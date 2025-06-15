@@ -1,0 +1,132 @@
+.data-list-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.data-list-header {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #e9ecef;
+  padding: 1rem;
+}
+
+.header-cell {
+  font-weight: 600;
+  color: #2c3e50;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
+}
+
+.sort-icon {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.data-list-body {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.data-list-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  padding: 1rem;
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.data-list-row:hover {
+  background-color: #f8f9fa;
+}
+
+.data-cell {
+  color: #495057;
+  display: flex;
+  align-items: center;
+}
+
+.no-data {
+  padding: 2rem;
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Estilos para el scrollbar */
+.data-list-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.data-list-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.data-list-body::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.data-list-body::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Estilos para estados de las filas */
+.data-list-row.active {
+  background-color: #e3f2fd;
+}
+
+.data-list-row.selected {
+  background-color: #e8f5e9;
+}
+
+/* Estilos para acciones en las celdas */
+.data-cell .action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.data-cell .action-button {
+  padding: 0.25rem 0.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.2s ease;
+}
+
+.data-cell .edit-button {
+  background-color: #3498db;
+  color: white;
+}
+
+.data-cell .delete-button {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.data-cell .action-button:hover {
+  opacity: 0.9;
+}
+
+@media screen and (max-width: 768px) {
+  .data-list-header,
+  .data-list-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .header-cell {
+    padding: 0.5rem 0;
+  }
+
+  .data-cell {
+    padding: 0.5rem 0;
+  }
+} 
