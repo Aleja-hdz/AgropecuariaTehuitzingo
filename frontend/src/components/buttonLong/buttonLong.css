@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap');
+
+.btn-long{
+    width: 200px;
+    height: 35px;
+    background-color: #D9D9D9;
+    color: #000000;
+    border-radius: 10px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+}
+
+.btn-long:hover{
+    background-color: #a8a8a8;
+    cursor: pointer;
+}
+
+@media (max-width: 600px) {
+    .btn-long {
+        width: 150px;
+        height: 35px;;
+    }
+}
