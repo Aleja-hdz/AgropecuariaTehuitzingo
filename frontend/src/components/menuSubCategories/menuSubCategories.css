@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap');
+
+.category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fdfaf0;
+  padding: 10px 20px;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+}
+
+.back-and-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.category-title {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.filters {
+  display: flex;
+  gap: 20px;
+  position: relative;
+}
+
+.filter {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #3e845c;
+  font-size: 14px;
+}
+
+.dropdown {
+  position: absolute;
+  top: 24px;
+  left: 0;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  padding: 5px 0;
+  list-style: none;
+  width: max-content;
+  border-radius: 4px;
+  z-index: 10;
+}
+
+.dropdown li {
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.dropdown li:hover {
+  background-color: #f0f0f0;
+}

@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap');
+
+.container-form {
+    width: 35%;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    background-color: #2ba02b;
+}
+
+.container-form form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.first-questions {
+    display: flex;
+    gap: 25px;
+    width: 100%;
+}
+
+.questions {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    align-items: flex-start;
+}
+
+.btn{
+    width: 100%;
+    height: 35px;
+    background-color: #D9D9D9;
+    color: #000000;
+    border-radius: 10px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.btn:hover{
+    background-color: #a8a8a8;
+    cursor: pointer;
+}
+
+input {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid rgb(255, 255, 255);    padding: 5px 0;
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    color: white;
+    outline: none;
+}
+
+.input-phone{
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid rgb(255, 255, 255);    padding: 5px 0;
+    width: 70%;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    color: white;
+    outline: none;
+}

@@ -10,16 +10,10 @@
     border: none;
     font-family: 'Inter', sans-serif;
     font-weight: 300;
+    font-size: 14px;
 }
 
 .btn-long:hover{
     background-color: #a8a8a8;
     cursor: pointer;
-}
-
-@media (max-width: 600px) {
-    .btn-long {
-        width: 150px;
-        height: 35px;;
-    }
 }
