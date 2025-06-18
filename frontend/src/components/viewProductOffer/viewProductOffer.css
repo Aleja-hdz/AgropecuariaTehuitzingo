@@ -1,0 +1,108 @@
+.vpo-modal-bg {
+  position: static;
+  width: auto;
+  height: auto;
+  background: none;
+  display: block;
+  align-items: unset;
+  justify-content: unset;
+  z-index: auto;
+  margin: 32px auto;
+}
+
+.vpo-modal {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+  display: flex;
+  padding: 24px;
+  min-width: 600px;
+  max-width: 90vw;
+  position: relative;
+  margin: 0 auto;
+}
+
+.vpo-img-box {
+  width: 180px;
+  height: 260px;
+  background: #f0f0f0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-right: 32px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+}
+
+.vpo-info {
+  flex: 1;
+  position: relative;
+}
+
+.vpo-close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: #e53935;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.vpo-close-btn:hover {
+  color: #b71c1c;
+}
+
+.vpo-title {
+  margin: 0 0 12px 0;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.vpo-date-row {
+  color: #e53935;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.vpo-date {
+  font-weight: bold;
+}
+
+.vpo-price-row {
+  margin-bottom: 4px;
+}
+.vpo-old-price {
+  text-decoration: line-through;
+  color: #b71c1c;
+  font-weight: bold;
+}
+.vpo-offer-price {
+  color: #222;
+  font-weight: bold;
+}
+
+.vpo-divider {
+  margin: 12px 0;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+.vpo-stock {
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+.vpo-stock-num {
+  font-weight: bold;
+}
+
+.vpo-details-title {
+  font-weight: bold;
+}
+.vpo-details-text {
+  margin: 4px 0 0 0;
+  font-size: 1rem;
+  color: #444;
+}
