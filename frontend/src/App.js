@@ -1,43 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
-import ButtonSmall from './components/buttonSmall/buttonSmall';
-import ButtonLong from './components/buttonLong/buttonLong';
-import CardProduct from './components/cardProduct/cardProduct';
-import CardProductOffer from './components/cardProductOffer/cardProductOffer';
-import CurrentInformation from './components/currentInformation/currentInformation';
-import FormContactUs from './components/formContactUs/formContactUs';
-import OptionsTable from './components/optionsTable/optionsTable';
+import './App.css'
 import Navbar from './components/navbar/navbar';
-import MenuCategories from './components/menuCategories/menuCategories';
-import MenuSubCategories from './components/menuSubCategories/menuSubCategories';
+import Offers from './pages/offers/offers';
+import Login from './pages/login/login';
+import Products from './pages/productsCategories/products';
+import ProductsSubCategories from './pages/productsSubCategories/productsSubCategories'
+import Register from './pages/register/register';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <ButtonSmall />
-        <br />
-        <ButtonLong />
-        <br />
-        <CardProduct />
-        <br />
-        <CardProductOffer />
-        <br />
-        <CurrentInformation />
-        <br />
-        <FormContactUs />
-        <br />
-        <OptionsTable />
-        <br />
+      <header>
         <Navbar />
-        <br />
-        <MenuCategories />
-        <br />
-        <MenuSubCategories />
-        <br />
       </header>
       <main>
+        <Offers />
+        <Login />
+        <Products />
+        <ProductsSubCategories />
+        <Register />
       </main>
     </div>
   );

@@ -3,18 +3,25 @@
 
 .category-header {
   display: flex;
+  width: 100%;
   align-items: center;
-  justify-content: space-between;
-  background-color: #fdfaf0;
-  padding: 10px 20px;
+  justify-content: center;
+  background-color: transparent;
   font-family: 'Inter', sans-serif;
-  position: relative;
+  margin-bottom: 20px;
+  margin-top: 15px;
+}
+
+.container-menuSub {
+  width: 80%;
+  display: flex;
 }
 
 .back-and-title {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-right: 20px;
 }
 
 .back-button {
@@ -22,11 +29,15 @@
   border: none;
   cursor: pointer;
   padding: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .category-title {
-  font-weight: 500;
-  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 .filters {
@@ -41,7 +52,9 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  color: #3e845c;
+  color: #000000;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
   font-size: 14px;
 }
 
