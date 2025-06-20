@@ -9,7 +9,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #ffffff;
+    background-color: transparent;
     gap: 20px;
 }
 
@@ -31,4 +31,5 @@
     align-content: center;
     border: none;
     border-radius: 10px;
+    cursor: pointer;
 }
