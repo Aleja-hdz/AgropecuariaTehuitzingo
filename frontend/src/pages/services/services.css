@@ -1,0 +1,135 @@
+.services-bg {
+  min-height: 100vh;
+  background: #e8f0e5;
+  padding: 40px 0 60px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.services-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  font-family: 'Inter', sans-serif;
+  text-align: center;
+}
+
+.services-zigzag {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.service-zigzag-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+}
+
+.service-zigzag-row.reverse {
+  flex-direction: row-reverse;
+}
+
+.service-zigzag-text {
+  flex: 1;
+  min-width: 220px;
+  max-width: 400px;
+  text-align: left;
+}
+
+.service-zigzag-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.service-zigzag-desc {
+  font-size: 1.05rem;
+  color: #333;
+}
+
+.service-zigzag-img {
+  width: 160px;
+  height: 120px;
+  background: #e0e0e0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  color: #888;
+  font-weight: bold;
+  min-width: 160px;
+}
+
+@media (max-width: 800px) {
+  .services-zigzag {
+    max-width: 100%;
+    gap: 30px;
+  }
+  .service-zigzag-row, .service-zigzag-row.reverse {
+    flex-direction: column !important;
+    gap: 18px;
+    align-items: center;
+    text-align: center;
+  }
+  .service-zigzag-text {
+    max-width: 100%;
+    text-align: center;
+  }
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 40px;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.service-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px #0001;
+  padding: 30px 20px 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.2s;
+}
+
+.service-card:hover {
+  box-shadow: 0 6px 24px #0002;
+}
+
+.service-img-placeholder {
+  width: 120px;
+  height: 120px;
+  background: #e0e0e0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  color: #888;
+  font-weight: bold;
+  margin-bottom: 18px;
+}
+
+.service-card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.service-card-desc {
+  font-size: 1rem;
+  color: #333;
+  text-align: center;
+} 

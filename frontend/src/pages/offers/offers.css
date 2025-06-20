@@ -1,0 +1,122 @@
+.offers-bg {
+  min-height: 100vh;
+  background: #fcfaef;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 40px;
+}
+
+.offers-navbar-space {
+  height: 80px;
+}
+
+.offers-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 8px;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+}
+
+.offers-desc {
+  font-size: 1.1rem;
+  color: #444;
+  text-align: center;
+  margin-bottom: 18px;
+  max-width: 900px;
+  line-height: 1.5;
+}
+
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 32px;
+  width: 100%;
+  max-width: 1200px;
+  justify-items: center;
+}
+
+.offer-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px #0001;
+  padding: 18px 12px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  min-width: 220px;
+  max-width: 240px;
+}
+
+.offer-label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #e53e3e;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: bold;
+  border-radius: 6px;
+  padding: 2px 10px;
+  z-index: 2;
+}
+
+.offer-img {
+  width: 120px;
+  height: 140px;
+  background: #e0e0e0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  color: #888;
+  font-weight: bold;
+  margin-bottom: 12px;
+  margin-top: 18px;
+}
+
+.offer-name {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.offer-prices {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.offer-old-price {
+  color: #e53e3e;
+  text-decoration: line-through;
+  margin-right: 4px;
+}
+
+.offer-new-price {
+  color: #222;
+  font-weight: bold;
+}
+
+.offer-btn {
+  background: #e0e0e0;
+  color: #222;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 18px;
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background 0.2s;
+}
+
+.offer-btn:hover {
+  background: #cfcfcf;
+} 
