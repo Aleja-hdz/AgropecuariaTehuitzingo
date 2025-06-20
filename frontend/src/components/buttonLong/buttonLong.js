@@ -1,7 +1,7 @@
 import './buttonLong.css';
 
-export default function ButtonLong() {
+export default function ButtonLong({ onClick }) {
     return (
-        <button className="btn-long">Ver detalles</button>
+        <button className="btn-long" onClick={onClick}>Ver detalles</button>
     );
 }  

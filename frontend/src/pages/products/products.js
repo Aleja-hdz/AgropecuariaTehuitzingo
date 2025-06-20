@@ -3,6 +3,7 @@ import Searcher from '../../components/searcher/searcher';
 import MenuCategories from '../../components/menuCategories/menuCategories';
 import MenuSubCategories from '../../components/menuSubCategories/menuSubCategories';
 import ViewProduct from '../../components/viewProduct/viewProduct';
+import ViewProductOffer from '../../components/viewProductOffer/viewProductOffer';
 import './products.css';
 
 function AlimentosBalanceados({ onBack }) {
@@ -91,28 +92,15 @@ function AlimentosBalanceados({ onBack }) {
           </div>
         ))}
       </div>
-      {modalAbierto && (
-        <div className="vpo-modal-bg" onClick={cerrarModal}>
-          <div className="vpo-modal" onClick={e => e.stopPropagation()}>
-            <button className="vpo-close-btn" onClick={cerrarModal}>
-              <span style={{fontSize: '1.5rem', color: '#e53935'}}>×</span>
-            </button>
-            <div className="vpo-img-box">
-              <img src={productoSeleccionado.img} alt={productoSeleccionado.nombre} style={{width: '100%', height: '100%', objectFit: 'contain'}} />
-            </div>
-            <div className="vpo-info">
-              <h2 className="vpo-title">{productoSeleccionado.nombre}</h2>
-              <div className="vpo-price-row">
-                <span>Precio: <span className="vpo-offer-price">${productoSeleccionado.precio} mxn</span></span>
-              </div>
-              <div className="vpo-stock">Cantidad disponible: <span className="vpo-stock-num">{productoSeleccionado.cantidad}</span></div>
-              <div className="vpo-details">
-                <span className="vpo-details-title">Detalles del producto:</span>
-                <p className="vpo-details-text">{productoSeleccionado.descripcion}</p>
-              </div>
-            </div>
-          </div>
-        </div>
+      {modalAbierto && productoSeleccionado && (
+        <ViewProductOffer
+          cerrarModal={cerrarModal}
+          nombre={productoSeleccionado.nombre}
+          img={productoSeleccionado.img}
+          precio={productoSeleccionado.precio}
+          cantidad={productoSeleccionado.cantidad}
+          detalles={productoSeleccionado.descripcion}
+        />
       )}
     </div>
   );
@@ -195,28 +183,15 @@ const Products = () => {
     <div className="products-bg">
       <div className="products-navbar-space" />
       {contenido}
-      {modalAbierto && (
-        <div className="vpo-modal-bg" onClick={cerrarModal}>
-          <div className="vpo-modal" onClick={e => e.stopPropagation()}>
-            <button className="vpo-close-btn" onClick={cerrarModal}>
-              <span style={{fontSize: '1.5rem', color: '#e53935'}}>×</span>
-            </button>
-            <div className="vpo-img-box">
-              <img src={productoSeleccionado.img} alt={productoSeleccionado.nombre} style={{width: '100%', height: '100%', objectFit: 'contain'}} />
-            </div>
-            <div className="vpo-info">
-              <h2 className="vpo-title">{productoSeleccionado.nombre}</h2>
-              <div className="vpo-price-row">
-                <span>Precio: <span className="vpo-offer-price">${productoSeleccionado.precio} mxn</span></span>
-              </div>
-              <div className="vpo-stock">Cantidad disponible: <span className="vpo-stock-num">{productoSeleccionado.cantidad}</span></div>
-              <div className="vpo-details">
-                <span className="vpo-details-title">Detalles del producto:</span>
-                <p className="vpo-details-text">{productoSeleccionado.descripcion}</p>
-              </div>
-            </div>
-          </div>
-        </div>
+      {modalAbierto && productoSeleccionado && (
+        <ViewProductOffer
+          cerrarModal={cerrarModal}
+          nombre={productoSeleccionado.nombre}
+          img={productoSeleccionado.img}
+          precio={productoSeleccionado.precio}
+          cantidad={productoSeleccionado.cantidad}
+          detalles={productoSeleccionado.descripcion}
+        />
       )}
     </div>
   );
