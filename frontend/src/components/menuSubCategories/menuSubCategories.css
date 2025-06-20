@@ -4,7 +4,7 @@
 .category-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   background-color: #fdfaf0;
   padding: 10px 20px;
   font-family: 'Inter', sans-serif;
@@ -15,6 +15,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-right: 40px;
 }
 
 .back-button {
@@ -65,4 +66,39 @@
 
 .dropdown li:hover {
   background-color: #f0f0f0;
+}
+
+.filters-centered {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-left: 40px;
+}
+
+.category-header-merged {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #fdfaf0;
+  padding: 10px 20px;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+  gap: 18px;
+}
+
+.category-title {
+  font-weight: 500;
+  font-size: 16px;
+  margin-right: 24px;
+}
+
+.filters-centered {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  margin-left: 0;
 }

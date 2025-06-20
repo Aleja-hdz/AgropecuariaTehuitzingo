@@ -1,17 +1,24 @@
 import React from "react";
 import "./viewProductOffer.css";
 
-const ViewProductOffer = () => {
+const ViewProductOffer = ({ cerrarModal }) => {
+  // Cierra el modal si se hace click en el fondo
+  const handleBgClick = (e) => {
+    if (e.target.classList.contains('vpo-modal-bg')) {
+      cerrarModal();
+    }
+  };
+
   return (
-    <div className="vpo-modal-bg">
-      <div className="vpo-modal">
+    <div className="vpo-modal-bg" onClick={handleBgClick}>
+      <div className="vpo-modal" onClick={e => e.stopPropagation()}>
+        <button className="vpo-close-btn" onClick={cerrarModal}>
+          <i className="fas fa-times"></i>
+        </button>
         <div className="vpo-img-box">
           <span>IMG</span>
         </div>
         <div className="vpo-info">
-          <button className="vpo-close-btn">
-            <i className="fas fa-times"></i>
-          </button>
           <h2 className="vpo-title">Nombre del producto en venta</h2>
           <div className="vpo-date-row">
             <span>Del <span className="vpo-date">05/06/2025</span> al <span className="vpo-date">05/06/2025</span></span>

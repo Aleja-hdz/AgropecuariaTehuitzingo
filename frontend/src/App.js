@@ -1,44 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
-import ButtonSmall from './components/buttonSmall/buttonSmall';
-import ButtonLong from './components/buttonLong/buttonLong';
-import CardProduct from './components/cardProduct/cardProduct';
-import CardProductOffer from './components/cardProductOffer/cardProductOffer';
-import CurrentInformation from './components/currentInformation/currentInformation';
-import FormContactUs from './components/formContactUs/formContactUs';
-import OptionsTable from './components/optionsTable/optionsTable';
 import Navbar from './components/navbar/navbar';
-import MenuCategories from './components/menuCategories/menuCategories';
-import MenuSubCategories from './components/menuSubCategories/menuSubCategories';
+import About from './pages/about/about';
+import Services from './pages/services/services';
+import Contact from './pages/contact/contact';
+import Products from './pages/products/products';
+import Offers from './pages/offers/offers';
+import Home from './pages/home/home';
+import React, { useState } from 'react';
 
 function App() {
+  const [pantalla, setPantalla] = useState('inicio');
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <ButtonSmall />
-        <br />
-        <ButtonLong />
-        <br />
-        <CardProduct />
-        <br />
-        <CardProductOffer />
-        <br />
-        <CurrentInformation />
-        <br />
-        <FormContactUs />
-        <br />
-        <OptionsTable />
-        <br />
-        <Navbar />
-        <br />
-        <MenuCategories />
-        <br />
-        <MenuSubCategories />
-        <br />
-      </header>
-      <main>
-      </main>
+    <div className="main-bg">
+      <Navbar onNavigate={setPantalla} />
+      {pantalla === 'inicio' && <Home />}
+      {pantalla === 'nosotros' && <About />}
+      {pantalla === 'servicios' && <Services />}
+      {pantalla === 'contacto' && <Contact />}
+      {pantalla === 'productos' && <Products />}
+      {pantalla === 'ofertas' && <Offers />}
     </div>
   );
 }

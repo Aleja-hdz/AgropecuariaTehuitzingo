@@ -2,20 +2,17 @@ import { ChevronDown, ChevronLeft } from 'lucide-react';
 import { useState } from 'react';
 import "./menuSubCategories.css";
 
-export default function MenuSubCategories() {
+export default function MenuSubCategories({ onBack }) {
   const [showSpecies, setShowSpecies] = useState(false);
   const [showBrands, setShowBrands] = useState(false);
 
   return (
-    <div className="category-header">
-      <div className="back-and-title">
-        <button className="back-button">
-          <ChevronLeft size={20} />
-        </button>
-        <span className="category-title">Alimentos balanceados</span>
-      </div>
-
-      <div className="filters">
+    <div className="category-header-merged">
+      <button className="back-button" onClick={onBack}>
+        <ChevronLeft size={20} />
+      </button>
+      <span className="category-title">Alimentos balanceados</span>
+      <div className="filters-centered">
         <div className="filter" onClick={() => setShowSpecies(!showSpecies)}>
           <span>Por especie</span>
           <ChevronDown size={16} />
@@ -28,7 +25,6 @@ export default function MenuSubCategories() {
             </ul>
           )}
         </div>
-
         <div className="filter" onClick={() => setShowBrands(!showBrands)}>
           <span>Por marca</span>
           <ChevronDown size={16} />
