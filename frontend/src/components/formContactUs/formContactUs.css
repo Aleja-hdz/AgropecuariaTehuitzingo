@@ -2,11 +2,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap');
 
 .container-form {
-    width: 35%;
+    width: 100%;
     font-family: 'Inter', sans-serif;
     font-weight: 300;
     font-size: 14px;
-    background-color: #2ba02b;
+    background-color: transparent;
 }
 
 .container-form form {

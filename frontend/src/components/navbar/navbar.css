@@ -9,6 +9,8 @@
     align-items: center;
     justify-content: center;
     background-color: #fcf5d6;
+    position: fixed;
+    z-index: 100;
 }
 
 .nav-logo img {

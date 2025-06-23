@@ -1,5 +1,6 @@
 import './App.css'
 import Navbar from './components/navbar/navbar';
+import Home from './pages/home/home';
 import Offers from './pages/offers/offers';
 import Login from './pages/login/login';
 import Products from './pages/productsCategories/products';
@@ -13,11 +14,7 @@ function App() {
         <Navbar />
       </header>
       <main>
-        <Offers />
-        <Login />
-        <Products />
-        <ProductsSubCategories />
-        <Register />
+        <Home />
       </main>
     </div>
   );
