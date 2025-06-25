@@ -17,7 +17,7 @@ export default function CardProductOffer() {
                     <p className="price-previous">$35</p>
                     <p className="price-offer">$25</p>
                 </div>
-                <ButtonLong />
+                <ButtonLong text={"Ver oferta"}/>
             </div>
         </div>
     );

@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap');
 
+html {
+  scroll-behavior: smooth;
+}
+
 .navbar {
     width: 100%;
     height: 70px;
@@ -38,20 +42,17 @@
     font-family: 'Inter', sans-serif;
     font-weight: 300;
     font-size: 14px;
-    position: relative;
     color: #000000;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.4s ease-in-out;
-    border-bottom: 1px solid transparent;
+    transition: color 0.2s ease;
+    padding: 5px 2px;
 }
 
 .nav-links a.active,
 .nav-links a:hover {
-  font-weight: bold;
-  color: #1a01ff;
-  border-bottom: 1px solid #1a01ff;
+    color: #1a01ff;
 }
 
 .nav-user {
@@ -75,5 +76,5 @@
 }
 
 .user-button:hover {
-    background-color: #a8a8a8;
+    background-color: #1a01ff;
 }

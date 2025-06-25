@@ -11,7 +11,7 @@ export default function CardProduct() {
                 <p className="name">Nombre del producto</p>
                 <p className="lot">Peso/Gramos: 35gr </p>
                 <p className="price">$25</p>
-                <ButtonLong />
+                <ButtonLong text={"Ver producto"}/>
             </div>
         </div>
     );

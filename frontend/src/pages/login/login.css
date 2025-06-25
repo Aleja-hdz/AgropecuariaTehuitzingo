@@ -24,8 +24,16 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+}
+
+.login-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .inputs-login {
@@ -35,12 +43,40 @@
     font-family: 'Inter', sans-serif;
     font-weight: 300;
     font-size: 14px;
+    color: rgb(41, 41, 41);
 }
 
-.checkbox-container {
-    display: flex;
+.view-password {
+    width: 80%;
     justify-content: flex-start;
-    margin-left: 30px;
+    display: flex;
+    height: 20px;
+    align-items: center;
+    margin-bottom: 15px;
     margin-top: -10px;
-    margin-bottom: 10px;
+}
+
+.view-password input {
+    margin-right: -90px;
+    margin-left: -100px;
+}
+
+.view-password p{
+    width: 100%;
+}
+
+.links-register {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.ad {
+    margin-top: 0px;
+}
+
+.ac {
+    margin-top: 15px;
 }

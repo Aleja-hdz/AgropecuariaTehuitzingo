@@ -4,11 +4,11 @@ import './currentInformation.css';
 export default function CurrentInformation({ products, offers }) {
     return (
         <div className="container-current-information">
-            <div>
+            <div className="info-separated">
                 <p className="amount">20</p>
                 <p className="concept">Productos</p>
             </div>
-            <div>
+            <div className="info-separated">
                 <p className="amount">8</p>
                 <p className="concept">Ofertas</p>
             </div>

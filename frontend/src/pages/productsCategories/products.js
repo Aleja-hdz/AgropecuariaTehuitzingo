@@ -5,7 +5,7 @@ import MenuCategories from '../../components/menuCategories/menuCategories';
 export default function Products(){
     return(
         <div className="products-container">
-            <div>
+            <div className="categories-container-head">
                 <h1>¿Qué producto deseas encontrar?</h1>
                 <Searcher />
             </div>

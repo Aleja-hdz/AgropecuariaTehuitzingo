@@ -1,18 +1,16 @@
-import React from 'react';
 import './tableOffers.css';
+import OptionsTable from '../optionsTable/optionsTable';
 
 const TableOffers = () => {
   const ofertas = [
     "Nombre completo del producto",
     "Nombre completo del producto",
     "Nombre completo del producto",
+    "Nombre completo del producto",
+    "Nombre completo del producto",
   ];
 
   return (
-    <div className="table-container">
-      <button className="nuevo-oferta">Nueva oferta</button>
-      <p className="table-subtitulo">Ofertas registradas</p>
-
       <table className="table-products">
         <thead>
           <tr>
@@ -26,15 +24,13 @@ const TableOffers = () => {
               <td>{nombre}</td>
               <td>
                 <div className="table-actions">
-                  <i className="fa fa-pen-to-square" title="Editar"></i>
-                  <i className="fa fa-trash" title="Eliminar"></i>
+                  <OptionsTable />
                 </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-    </div>
   );
 };
 

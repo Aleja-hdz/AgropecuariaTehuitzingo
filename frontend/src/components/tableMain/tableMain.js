@@ -1,5 +1,5 @@
-import React from 'react';
 import './tableMain.css';
+import OptionsTable from "../../components/optionsTable/optionsTable"
 
 const TableMain = () => {
   const data = [
@@ -11,8 +11,6 @@ const TableMain = () => {
   ];
 
   return (
-    <div className="table-container">
-      <div className="table-title">Ultimas creaciones</div>
       <table className="product-table">
         <thead>
           <tr>
@@ -26,26 +24,24 @@ const TableMain = () => {
             <tr key={index}>
               <td>{producto.nombre}</td>
               <td>
-                <a
+                <label
                   className={
                     producto.categoria === "Producto" ? "product" : "oferta"
                   }
                   href="#"
                 >
                   {producto.categoria}
-                </a>
+                </label>
               </td>
               <td>
                 <div className="actions">
-                  <i className="fa fa-pen-to-square" title="Editar"></i>
-                  <i className="fa fa-trash" title="Eliminar"></i>
+                  <OptionsTable />
                 </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-    </div>
   );
 };
 
