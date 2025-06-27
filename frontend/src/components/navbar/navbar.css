@@ -12,7 +12,7 @@ html {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #fcf5d6;
+    background-color: rgb(37, 58, 241);
     position: fixed;
     z-index: 100;
 }
@@ -42,7 +42,7 @@ html {
     font-family: 'Inter', sans-serif;
     font-weight: 300;
     font-size: 14px;
-    color: #000000;
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -52,22 +52,22 @@ html {
 
 .nav-links a.active,
 .nav-links a:hover {
-    color: #1a01ff;
+    color: #FACC15;
 }
 
 .nav-user {
   display: flex;
   align-items: center;
-  color: #1f4c39;
+  color: #ffffff;
   cursor: pointer;
 }
 
 .user-button {
     background: none;
-    border: 1px solid #000000;
+    border: 1px solid #ffffff;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    width: 27px;
+    height: 27px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -76,5 +76,5 @@ html {
 }
 
 .user-button:hover {
-    background-color: #1a01ff;
+    background-color: #FACC15;
 }

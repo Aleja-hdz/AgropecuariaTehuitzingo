@@ -1,5 +1,6 @@
 import './home.css';
 import ButtonSmall from "../../components/buttonSmall/buttonSmall";
+ import ImagenPortada from '../../assets/ImagenPortada.png';
 import { MapPin } from 'lucide-react';
 import { Mail } from 'lucide-react';
 import { Smartphone } from 'lucide-react';
@@ -9,7 +10,7 @@ import { IoLogoWhatsapp } from "react-icons/io";
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 
-export default function() {
+export default function Home() {
   useEffect(() => {
     if (window.location.hash) {
       const id = window.location.hash.replace('#', '');
@@ -23,7 +24,7 @@ export default function() {
   return (
     <>
       {/* Sección inicial */}
-      <div className="container-home" id="index">
+      <div className="container-home" id="inicio">
         <div className="section-home">
           <div className="container-info">
             <div className="content-text">
@@ -33,18 +34,20 @@ export default function() {
               y consultas a tus animales.<br></br>Ganarnos tu confianza es nuestro mayor  objetivo.</p>
             </div>
             <div className="btns-home">
-              <Link to="/register"><ButtonSmall text="Regístrate" /></Link>
-              <Link to="/login"><ButtonSmall text="Iniciar sesión" /></Link>
+              <Link to="/registro"><ButtonSmall text="Regístrate" /></Link>
+              <Link to="/ingreso"><ButtonSmall text="Iniciar sesión" /></Link>
             </div>
           </div>
-          <div className="image-home"></div>
+          <div className="image-home">
+            <img className="img-portada" alt='Imagen representativa' src={ImagenPortada} />
+          </div>
         </div>
       </div>
       {/* Sección Nosotros */}
-      <div className="container-about" id="about">
+      <div className="container-about" id="nosotros">
         <div className="section-about">
           <h1 className="tittles-h1">Nosotros</h1>
-          <hr className="tittle-hr"></hr>
+          <hr className="tittle-hr-service"></hr>
           <p className="tittles">Historia</p>
           <p className="text-about">En Agropecuaria Tehuitzingo, trabajamos con pasión y compromiso por el bienestar animal. Somos un negocio dedicado a la atención médico-veterinaria, la venta de alimentos balanceados y medicamentos, tanto para mascotas como para animales de producción.</p>
           <div className="box-about">
@@ -70,7 +73,7 @@ export default function() {
         </div>
       </div>
       {/* Sección Servicios */}
-      <div className="container-service" id='service'>
+      <div className="container-service" id='servicios'>
         <div className="section-service">
           <h1 className="tittles-h1">Servicios</h1>
           <hr className="tittle-hr-service"></hr>
@@ -105,7 +108,7 @@ export default function() {
         </div>
       </div>
       {/* Sección Contáctanos */}
-      <div className="container-contact" id='contact'>
+      <div className="container-contact" id='contactanos'>
         <div className="section-contact">
           <div className="box-contact">
             <h1 className="tittles-h1">Contáctanos</h1>
@@ -130,16 +133,16 @@ export default function() {
           </div>
           <div className="box-contact">
             <ul className="links-footer">
-              <li><a href="#index">Inicio</a></li>
-              <li><a href="#about">Nosotros</a></li>
-              <li><a href="#service">Servicios</a></li>
-              <li><a href="#contact">Contáctanos</a></li>
-              <li><Link to="/products">Productos</Link></li>
-              <li><Link to="/offers">Ofertas</Link></li>
+              <li><a href="#inicio">Inicio</a></li>
+              <li><a href="#nosotros">Nosotros</a></li>
+              <li><a href="#servicios">Servicios</a></li>
+              <li><a href="#contactanos">Contáctanos</a></li>
+              <li><Link to="/productos">Productos</Link></li>
+              <li><Link to="/ofertas">Ofertas</Link></li>
             </ul>
             <div className="box-icons">
-              <a><IoLogoWhatsapp size={27}/></a>
-              <a><FaFacebook size={25}/></a>
+              <a href="https://wa.me/"><IoLogoWhatsapp size={27}/></a>
+              <a href="https://facebook.com"><FaFacebook size={25}/></a>
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import './navbar.css';
 import { User } from 'lucide-react';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/Logo2.png';
 import { Link } from 'react-router-dom';
 
 export default function Navbar() {
@@ -10,18 +10,18 @@ export default function Navbar() {
         <img src={logo} alt="Logo" />
       </div>
       <ul className="nav-links">
-        <li><a href="/#index">Inicio</a></li>
-        <li><a href="/#about">Nosotros</a></li>
-        <li><a href="/#service">Servicios</a></li>
-        <li><a href="/#contact">Contáctanos</a></li>
-        <li><Link to="/products">Productos</Link></li>
-        <li><Link to="/offers">Ofertas</Link></li>
-        <li><Link to="/adminPanel">Gestión</Link></li>
+        <li><a href="/#inicio">Inicio</a></li>
+        <li><a href="/#nosotros">Nosotros</a></li>
+        <li><a href="/#servicios">Servicios</a></li>
+        <li><a href="/#contactanos">Contáctanos</a></li>
+        <li><Link to="/productos">Productos</Link></li>
+        <li><Link to="/ofertas">Ofertas</Link></li>
+        <li><Link to="/panelDeAdministracion">Gestión</Link></li>
       </ul>
       <div className="nav-user">
-        <Link to="/login">
+        <Link to="/ingreso">
           <button className="user-button">
-              <User size={22} />
+              <User color='white' size={22} />
           </button>
         </Link>
       </div>

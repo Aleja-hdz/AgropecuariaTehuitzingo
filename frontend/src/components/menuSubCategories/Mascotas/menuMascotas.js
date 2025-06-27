@@ -1,8 +1,9 @@
 import { ChevronDown, ChevronLeft } from 'lucide-react';
 import { useState } from 'react';
-import "./menuSubCategories.css";
+import "./menuMascotas.css";
+import { Link } from 'react-router-dom';
 
-export default function MenuSubCategories() {
+export default function MenuMascotas() {
   const [showSpecies, setShowSpecies] = useState(false);
   const [showBrands, setShowBrands] = useState(false);
 
@@ -10,35 +11,36 @@ export default function MenuSubCategories() {
     <div className="category-header">
       <div className="container-menuSub">
         <div className="back-and-title">
-          <button className="back-button">
-            <ChevronLeft size={20} />
-          </button>
-          <span className="category-title">Alimentos balanceados</span>
+          <Link to="/productos">
+            <button className="back-button">
+              <ChevronLeft size={20} />
+            </button>
+          </Link>
+          <span className="category-title">Mascotas</span>
         </div>
 
         <div className="filters">
           <div className="filter" onClick={() => setShowSpecies(!showSpecies)}>
-            <span>Por especie</span>
+            <span>Alimentos</span>
             <ChevronDown size={16} />
             {showSpecies && (
               <ul className="dropdown">
                 <li>Perro</li>
                 <li>Gato</li>
-                <li>Gallina</li>
-                <li>Cerdo</li>
+                <li>Hasmters</li>
+                <li>Peces</li>
               </ul>
             )}
           </div>
 
           <div className="filter" onClick={() => setShowBrands(!showBrands)}>
-            <span>Por marca</span>
+            <span>Accesorios</span>
             <ChevronDown size={16} />
             {showBrands && (
               <ul className="dropdown">
-                <li>Unión</li>
-                <li>Apiaba</li>
-                <li>Fasa</li>
-                <li>Nutre bien</li>
+                <li>Collares</li>
+                <li>Correas</li>
+                <li>Juguetes</li>
               </ul>
             )}
           </div>

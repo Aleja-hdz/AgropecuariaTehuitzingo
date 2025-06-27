@@ -22,7 +22,7 @@ export default function Register() {
                         <p>Ver contraseña</p>
                     </div>
                     <ButtonSmall text="Guardar" />
-                    <p>¿Ya tienes una cuenta? <a href="/login">Inicia sesión</a></p>
+                    <p>¿Ya tienes una cuenta? <a href="/ingreso">Inicia sesión</a></p>
                 </form>
             </div>
         </div>
