@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+.no-products-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  margin: 20px 0;
+  min-height: 300px;
+}
+
+.no-products-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  opacity: 0.7;
+}
+
+.no-products-found h3 {
+  color: #333;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.no-products-found p {
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.no-products-found .suggestion {
+  color: #888;
+  font-size: 14px;
+  font-style: italic;
+  margin-top: 10px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .no-products-found {
+    padding: 40px 15px;
+    min-height: 250px;
+  }
+  
+  .no-products-icon {
+    font-size: 36px;
+  }
+  
+  .no-products-found h3 {
+    font-size: 20px;
+  }
+  
+  .no-products-found p {
+    font-size: 14px;
+  }
+} 

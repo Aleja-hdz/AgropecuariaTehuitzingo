@@ -1,8 +1,10 @@
-import React from 'react';
 import './tableProducts.css';
+import OptionsTable from '../optionsTable/optionsTable';
 
-const TableProducts = () => {
-  const productos = [
+const TableProducts = ({ productos = [] }) => {
+  // Si no se pasan productos, usar los datos de ejemplo
+  const productosData = productos.length > 0 ? productos : [
+    "Nombre completo del producto",
     "Nombre completo del producto",
     "Nombre completo del producto",
     "Nombre completo del producto",
@@ -10,9 +12,6 @@ const TableProducts = () => {
 
   return (
     <div className="table-container">
-      <button className="nuevo-producto">Nuevo producto</button>
-      <p className="table-subtitulo">Productos registrados</p>
-
       <table className="table-products">
         <thead>
           <tr>
@@ -21,13 +20,12 @@ const TableProducts = () => {
           </tr>
         </thead>
         <tbody>
-          {productos.map((nombre, i) => (
+          {productosData.map((nombre, i) => (
             <tr key={i}>
               <td>{nombre}</td>
               <td>
                 <div className="table-actions">
-                  <i className="fa fa-pen-to-square" title="Editar"></i>
-                  <i className="fa fa-trash" title="Eliminar"></i>
+                  <OptionsTable />
                 </div>
               </td>
             </tr>

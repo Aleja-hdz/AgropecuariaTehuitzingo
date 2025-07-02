@@ -7,7 +7,7 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background: linear-gradient(to bottom right, rgb(38, 157, 236), rgb(255, 255, 255));
+    background-color: rgb(37, 58, 241);
     justify-content: center;
     display: flex; 
     align-items: center;
@@ -18,14 +18,16 @@
 
 .register-container {
     width: 300px;
-    height: 490px;
-    background-color: rgba(255, 255, 255, 0.5);
+    height: auto;
+    background-color: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    padding: 5px;
 }
 
 .inputs-register {
@@ -35,6 +37,22 @@
     font-family: 'Inter', sans-serif;
     font-weight: 300;
     font-size: 14px;
+    color: rgb(41, 41, 41);
+}
+
+.inputs-register::placeholder {
+    color: #222;
+    opacity: 1;
+}
+
+.inputs-register:-ms-input-placeholder {
+    color: #222;
+    opacity: 1;
+}
+
+.inputs-register::-ms-input-placeholder {
+    color: #222;
+    opacity: 1;
 }
 
 .checkbox-container {
@@ -43,4 +61,44 @@
     margin-left: 30px;
     margin-top: -10px;
     margin-bottom: 10px;
+}
+
+.register-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.view-password-register {
+    width: 80%;
+    justify-content: flex-start;
+    display: flex;
+    height: 20px;
+    align-items: center;
+    margin-bottom: 15px;
+    margin-top: -10px;
+}
+
+.view-password-register input {
+    margin-right: -90px;
+    margin-left: -100px;
+}
+
+.view-password-register p{
+    width: 100%;
+}
+
+input::placeholder {
+  color: #888;
+  opacity: 1;
+}
+input:-ms-input-placeholder {
+  color: #888;
+  opacity: 1;
+}
+input::-ms-input-placeholder {
+  color: #888;
+  opacity: 1;
 }

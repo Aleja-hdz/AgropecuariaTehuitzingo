@@ -1,7 +1,7 @@
 import './buttonSmall.css';
 
-export default function ButtonSmall(){
+export default function ButtonSmall({text}){
     return (
-            <button className="btn-small">Iniciar sesión</button>
+            <button className="btn-small">{text}</button>
     );
 }

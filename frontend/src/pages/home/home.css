@@ -1,0 +1,340 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap');
+
+html {
+  scroll-behavior: smooth;
+}
+
+.tittles-h1 {
+  font-size: 32px;
+  font-weight: 600;
+}
+
+/*Estilos para la sección principal*/
+
+.container-home {
+  width: 100%;
+  height: 100vh;
+  background-color: rgb(22, 40, 196);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: white;
+}
+
+.home-head-tittle{
+  font-size: 45px;
+  text-align: left;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+  font-weight: 600;
+}
+
+.section-home {
+  width: 60%;
+  height: 100%;
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-home {
+  width: 65%;
+  margin-top: 70px;
+  height: 65%;
+  background-color: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.image-home img {
+  height: 100%;
+}
+
+.img-portada {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.container-info {
+  padding: 25px;
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.content-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.text-home {
+  text-align: left;
+  line-height: 25px;
+}
+
+.btns-home {
+  width: 100%;
+  display: flex;
+  gap: 25px;
+}
+
+/*Estilos para la sección Nosotros*/
+
+.container-about {
+  width: 100%;
+  height: auto;
+  background-color: rgb(215, 249, 250);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  padding-bottom: 25px;
+  color: black;
+}
+
+.section-about {
+  width: 85%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 75px;
+  padding-bottom: 75px;
+}
+
+.tittle-hr {
+    padding-top: -50;
+    width: 80px;
+    border: 2px solid rgb(22, 40, 196);
+    margin-bottom: 25px;
+    margin-top: -20px;
+}
+
+.tittles {
+  font-family: 'Inter', sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: -5px;
+  text-align: center;
+}
+
+.text-about {
+  text-align: left;
+  line-height: 25px;
+  text-align: center;
+}
+
+.box-about {
+  width: 100%;
+  display: flex;
+  gap: 30px;
+  margin-top: 25px;
+  margin-bottom: 25px; 
+}
+
+.divs-about{
+  width: 30%;
+}
+
+.image-about {
+  background-color: blue;
+  width: 100%;
+  height: 100%;
+}
+
+.distributors {
+  display: flex;
+  gap: 100px;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: -20px;;
+}
+
+.box-distributors {
+  background-color: gray;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+}
+
+/*Estilos para la sección Servicios*/
+
+.container-service {
+  width: 100%;
+  height: auto;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  padding-bottom: 50px;
+  color: black;
+}
+
+.section-service {
+  width: 85%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 75px;
+  padding-bottom: 75px;
+}
+
+.tittles-services {
+  font-family: 'Inter', sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 20px;;
+}
+
+.text-service {
+  text-align: left;
+  line-height: 25px;
+  text-align: center;
+  margin-top: -10px;
+}
+
+.box-services {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.box-container-services {
+  width: 40%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.images-service {
+  background-color: gray;
+  width: 70%;
+  height: 200px;;
+}
+
+.tittle-hr-service {
+    width: 80px;
+    border: 2px solid rgb(22, 40, 196);
+    margin-top: -20px;
+    margin-bottom: 25px;
+}
+
+/*Estilos para la sección Contáctanos*/
+
+.container-contact {
+  width: 100%;
+  height: auto;
+  background-color: rgb(22, 40, 196);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  padding-top: 25px;
+  padding-bottom: 50px;
+  color: white;
+}
+
+.section-contact {
+  width: 75%;
+  display: flex;
+  gap: 70px;
+  justify-content: center;
+  align-items: center;
+  padding-top: 30px;
+  padding-bottom: 75px;
+}
+
+.box-contact {
+  width: 30%;
+  display:flex;
+  flex-direction: column; 
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.box-contact2 {
+  width: 90%;
+  display:flex;
+  flex-direction: column; 
+  justify-content: center;
+}
+
+.text-contact {
+  text-align: left;
+  line-height: 25px;
+}
+
+.box-contact-info {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: -15px;
+}
+
+.container-info-contact {
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.links-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 75%;
+  margin-right: 25px;
+}
+
+.links-footer li a {
+  text-decoration: none;
+  color: white;
+}
+
+.box-icons {
+  display: flex;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.box-icons a {
+  cursor: pointer;
+  color: white;
+}
+
+.box-icons a:hover{
+  cursor: pointer;
+  color: #FACC15;
+}

@@ -1,8 +1,10 @@
-import React from 'react';
 import './tableOffers.css';
+import OptionsTable from '../optionsTable/optionsTable';
 
-const TableOffers = () => {
-  const ofertas = [
+const TableOffers = ({ ofertas = [] }) => {
+  // Si no se pasan ofertas, usar los datos de ejemplo
+  const ofertasData = ofertas.length > 0 ? ofertas : [
+    "Nombre completo del producto",
     "Nombre completo del producto",
     "Nombre completo del producto",
     "Nombre completo del producto",
@@ -10,10 +12,7 @@ const TableOffers = () => {
 
   return (
     <div className="table-container">
-      <button className="nuevo-oferta">Nueva oferta</button>
-      <p className="table-subtitulo">Ofertas registradas</p>
-
-      <table className="table-products">
+      <table className="table-offers">
         <thead>
           <tr>
             <th>Nombre del producto</th>
@@ -21,13 +20,12 @@ const TableOffers = () => {
           </tr>
         </thead>
         <tbody>
-          {ofertas.map((nombre, i) => (
+          {ofertasData.map((nombre, i) => (
             <tr key={i}>
               <td>{nombre}</td>
               <td>
                 <div className="table-actions">
-                  <i className="fa fa-pen-to-square" title="Editar"></i>
-                  <i className="fa fa-trash" title="Eliminar"></i>
+                  <OptionsTable />
                 </div>
               </td>
             </tr>

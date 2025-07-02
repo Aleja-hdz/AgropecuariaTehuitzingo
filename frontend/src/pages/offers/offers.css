@@ -8,27 +8,22 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding-top: 45px;
+    background-color: rgb(24, 43, 209);
 }
 
 .container-info {
     width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
 }
 
 .tittle-hr {
-    padding-top: -50;
     width: 80px;
-    border: 2px solid rgb(71, 141, 81);
-    margin-bottom: 25px;
-    margin-top: -20px;
-}
-
-.text-head1 {
-    margin-bottom: -14px;
-    line-height: 1.7;
-}
-
-.content-hr {
-    width: 100%;
+    border: 2px solid #FACC15; 
     margin-bottom: 0px;
 }
 
@@ -37,7 +32,8 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    padding-bottom: 30px;
+    padding-bottom: 50px;
+    padding-top: 10px;
     background-color: #FCFAF5;
 }
 
@@ -50,4 +46,17 @@
     overflow: hidden;
     gap: 35px;
     padding-top: 25px;
+}
+
+.text-offers {
+  text-align: center;
+  line-height: 25px;
+  margin-bottom: -10px;
+}
+
+.separador {
+    width: 99.9%;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    border-width: 1px;
 }

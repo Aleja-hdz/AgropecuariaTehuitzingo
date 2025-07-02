@@ -1,13 +1,25 @@
 .vpo-modal-bg {
-  position: static;
-  width: auto;
-  height: auto;
-  background: none;
-  display: block;
-  align-items: unset;
-  justify-content: unset;
-  z-index: auto;
-  margin: 32px auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .vpo-modal {
@@ -18,8 +30,22 @@
   padding: 24px;
   min-width: 600px;
   max-width: 90vw;
+  max-height: 90vh;
   position: relative;
   margin: 0 auto;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .vpo-img-box {
@@ -34,6 +60,7 @@
   font-weight: bold;
   margin-right: 32px;
   box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  flex-shrink: 0;
 }
 
 .vpo-info {
@@ -51,6 +78,7 @@
   color: #e53935;
   cursor: pointer;
   transition: color 0.2s;
+  z-index: 1;
 }
 .vpo-close-btn:hover {
   color: #b71c1c;
@@ -105,4 +133,24 @@
   margin: 4px 0 0 0;
   font-size: 1rem;
   color: #444;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .vpo-modal {
+    flex-direction: column;
+    min-width: 90vw;
+    padding: 16px;
+  }
+  
+  .vpo-img-box {
+    width: 100%;
+    height: 200px;
+    margin-right: 0;
+    margin-bottom: 16px;
+  }
+  
+  .vpo-title {
+    font-size: 1.4rem;
+  }
 }

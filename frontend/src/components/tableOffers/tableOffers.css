@@ -1,60 +1,63 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
 
+/* Contenedor para la tabla con scroll */
 .table-container {
-  font-family: 'Inter', sans-serif;
-  background: transparent;
-  padding: 20px;
-  text-align: center;
-}
-
-.nuevo-oferta {
-  background: #d9d9d9;
-  border: none;
+  max-height: 600px; /* Altura mínima para mostrar aproximadamente 8 registros */
+  overflow-y: auto;
   border-radius: 12px;
-  padding: 8px 18px;
-  font-size: 14px;
-  color: red;
-  font-weight: 500;
-  cursor: pointer;
-  margin-bottom: 6px;
-}
-
-.table-subtitulo {
-  font-size: 14px;
-  color: #444;
-  margin-bottom: 12px;
-}
-
-.table-products {
-  width: 340px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+  width: 97%;
   margin: 0 auto;
+}
+
+.table-offers {
+  width: 100%;
+  margin: 0;
   border-collapse: collapse;
-  background-color: #dcf4e5; 
+  background-color: rgb(68, 86, 255);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+  table-layout: fixed;
+  color: white;
 }
 
-.table-products th,
-.table-products td {
-  padding: 12px 10px;
+.table-offers th,
+.table-offers td {
+  padding: 14px 10px;
+  vertical-align: middle;
+}
+
+.table-offers th:nth-child(1),
+.table-offers td:nth-child(1) {
+  width: 85%;
   text-align: left;
 }
 
-.table-products th {
-  background-color:#cce3cc;
-  font-weight: 700;
-  color: #000;
+.table-offers th:nth-child(2),
+.table-offers td:nth-child(2) {
+  width: 20%;
+  text-align: center;
+  padding: 14px 0px;
 }
 
-.table-products tr:not(:last-child) {
-  border-bottom: 1px solid #cce3cc;
+.table-offers th {
+  background-color: rgb(22, 40, 196);
+  font-weight: 700;
+  color: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.table-offers tr:not(:last-child) {
+  border-bottom: 0px solid #36b8f5;
 }
 
 .table-actions {
   display: flex;
-  gap: 10px;
   justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .table-actions i {
@@ -65,4 +68,23 @@
 
 .table-actions i:hover {
   color: #ec2d2d;
+}
+
+/* Estilos para el scroll */
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: rgb(22, 40, 196);
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: rgb(37, 58, 241);
 }
