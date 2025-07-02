@@ -9,7 +9,7 @@ export default function Register() {
     return (
         <div className="register-body">
             <div className="register-container">
-                <h1>Regístrate</h1>
+                <h1 className="tittles-h1">Regístrate</h1>
                 <form className="register-form">
                     <input className="inputs-register" type="text" placeholder="Nombre" required />
                     <input className="inputs-register" type="text" placeholder="Apellido" required />

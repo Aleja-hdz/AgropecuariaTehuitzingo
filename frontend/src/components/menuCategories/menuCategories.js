@@ -5,12 +5,12 @@ export default function MenuCategories() {
     return(
         <div className="menu-categories">
             <div className="order-categories">
-                <Link className="btn-categorie" to="/alimentosBalanceados"><button className="btn-categorie">Alimentos balanceados</button></Link>
-                <Link className="btn-categorie" to="/medicamentosVeterinarios"><button className="btn-categorie">Medicamentos veterinarios</button></Link>
+                <Link className="btn-categorie-balanceados" to="/alimentosBalanceados"><button className="btn-categorie-balanceados btn-balanceados"><span className="tittles-h1">Alimentos balanceados</span></button></Link>
+                <Link className="btn-categorie-mv" to="/medicamentosVeterinarios"><button className="btn-categorie-mv btn-mv"><span className="tittles-h1">Medicamentos veterinarios</span></button></Link>
             </div>
             <div className="order-categories">
-                <Link className="btn-categorie" to="/mascotas"><button className="btn-categorie">Mascotas</button></Link>
-                <Link className="btn-categorie" to="/implementos"><button className="btn-categorie">Implementos</button></Link>
+                <Link className="btn-categorie-mascotas" to="/mascotas"><button className="btn-categorie-mascotas btn-mascotas"><span className="tittles-h1">Mascotas</span></button></Link>
+                <Link className="btn-categorie-implementos" to="/implementos"><button className="btn-categorie-implementos btn-implementos"><span className="tittles-h1">Implementos</span></button></Link>
             </div>
         </div>
     );

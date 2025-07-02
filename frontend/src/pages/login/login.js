@@ -9,7 +9,7 @@ export default function Login(){
     return (
         <div className="login-body">
             <div className="login-container">
-                <h1>Iniciar sesión</h1>
+                <h1 className="tittles-h1">Iniciar sesión</h1>
                 <form className="login-form">
                     <input className="inputs-login" type="email" placeholder="Correo electrónico" required />
                     <input className="inputs-login" type={showPassword ? 'text' : 'password'} placeholder="Contraseña" required />

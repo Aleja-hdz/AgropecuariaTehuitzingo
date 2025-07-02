@@ -1,6 +1,10 @@
 import './home.css';
 import ButtonSmall from "../../components/buttonSmall/buttonSmall";
- import ImagenPortada from '../../assets/ImagenPortada.png';
+import ImagenPortada from '../../assets/ImagenPortada.png';
+import Negocio from '../../assets/Negocio.jpg';
+import imgS1 from '../../assets/imgS1.jpg';
+import imgS2 from '../../assets/imgS2.png';
+import imgS3 from '../../assets/imgS3.jpg';
 import { MapPin } from 'lucide-react';
 import { Mail } from 'lucide-react';
 import { Smartphone } from 'lucide-react';
@@ -28,10 +32,8 @@ export default function Home() {
         <div className="section-home">
           <div className="container-info">
             <div className="content-text">
-              <h1 className="head-tittle">Agrupecuaria Tehuitzingo</h1>
-              <p className="text-home">Nos dedicamos a la venta y distribución de alimentos 
-              balanceados para tus animales, así como de accesorios 
-              y consultas a tus animales.<br></br>Ganarnos tu confianza es nuestro mayor  objetivo.</p>
+              <h1 className="home-head-tittle">Agropecuaria Tehuitzingo</h1>
+              <p className="text-home">Venta y distribución de las mejores marcas de alimento balanceado, materias primas y accesorios para todas las especies.<br></br>Ganarnos tu confianza es nuestro mayor  objetivo.</p>
             </div>
             <div className="btns-home">
               <Link to="/registro"><ButtonSmall text="Regístrate" /></Link>
@@ -56,7 +58,9 @@ export default function Home() {
               <p className="text-about">Brindar servicios veterinarios de calidad, ofreciendo atención médica integral, productos confiables y asesoramiento personalizado para el cuidado de mascotas y animales de producción, comprometidos con el bienestar animal y la satisfacción de nuestros clientes.</p>
             </div>
             <div className="divs-about">
-              <div className="image-about"></div>
+              <div className="image-about">
+                <img className="img-portada" alt='Negocio' src={Negocio} />
+              </div>
             </div>
             <div className="divs-about">
               <p className="tittles">Visión</p>
@@ -84,12 +88,16 @@ export default function Home() {
               <p className="text-service">Contamos con una amplia variedad de alimentos balanceados para mascotas y animales de granja, seleccionados para garantizar nutrición, salud y bienestar. Ofrecemos asesoramiento personalizado para elegir el alimento ideal según cada especie y etapa.</p>
             </div>
             <div className="box-container-services">
-              <div className="images-service"></div>
+              <div className="images-service">
+                <img className="img-portada" alt='Servicio 1' src={imgS1} />
+              </div>
             </div>
           </div>
           <div className="box-services">
             <div className="box-container-services">
-              <div className="images-service"></div>
+              <div className="images-service">
+                <img className="img-portada" alt='Servicio 2' src={imgS2} />
+              </div>
             </div>
             <div className="box-container-services">
               <p className="tittles-services">Venta y distribución de alimentos balanceados</p>
@@ -102,7 +110,9 @@ export default function Home() {
               <p className="text-service">Ofrecemos atención veterinaria profesional para perros, gatos y animales de granja. Realizamos controles generales, diagnóstico de enfermedades, tratamientos y seguimiento clínico. Tu mascota estará en manos de expertos comprometidos con su salud y bienestar.</p>
             </div>
             <div className="box-container-services">
-              <div className="images-service"></div>
+              <div className="images-service">
+                <img className="img-portada" alt='Servicio 3' src={imgS3} />
+              </div>
             </div>
           </div>
         </div>

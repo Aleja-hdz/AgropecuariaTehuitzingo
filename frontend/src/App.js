@@ -29,8 +29,8 @@ function App() {
   const [isNotFound, setIsNotFound] = useState(false);
   
   useEffect(() => {
-    const definedRoutes = ['/', '/productos', '/ofertas', '/panelDeAdministracion', '/ingreso', '/registro', '/alimentosBalanceados', '/medicamentosVeterinarios', '/mascotas', '/implementos'];
-    setIsNotFound(!definedRoutes.includes(location.pathname));
+    const definedRoutes = ['/', '/productos', '/ofertas', '/panelDeAdministracion', '/ingreso', '/registro', '/alimentosBalanceados', '/medicamentosVeterinarios', '/mascotas', '/implementos', '/producto'];
+    setIsNotFound(!definedRoutes.includes(location.pathname) && !location.pathname.startsWith('/producto/'));
   }, [location.pathname]);
   
   const hideNavbar = location.pathname === '/ingreso' || location.pathname === '/registro' || isNotFound;
@@ -58,3 +58,24 @@ function App() {
 }
 
 export default App;
+
+
+/*
+ <ScrollToTop />
+      {!hideNavbar && <Navbar />}
+      <main className="main-content">
+        <Routes>
+          <Route path='/' element={<Home />}/>
+          <Route path='/productos' element={<Products />}/>
+          <Route path='/ofertas' element={<Offers />}/>
+          <Route path='/panelDeAdministracion' element={<AdminPanel />}/>
+          <Route path='/ingreso' element={<Login />}/>
+          <Route path='/registro' element={<Register />}/>
+          <Route path='/alimentosBalanceados' element={<AlimentosBalanceados />}/>
+          <Route path='/medicamentosVeterinarios' element={<MedicamentosVeterinarios />}/>
+          <Route path='/mascotas' element={<Mascotas />}/>
+          <Route path='/implementos' element={<Implementos />}/>
+          <Route path='*' element={<NotFound />}/>
+        </Routes>
+      </main>
+*/

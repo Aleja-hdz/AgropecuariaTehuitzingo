@@ -7,7 +7,7 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background: linear-gradient(to bottom right, rgb(38, 157, 236), rgb(255, 255, 255));
+    background-color: rgb(37, 58, 241);
     justify-content: center;
     display: flex; 
     align-items: center;
@@ -19,7 +19,7 @@
 .login-container {
     width: 300px;
     height: 400px;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -79,4 +79,17 @@
 
 .ac {
     margin-top: 15px;
+}
+
+.inputs-login::placeholder {
+    color: #222;
+    opacity: 1;
+}
+.inputs-login:-ms-input-placeholder {
+    color: #222;
+    opacity: 1;
+}
+.inputs-login::-ms-input-placeholder {
+    color: #222;
+    opacity: 1;
 }

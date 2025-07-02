@@ -18,12 +18,61 @@
     width: 100%;
     height: 45%;
     gap: 20px;
+    justify-content: center;
 }
 
-.btn-categorie {
+/*Balanceados*/
+
+.btn-categorie-balanceados {
     width: 100%;
     height: 100%;
-    background-color: #d1c84d;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 32px;
+    overflow: hidden;
+    align-content: center;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.btn-balanceados {
+  position: relative;
+  background-image: url('../../assets/Balanceados.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  text-shadow: 1px 1px 4px #000;
+  overflow: hidden;
+}
+
+.btn-balanceados::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1;
+}
+
+.btn-balanceados span {
+  position: relative;
+  z-index: 2;
+}
+
+/*Medicamentos veterinarios*/
+
+.btn-categorie-mv {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
     font-family: 'Inter', sans-serif;
     font-weight: bold;
     font-size: 31px;
@@ -32,4 +81,114 @@
     border: none;
     border-radius: 10px;
     cursor: pointer;
+}
+
+.btn-mv {
+  position: relative;
+  background-image: url('../../assets/MV.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  text-shadow: 1px 1px 4px #000;
+  overflow: hidden;
+}
+
+.btn-mv::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1;
+}
+
+.btn-mv span {
+  position: relative;
+  z-index: 2;
+}
+
+/*Mascotas*/
+
+.btn-categorie-mascotas {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 31px;
+    overflow: hidden;
+    align-content: center;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.btn-mascotas {
+  position: relative;
+  background-image: url('../../assets/Mascotas.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  text-shadow: 1px 1px 4px #000;
+  overflow: hidden;
+}
+
+.btn-mascotas::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1;
+}
+
+.btn-mascotas span {
+  position: relative;
+  z-index: 2;
+}
+
+/*Implementos*/
+
+.btn-categorie-implementos {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 31px;
+    overflow: hidden;
+    align-content: center;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.btn-implementos {
+  position: relative;
+  background-image: url('../../assets/Implementos.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  text-shadow: 1px 1px 4px #000;
+  overflow: hidden;
+}
+
+.btn-implementos::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1;
+}
+
+.btn-implementos span {
+  position: relative;
+  z-index: 2;
 }

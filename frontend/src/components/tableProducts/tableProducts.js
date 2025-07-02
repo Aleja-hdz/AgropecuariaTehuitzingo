@@ -1,9 +1,9 @@
 import './tableProducts.css';
 import OptionsTable from '../optionsTable/optionsTable';
 
-const TableProducts = () => {
-  const productos = [
-    "Nombre completo del producto",
+const TableProducts = ({ productos = [] }) => {
+  // Si no se pasan productos, usar los datos de ejemplo
+  const productosData = productos.length > 0 ? productos : [
     "Nombre completo del producto",
     "Nombre completo del producto",
     "Nombre completo del producto",
@@ -11,6 +11,7 @@ const TableProducts = () => {
   ];
 
   return (
+    <div className="table-container">
       <table className="table-products">
         <thead>
           <tr>
@@ -19,7 +20,7 @@ const TableProducts = () => {
           </tr>
         </thead>
         <tbody>
-          {productos.map((nombre, i) => (
+          {productosData.map((nombre, i) => (
             <tr key={i}>
               <td>{nombre}</td>
               <td>
@@ -31,6 +32,7 @@ const TableProducts = () => {
           ))}
         </tbody>
       </table>
+    </div>
   );
 };
 

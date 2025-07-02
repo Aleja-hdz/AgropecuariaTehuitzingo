@@ -1,6 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap');
 
+/* Contenedor para la tabla con scroll */
+.table-container {
+  max-height: 600px; /* Altura mínima para mostrar aproximadamente 8 registros */
+  overflow-y: auto;
+  border-radius: 12px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
 .product-table {
   width: 100%;
   border-collapse: collapse;
@@ -10,7 +18,8 @@
   table-layout: fixed;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+  color: white;
+  margin: 0;
 }
 
 .product-table th,
@@ -35,16 +44,19 @@
 }
 
 .product-table th {
-  background-color: #b3d4b3;
+  background-color: rgb(22, 40, 196);
   font-weight: 700;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .product-table tr:nth-child(even) {
-  background-color: #d4e8d4;
+  background-color: rgb(68, 86, 255);
 }
 
 .product-table tr:nth-child(odd) {
-  background-color: #c8e0c8;
+  background-color: rgb(37, 58, 241);
 }
 
 .product-table label {
@@ -55,11 +67,11 @@
 }
 
 .product-table label.product {
-  color: #1a73e8;
+  color: #72ff6d;
 }
 
 .product-table label.oferta {
-  color: #d93025;
+  color: #eeff00;
 }
 
 .actions {
@@ -83,4 +95,23 @@
 .product-table th:nth-child(3),
 .product-table td:nth-child(3) {
   text-align: center;
+}
+
+/* Estilos para el scroll */
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: rgb(22, 40, 196);
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: rgb(37, 58, 241);
 }

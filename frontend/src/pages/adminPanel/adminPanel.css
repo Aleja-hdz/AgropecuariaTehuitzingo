@@ -3,14 +3,15 @@
 
 .admin-container {
     padding-top: 70px;
-    padding-bottom: 70px;
+    padding-bottom: 50px;
     width: 100%;
     height: auto;
-    background: linear-gradient(to bottom right, rgba( 224, 238, 213), rgb(255, 255, 255));;
-    display: flex;
+    background-color: white;
+    display: flex;	
     justify-content: center;
     font-family: 'Inter', sans-serif;
-    font-weight: 300;font-family: 'Inter', sans-serif;
+    font-weight: 300;
+	font-family: 'Inter', sans-serif;
     font-weight: 300;
     font-size: 14px;
 }
@@ -41,7 +42,7 @@
 
 .admin-line {
     width: 80px;
-    border: 2px solid rgb(71, 141, 81);
+    border: 2px solid rgb(22, 40, 196);
     margin-left: 0;
     margin-top: -15px;
 }
@@ -58,6 +59,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top: -20px;;
 }
 
 .admin-others-tables {
@@ -70,8 +72,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 25px;
-    
+    margin-top: 20px;
+}
+
+.admin-table-products p {
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 .admin-table-offers {
@@ -79,6 +85,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 25px;
-    
+    margin-top: 20px;
+}
+
+.admin-table-offers p {
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
