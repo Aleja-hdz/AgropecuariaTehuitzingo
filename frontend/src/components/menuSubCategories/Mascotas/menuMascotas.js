@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 export default function MenuMascotas() {
   const [showSpecies, setShowSpecies] = useState(false);
   const [showBrands, setShowBrands] = useState(false);
+  const [showAnimals, setShowAnimals] = useState(false);
 
   return (
     <div className="category-header">
@@ -21,7 +22,7 @@ export default function MenuMascotas() {
 
         <div className="filters">
           <div className="filter" onClick={() => setShowSpecies(!showSpecies)}>
-            <span>Alimentos</span>
+            <span>Alimentos para</span>
             <ChevronDown size={16} />
             {showSpecies && (
               <ul className="dropdown">
@@ -41,6 +42,19 @@ export default function MenuMascotas() {
                 <li>Collares</li>
                 <li>Correas</li>
                 <li>Juguetes</li>
+              </ul>
+            )}
+          </div>
+
+          <div className="filter" onClick={() => setShowAnimals(!showAnimals)}>
+            <span>Animales</span>
+            <ChevronDown size={16} />
+            {showAnimals && (
+              <ul className="dropdown">
+                <li>Perro</li>
+                <li>Gato</li>
+                <li>Hasmters</li>
+                <li>Peces</li>
               </ul>
             )}
           </div>

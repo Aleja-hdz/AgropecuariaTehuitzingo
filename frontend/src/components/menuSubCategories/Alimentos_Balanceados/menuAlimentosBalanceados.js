@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 export default function MenuAlimentosBalanceados() {
   const [showSpecies, setShowSpecies] = useState(false);
   const [showBrands, setShowBrands] = useState(false);
+  const [showOthers, setShowOthers] = useState(false);
 
   return (
     <div className="category-header">
@@ -27,8 +28,11 @@ export default function MenuAlimentosBalanceados() {
               <ul className="dropdown">
                 <li>Bovinos</li>
                 <li>Equinos</li>
+                <li>Porcinos</li>
+                <li>Caprinos</li>
+                <li>Ovinos</li>
                 <li>Aves</li>
-                <li>Cerdos</li>
+                <li>Aquacultura</li>
               </ul>
             )}
           </div>
@@ -42,6 +46,16 @@ export default function MenuAlimentosBalanceados() {
                 <li>Apiaba</li>
                 <li>Fasa</li>
                 <li>Nutre bien</li>
+              </ul>
+            )}
+          </div>
+
+          <div className="filter" onClick={() => setShowOthers(!showOthers)}>
+            <span>Otros</span>
+            <ChevronDown size={16} />
+            {showOthers && (
+              <ul className="dropdown">
+                <li>Alimentos para producción</li>
               </ul>
             )}
           </div>

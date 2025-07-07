@@ -1,9 +1,38 @@
 import './formNewProduct.css';
 import { useState, useEffect } from 'react';
 import ButtonSmall from '../buttonSmall/buttonSmall';
+import FormAlimentosBalanceados from './forms/alimentosBalanceados/formAlimentosBalanceados';
+import FormMedicamentosVeterinarios from './forms/medicamentosVeterinarios/formMedicamentosVeterinarios';
+import FormMascotas from './forms/mascotas/formMascotas';
+import FormImplementos from './forms/implementos/formImplementos';
 
 export default function FormNewProduct({ onClose }) {
     const [imagePreview, setImagePreview] = useState(null);
+    const [opcCategory, setOpcCategory] = useState("");
+
+    //Para seleccionar categoria de producto a usar y mostrar sus respectivos formularios
+    const renderForm = () => {
+        switch (opcCategory){
+            case 'Alimentos balanceados':
+                return(
+                    <FormAlimentosBalanceados />
+                );
+            case 'Medicamentos veterinarios':
+                return(
+                    <FormMedicamentosVeterinarios />
+                );
+            case 'Mascotas':
+                return(
+                    <FormMascotas />
+                );
+            case 'Implementos':
+                return(
+                    <FormImplementos />
+                );
+            default:
+                return(' ');
+        }
+    }
 
     // Prevenir scroll del body cuando el modal está abierto
     useEffect(() => {
@@ -72,7 +101,8 @@ export default function FormNewProduct({ onClose }) {
                 <div className='new-product-box'>
                     <label className='new-product-text-box'>Contenido: </label>
                     <input className='new-product-number-box' type='number' placeholder='0' />
-                    <select className='new-product-opc-box' name='Opciones'>
+                    <select className='new-product-opc-box'>
+                        <option value="">-- Selecciona --</option>
                         <option value=''>Miligramos</option>
                         <option value=''>Gramos</option>
                         <option value=''>Kilogramos</option>
@@ -81,7 +111,22 @@ export default function FormNewProduct({ onClose }) {
                     </select>
                 </div>
 
-                <p className='new-product-text'>Detalles del producto</p>
+                <div className='new-product-category'>
+                    <label>Categoría del producto: </label>
+                    <select className='new-product-opc-category' value={opcCategory} onChange={(e) => setOpcCategory(e.target.value)}>
+                        <option value="">-- Selecciona --</option>
+                        <option value='Alimentos balanceados'>Alimentos balanceados</option>
+                        <option value='Medicamentos veterinarios'>Medicamentos veterinarios</option>
+                        <option value='Mascotas'>Mascotas</option>
+                        <option value='Implementos'>Implementos</option>
+                    </select>
+                </div>
+
+                <div className='new-product-forms'>
+                    {renderForm()}
+                </div>
+
+                <p className='new-product-text-box'>Detalles del producto:</p>
                 <textarea className='new-product-input' placeholder='Detalles del producto ...'></textarea>
 
                 <div className='new-product-btn-keep'>

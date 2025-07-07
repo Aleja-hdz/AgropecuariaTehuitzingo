@@ -26,9 +26,11 @@ export default function MenuImplementos() {
             {showSpecies && (
               <ul className="dropdown">
                 <li>Gallos</li>
-                <li>Rascaderos</li>
-                <li>Bebederos</li>
-                <li>Comederos</li>
+                <li>Pollos</li>
+                <li>Caballos</li>
+                <li>Vacas</li>
+                <li>Cerdos</li>
+                <li>Ovejas</li>
               </ul>
             )}
           </div>
@@ -38,8 +40,11 @@ export default function MenuImplementos() {
             <ChevronDown size={16} />
             {showBrands && (
               <ul className="dropdown">
-                <li>Herramientas</li>
-                <li>Otros</li>
+                <li>Comederos</li>
+                <li>Bebederos</li>
+                <li>Monturas</li>
+                <li>Cuerdas</li>
+                <li>Deslanadores</li>
               </ul>
             )}
           </div>
