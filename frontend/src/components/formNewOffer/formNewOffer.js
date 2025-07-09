@@ -69,7 +69,7 @@ export default function FormNewOffer({ onClose }) {
                 <p className='new-offer-text'>Nombre del producto</p>
                 <input className='new-offer-input1' type='text' placeholder='Cerdo Inicia Medicado ...' />
 
-                <p className='new-offer-text'>Mensaje de detalles de la oferta</p>
+                <p className='new-offer-text'>Mensaje de oferta</p>
                 <input className='new-offer-input1' type='text' placeholder='En la compra de ...' />
 
                 <div className='new-offer-prices-container'>
@@ -88,6 +88,21 @@ export default function FormNewOffer({ onClose }) {
                         </div>
                     </div>
                 </div>
+                <div className='divUso'></div>
+                <div className='new-offer-prices-container'>
+                    <div className='new-offer-box-price'>
+                        <p>Fecha de inicio</p>
+                        <div className='new-offer-price'>
+                            <input className='new-offer-number-box' type='date'></input>
+                        </div>
+                    </div>
+                    <div className='new-offer-box-price'>
+                        <p>Fecha de fin</p>
+                        <div className='new-offer-price'>
+                            <input className='new-offer-number-box' type='date'></input>
+                        </div>
+                    </div>
+                </div>
 
                 <div className='new-offer-box'>
                     <label className='new-offer-text-box'>Contenido: </label>
@@ -101,7 +116,7 @@ export default function FormNewOffer({ onClose }) {
                     </select>
                 </div>
 
-                <p className='new-offer-text'>Detalles adicionales del producto</p>
+                <p className='new-offer-text'>Detalles adicionales del producto (opcional)</p>
                 <textarea className='new-offer-input' placeholder='Detalles del producto'></textarea>
 
                 <div className='new-offer-btn-keep'>

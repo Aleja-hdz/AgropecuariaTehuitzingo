@@ -60,3 +60,13 @@
     margin-bottom: 0px;
     border-width: 1px;
 }
+
+.footer {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1628c4;
+    color: white;
+}

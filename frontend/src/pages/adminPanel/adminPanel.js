@@ -73,44 +73,49 @@ export default function AdminPanel() {
     };
 
     return (
-        <div className="admin-container">
-            <div className='admin-content'>
-                <div className='admin-head'>
-                    <div className='admin-box1-head'>
-                        <h1 className='tittles-h1'>Panel de gestión</h1>
-                        <hr className='admin-line'></hr>
+        <>
+            <div className="admin-container">
+                <div className='admin-content'>
+                    <div className='admin-head'>
+                        <div className='admin-box1-head'>
+                            <h1 className='tittles-h1'>Panel de gestión</h1>
+                            <hr className='admin-line'></hr>
+                        </div>
+                        <div className='admin-box2-head'>
+                            <CurrentInformation products={totalProductos} offers={totalOfertas} />
+                        </div>
                     </div>
-                    <div className='admin-box2-head'>
-                        <CurrentInformation products={totalProductos} offers={totalOfertas} />
+                    <div className="admin-first-table">
+                        <p>Últimas creaciones</p>
+                        <TableMain data={ultimasCreacionesData} />
+                    </div>
+                    <div className='admin-others-tables'>
+                        <div className='admin-table-products'>
+                            <ButtonLong text={"Nuevo producto"} onClick={handleNewProduct}/>
+                            <p>Productos registrados</p>
+                            <TableProducts productos={productosData} />
+                        </div>
+                        <div className='admin-table-offers'>
+                            <ButtonLong text={"Nueva oferta"} onClick={handleNewOffer}/>
+                            <p>Ofertas registradas</p>
+                            <TableOffers ofertas={ofertasData} />
+                        </div>
                     </div>
                 </div>
-                <div className="admin-first-table">
-                    <p>Últimas creaciones</p>
-                    <TableMain data={ultimasCreacionesData} />
-                </div>
-                <div className='admin-others-tables'>
-                    <div className='admin-table-products'>
-                        <ButtonLong text={"Nuevo producto"} onClick={handleNewProduct}/>
-                        <p>Productos registrados</p>
-                        <TableProducts productos={productosData} />
-                    </div>
-                    <div className='admin-table-offers'>
-                        <ButtonLong text={"Nueva oferta"} onClick={handleNewOffer}/>
-                        <p>Ofertas registradas</p>
-                        <TableOffers ofertas={ofertasData} />
-                    </div>
-                </div>
+
+                {/* Modal para Nuevo Producto */}
+                {showNewProductForm && (
+                    <FormNewProduct onClose={handleCloseNewProduct} />
+                )}
+
+                {/* Modal para Nueva Oferta */}
+                {showNewOfferForm && (
+                    <FormNewOffer onClose={handleCloseNewOffer} />
+                )}
             </div>
-
-            {/* Modal para Nuevo Producto */}
-            {showNewProductForm && (
-                <FormNewProduct onClose={handleCloseNewProduct} />
-            )}
-
-            {/* Modal para Nueva Oferta */}
-            {showNewOfferForm && (
-                <FormNewOffer onClose={handleCloseNewOffer} />
-            )}
-        </div>
+            <footer className='footer'>
+                <p className="text-contact">&copy; 2025 Todos los derechos reservados || Agropecuaria Tehuitzingo</p>
+            </footer>
+        </>
     );
 }

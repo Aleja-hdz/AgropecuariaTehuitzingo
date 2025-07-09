@@ -19,7 +19,7 @@ export default function Navbar() {
         <li><Link to="/panelDeAdministracion">Gestión</Link></li>
       </ul>
       <div className="nav-user">
-        <Link to="/ingreso">
+        <Link to="/perfil">
           <button className="user-button">
               <User color='white' size={22} />
           </button>

@@ -120,6 +120,9 @@ export default function MedicamentosVeterinarios() {
             {showProductModal && (
                 <ViewProduct product={selectedProduct} onClose={handleCloseProductModal} />
             )}
+            <footer className='footer'>
+                <p className="text-contact">&copy; 2025 Todos los derechos reservados || Agropecuaria Tehuitzingo</p>
+            </footer>
         </div>
     );
 }
