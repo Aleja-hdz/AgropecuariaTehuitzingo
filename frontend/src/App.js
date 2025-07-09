@@ -13,6 +13,11 @@ import MedicamentosVeterinarios from './pages/productsSubCategories/Medicamentos
 import Mascotas from './pages/productsSubCategories/Mascotas/mascotas'
 import Implementos from './pages/productsSubCategories/Implementos/implementos';
 import NotFound from './pages/NotFound';
+import UserProfile from './pages/userProfile/userProfile';
+import ForgotPassword from './pages/passwordRecovery/forgotPassword/forgotPassword';
+import ResetPassword from './pages/passwordRecovery/resetPassword/resetPassword';
+import ChangePassword from './pages/passwordRecovery/changePassword/changePassword';
+import ChangeTypeUser from './pages/changeTypeUser/changeTypeUser';
 
 function ScrollToTop() {
   const location = useLocation();
@@ -46,10 +51,15 @@ function App() {
           <Route path='/panelDeAdministracion' element={<AdminPanel />}/>
           <Route path='/ingreso' element={<Login />}/>
           <Route path='/registro' element={<Register />}/>
+          <Route path='/recuperarContraseña' element={<ForgotPassword />}/>
+          <Route path='/cambiarContraseña' element={<ResetPassword />}/>
           <Route path='/alimentosBalanceados' element={<AlimentosBalanceados />}/>
           <Route path='/medicamentosVeterinarios' element={<MedicamentosVeterinarios />}/>
           <Route path='/mascotas' element={<Mascotas />}/>
           <Route path='/implementos' element={<Implementos />}/>
+          <Route path='/perfil' element={<UserProfile />}/>
+          <Route path='/nuevaContraseña' element={<ChangePassword />}/>
+          <Route path='/cambioUsuario' element={<ChangeTypeUser />}/>
           <Route path='*' element={<NotFound />}/>
         </Routes>
       </main>

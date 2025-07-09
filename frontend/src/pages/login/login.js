@@ -20,7 +20,7 @@ export default function Login(){
                     <ButtonSmall text="Iniciar sesión" />
                     <div className="links-register">
                         <p className="ac">¿No tienes una cuenta? <a href="/registro">Regístrate</a></p>
-                        <p className="ad"><a href="/registro">¿Olvidaste tu contraseña?</a></p>
+                        <p className="ad"><a href="/recuperarContraseña">¿Olvidaste tu contraseña?</a></p>
                     </div>
                 </form>
             </div>

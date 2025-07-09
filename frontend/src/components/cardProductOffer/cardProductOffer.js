@@ -10,13 +10,13 @@ export default function CardProductOffer({ offer }) {
     const defaultOffer = {
         id: 1,
         name: "Nombre del producto",
+        textOffer: "¡Oferta Especial!",
         weight: "35gr",
         pricePrevious: "$35",
         priceOffer: "$25",
         image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw",
         startDate: "05/06/2025",
         endDate: "15/06/2025",
-        stock: 5,
         description: "Lorem ipsum dolor sit amet consectetur, adipiscing elit sem sapien lacus et, sociis cubilia congue sollicitudin. Arcu risus sociosqu imperdiet aliquam per, etiam vel facilisis."
     };
     
