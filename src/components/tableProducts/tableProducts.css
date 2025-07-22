@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+/* Contenedor para la tabla con scroll */
+.table-container {
+  max-height: 600px; /* Altura mínima para mostrar aproximadamente 8 registros */
+  overflow-y: auto;
+  border-radius: 12px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+  width: 97%;
+  margin: 0 auto;
+}
+
+.table-products {
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  background-color: rgb(37, 58, 241);
+  border-radius: 12px;
+  overflow: hidden;
+  table-layout: fixed;
+  color: white;
+}
+
+.table-products th,
+.table-products td {
+  padding: 14px 10px;
+  vertical-align: middle;
+}
+
+.table-products th:nth-child(1),
+.table-products td:nth-child(1) {
+  width: 85%;
+  text-align: left;
+}
+
+.table-products th:nth-child(2),
+.table-products td:nth-child(2) {
+  width: 20%;
+  text-align: center;
+  padding: 14px 0px;
+}
+
+.table-products th {
+  background-color: rgb(22, 40, 196);
+  font-weight: 700;
+  color: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.table-products tr:not(:last-child) {
+  border-bottom: 0px solid #36b8f5;
+}
+
+.table-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.table-actions i {
+  cursor: pointer;
+  font-size: 16px;
+  color: #222;
+}
+
+.table-actions i:hover {
+  color: #ec2d2d;
+}
+
+/* Estilos para el scroll */
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: rgb(22, 40, 196);
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: rgb(37, 58, 241);
+}

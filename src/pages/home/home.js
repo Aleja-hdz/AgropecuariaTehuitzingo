@@ -12,6 +12,7 @@ import { Smartphone } from 'lucide-react';
 import { FaFacebook } from "react-icons/fa";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Home() {
   useEffect(() => {
@@ -147,7 +148,7 @@ export default function Home() {
               <li><a href="#servicios">Servicios</a></li>
               <li><a href="#contactanos">Contáctanos</a></li>
               <li><a href="/productos">Productos</a></li>
-              <li><a href="/ofertas">Ofertas</a></li>
+              <li><Link to="/ofertas">Ofertas</Link></li>
             </ul>
             <div className="box-icons">
               <a href="https://wa.me/"><IoLogoWhatsapp size={27}/></a>

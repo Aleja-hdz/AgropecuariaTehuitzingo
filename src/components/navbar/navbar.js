@@ -1,5 +1,6 @@
 import './navbar.css';
 import { User } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import logo from '../../assets/Logo2.png';
 
 export default function Navbar() {
@@ -14,8 +15,8 @@ export default function Navbar() {
         <li><a href="/#servicios">Servicios</a></li>
         <li><a href="/#contactanos">Contáctanos</a></li>
         <li><a href="/productos">Productos</a></li>
-        <li><a href="/ofertas">Ofertas</a></li>
-        <li><a href="/panelDeAdministracion">Gestión</a></li>
+        <li><Link to="/ofertas">Ofertas</Link></li>
+        <li><Link to="/dashboard">Gestión</Link></li>
       </ul>
       <div className="nav-user">
         <a href="/perfil">
