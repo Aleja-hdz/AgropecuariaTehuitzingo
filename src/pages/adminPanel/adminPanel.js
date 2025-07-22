@@ -92,7 +92,7 @@ export default function AdminPanel() {
                             <hr className='admin-line'></hr>
                         </div>
                         <div className='admin-box2-head'>
-                            <CurrentInformation products={totalProductos} offers={totalOfertas} />
+                            <CurrentInformation products={totalProductos} offers={ofertas.length} />
                         </div>
                     </div>
                     <div className="admin-first-table">
