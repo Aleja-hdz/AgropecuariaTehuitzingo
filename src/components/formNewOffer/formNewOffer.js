@@ -3,19 +3,19 @@ import { useState, useEffect } from 'react';
 import ButtonSmall from '../buttonSmall/buttonSmall';
 import { supabase } from '../../lib/supabaseClient';
 
-export default function FormNewOffer({ onClose }) {
+export default function FormNewOffer({ onClose, offerData, isEdit, onSave }) {
     const [imageFile, setImageFile] = useState(null);
-    const [imageUrl, setImageUrl] = useState('');
-    const [nameOffer, setNameOffer] = useState('');
-    const [messageOffer, setMessageOffer] = useState('');
-    const [previousPrice, setPreviousPrice] = useState('');
-    const [currentPrice, setCurrentPrice] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-    const [contentNumber, setContentNumber] = useState('');
-    const [contentExtent, setContentExtent] = useState('');
-    const [additionalDetails, setAdditionalDetails] = useState('');
-    const [imagePreview, setImagePreview] = useState(null);
+    const [imageUrl, setImageUrl] = useState(offerData?.url || '');
+    const [nameOffer, setNameOffer] = useState(offerData?.nombre || '');
+    const [messageOffer, setMessageOffer] = useState(offerData?.mensaje_promocional || '');
+    const [previousPrice, setPreviousPrice] = useState(offerData?.precio_anterior || '');
+    const [currentPrice, setCurrentPrice] = useState(offerData?.precio_actual || '');
+    const [startDate, setStartDate] = useState(offerData?.fecha_inicio || '');
+    const [endDate, setEndDate] = useState(offerData?.fecha_fin || '');
+    const [contentNumber, setContentNumber] = useState(offerData?.contenido_decimal || '');
+    const [contentExtent, setContentExtent] = useState(offerData?.contenido_medida || '');
+    const [additionalDetails, setAdditionalDetails] = useState(offerData?.informacion_adicional || '');
+    const [imagePreview, setImagePreview] = useState(offerData?.url || null);
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -63,36 +63,62 @@ export default function FormNewOffer({ onClose }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
-            const url = await uploadImageToSupabase();
-            if (!url) {
-                alert('No se pudo subir la imagen.');
-                return;
+            let url = imageUrl;
+            if (imageFile) {
+                const uploadedUrl = await uploadImageToSupabase();
+                if (!uploadedUrl) {
+                    alert('No se pudo subir la imagen.');
+                    return;
+                }
+                url = uploadedUrl;
             }
-
-            const { error } = await supabase.from('ofertas').insert({
-                url: url,
-                nombre: nameOffer,
-                mensaje_promocional: messageOffer,
-                precio_anterior: previousPrice === '' ? null : Number(previousPrice),
-                precio_actual: currentPrice === '' ? null : Number(currentPrice),
-                fecha_inicio: startDate,
-                fecha_fin: endDate,
-                contenido_decimal: contentNumber === '' ? null : parseInt(contentNumber),
-                contenido_medida: contentExtent,
-                informacion_adicional: additionalDetails,
-            });
-
-            if (error) {
-                console.error(error);
-                alert('Error al guardar la oferta en Supabase');
-                return;
+            if (isEdit && offerData) {
+                // Actualizar oferta existente
+                const { error } = await supabase.from('ofertas').update({
+                    url: url,
+                    nombre: nameOffer,
+                    mensaje_promocional: messageOffer,
+                    precio_anterior: previousPrice === '' ? null : Number(previousPrice),
+                    precio_actual: currentPrice === '' ? null : Number(currentPrice),
+                    fecha_inicio: startDate,
+                    fecha_fin: endDate,
+                    contenido_decimal: contentNumber === '' ? null : parseInt(contentNumber),
+                    contenido_medida: contentExtent,
+                    informacion_adicional: additionalDetails,
+                }).eq('id', offerData.id);
+                if (error) {
+                    console.error(error);
+                    alert('Error al actualizar la oferta en Supabase');
+                    return;
+                }
+                alert('¡Oferta actualizada con éxito!');
+                if (onSave) onSave();
+                onClose();
+            } else {
+                // Crear nueva oferta
+                const { error } = await supabase.from('ofertas').insert({
+                    url: url,
+                    nombre: nameOffer,
+                    mensaje_promocional: messageOffer,
+                    precio_anterior: previousPrice === '' ? null : Number(previousPrice),
+                    precio_actual: currentPrice === '' ? null : Number(currentPrice),
+                    fecha_inicio: startDate,
+                    fecha_fin: endDate,
+                    contenido_decimal: contentNumber === '' ? null : parseInt(contentNumber),
+                    contenido_medida: contentExtent,
+                    informacion_adicional: additionalDetails,
+                });
+                if (error) {
+                    console.error(error);
+                    alert('Error al guardar la oferta en Supabase');
+                    return;
+                }
+                alert('¡Oferta guardada con éxito!');
+                resetForm();
+                if (onSave) onSave();
+                onClose();
             }
-
-            alert('¡Oferta guardada con éxito!');
-            resetForm();
-            onClose();
         } catch (err) {
             console.error('Error inesperado:', err);
             alert('Error inesperado al guardar la oferta.');
@@ -128,7 +154,7 @@ export default function FormNewOffer({ onClose }) {
                 <div className='new-offer-exit'>
                     <button className='new-offer-btn-exit' onClick={handleClose}>X</button>
                 </div>
-                <h1>Nueva oferta</h1>
+                <h1>{isEdit ? 'Editar oferta' : 'Nueva oferta'}</h1>
 
                 <p className='new-offer-text'>Imagen para el producto</p>
                 {!imagePreview ? (
