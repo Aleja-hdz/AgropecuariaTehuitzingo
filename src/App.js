@@ -6,6 +6,8 @@ import Home from './pages/home/home';
 import Offers from './pages/offers/offers';
 import NotFound from './pages/NotFound';
 import AdminPanel from './pages/adminPanel/adminPanel';
+import Register from './pages/register/register';
+import Login from './pages/login/login';
 
 function ScrollToTop() {
   const location = useLocation();
@@ -38,6 +40,8 @@ function App() {
           <Route path='/' element={<Home />}/>
           <Route path='/ofertas' element={<Offers/>}/>
           <Route path='/dashboard' element={<AdminPanel />}/>
+          <Route path='/registro' element={<Register />}/>
+          <Route path='/ingreso' element={<Login />}/>
           <Route path='*' element={<NotFound />}/>
         </Routes>
       </main>
