@@ -1,0 +1,137 @@
+.view-producto-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+  backdrop-filter: blur(5px);
+}
+
+.view-producto-modal-content {
+  background-color: white;
+  border-radius: 12px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.view-producto-box {
+  display: flex;
+  gap: 20px;
+  padding: 30px;
+  width: 700px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.producto-img-placeholder {
+  width: 200px;
+  height: 200px;
+  background-color: #ddd;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: #666;
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.producto-info {
+  flex: 1;
+  font-family: 'Inter', sans-serif;
+  color: #333;
+  min-width: 0; /* Permite que el texto se ajuste */
+}
+
+.producto-titulo {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #182bd1;
+}
+
+.cantidad, .precio {
+  font-weight: 600;
+  color: black;
+}
+
+.descripcion {
+  font-size: 14px;
+  color: #666;
+  margin-top: 5px;
+  line-height: 1.5;
+}
+
+.modal-close-btn {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background-color: #182bd1;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.modal-close-btn:hover {
+  background-color: #141f8a;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .view-producto-box {
+    flex-direction: column;
+    padding: 20px;
+    width: 100%;
+  }
+  
+  .producto-img-placeholder {
+    width: 100%;
+    height: 150px;
+    margin-bottom: 15px;
+  }
+  
+  .producto-titulo {
+    font-size: 18px;
+  }
+  
+  .view-producto-modal-content {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+}
+
+/* Mantener los estilos originales para compatibilidad */
+.view-producto-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0,0,0,0.5);
+  padding: 40px 0;
+  min-height: 100vh;
+}
