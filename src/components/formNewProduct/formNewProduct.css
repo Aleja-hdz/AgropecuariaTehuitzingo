@@ -105,7 +105,8 @@ body {
 }
 
 .new-product-text {
-  margin: 10px 0 5px;
+  margin-top: 17px;
+  margin-bottom: 5px;
 }
 
 .new-product-photo {
@@ -132,7 +133,7 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   margin-top: 5px;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   color: rgb(255, 255, 255);
   background-color: rgb(37, 58, 241);
 }
@@ -147,6 +148,7 @@ body {
 
 .new-product-text-box {
   flex: 1 1 100%;
+  margin-top: 25px;
 }
 
 .new-product-number-box {
@@ -226,7 +228,7 @@ body {
 input::placeholder,
 textarea::placeholder {
   color: #dfdede;
-  opacity: 1;
+  opacity: 5;
 }
 
 .new-product-category {

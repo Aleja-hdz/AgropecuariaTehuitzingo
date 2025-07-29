@@ -38,6 +38,30 @@ export default function FormNewOffer({ onClose, offerData, isEdit, onSave }) {
         }
     };
 
+    // Función para eliminar imagen anterior del bucket
+    const deletePreviousImage = async (imageUrl) => {
+        if (!imageUrl) return;
+        
+        try {
+            // Extraer el nombre del archivo de la URL
+            const parts = imageUrl.split('/');
+            const fileName = parts[parts.length - 1].split('?')[0];
+            
+            const { error } = await supabase
+                .storage
+                .from('ofertas-img')
+                .remove([fileName]);
+                
+            if (error) {
+                console.error('Error al eliminar imagen anterior:', error);
+            } else {
+                console.log('Imagen anterior eliminada exitosamente');
+            }
+        } catch (err) {
+            console.error('Error al procesar eliminación de imagen anterior:', err);
+        }
+    };
+
     const uploadImageToSupabase = async () => {
         if (!imageFile) return;
 
@@ -65,6 +89,13 @@ export default function FormNewOffer({ onClose, offerData, isEdit, onSave }) {
         e.preventDefault();
         try {
             let url = imageUrl;
+            let previousImageUrl = null;
+            
+            // Si estamos editando y hay una nueva imagen, guardar la URL anterior
+            if (isEdit && offerData && imageFile && offerData.url) {
+                previousImageUrl = offerData.url;
+            }
+            
             if (imageFile) {
                 const uploadedUrl = await uploadImageToSupabase();
                 if (!uploadedUrl) {
@@ -73,6 +104,7 @@ export default function FormNewOffer({ onClose, offerData, isEdit, onSave }) {
                 }
                 url = uploadedUrl;
             }
+            
             if (isEdit && offerData) {
                 // Actualizar oferta existente
                 const { error } = await supabase.from('ofertas').update({
@@ -92,6 +124,12 @@ export default function FormNewOffer({ onClose, offerData, isEdit, onSave }) {
                     alert('Error al actualizar la oferta en Supabase');
                     return;
                 }
+                
+                // Eliminar imagen anterior si se subió una nueva
+                if (previousImageUrl) {
+                    await deletePreviousImage(previousImageUrl);
+                }
+                
                 alert('¡Oferta actualizada con éxito!');
                 if (onSave) onSave();
                 onClose();

@@ -1,7 +1,7 @@
 import './buttonSmall.css';
 
-export default function ButtonSmall({text, onClick}){
+export default function ButtonSmall({text, onClick, type}){
     return (
-            <button type='button' onClick={onClick} className="btn-small">{text}</button>
+            <button type={type} onClick={onClick} className="btn-small" >{text}</button>
     );
 }
