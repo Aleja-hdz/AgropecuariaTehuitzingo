@@ -23,9 +23,28 @@ const TableOffers = () => {
     }
   };
 
-  const handleDelete = async (id, nombre) => {
+  // Modificado: handleDelete ahora recibe también la url de la imagen
+  const handleDelete = async (id, nombre, url) => {
     const confirm = window.confirm(`Eliminarás la siguiente oferta: ${nombre}`);
     if (!confirm) return;
+    // Eliminar imagen del bucket si existe
+    if (url) {
+      try {
+        // Extraer el nombre del archivo de la URL
+        const parts = url.split('/');
+        const fileName = parts[parts.length - 1].split('?')[0];
+        const { error: storageError } = await supabase
+          .storage
+          .from('ofertas-img')
+          .remove([fileName]);
+        if (storageError) {
+          console.error('Error al eliminar la imagen del bucket:', storageError.message);
+        }
+      } catch (err) {
+        console.error('Error al procesar la eliminación de la imagen:', err);
+      }
+    }
+    // Eliminar registro de la base de datos
     const { error } = await supabase
       .from('ofertas')
       .delete()
@@ -65,7 +84,8 @@ const TableOffers = () => {
               <td>
                 <div className="table-actions">
                   <OptionsTable 
-                    onDelete={() => handleDelete(oferta.id, oferta.nombre)} 
+                    // Modificado: pasar url a handleDelete
+                    onDelete={() => handleDelete(oferta.id, oferta.nombre, oferta.url)} 
                     offerId={oferta.id} 
                     onEdit={() => handleEdit(oferta)}
                   />
