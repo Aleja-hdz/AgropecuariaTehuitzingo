@@ -1,278 +1,214 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import './products.css';
 import Searcher from '../../components/searcher/searcher';
 import MenuCategories from '../../components/menuCategories/menuCategories';
 import CardProduct from '../../components/cardProduct/cardProduct';
 import NoProductsFound from '../../components/noProductsFound/noProductsFound';
 import ViewProduct from '../../components/viewProduct/viewProduct';
+import AliBalViewProduct from '../../components/viewProduct/aliBalViewProduct';
+import ImpViewProduct from '../../components/viewProduct/impViewProduct';
+import MascAccViewProduct from '../../components/viewProduct/mascAccViewProduct';
+import MascAliViewProduct from '../../components/viewProduct/mascAliViewProduct';
+import { supabase } from '../../lib/supabaseClient';
 
 export default function Products(){
     const [searchTerm, setSearchTerm] = useState('');
     const [showProductModal, setShowProductModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
-    
-    const allProducts = [
-        // Alimentos Balanceados (IDs 1-8)
-        {
-            id: 1,
-            name: "Alimento Premium para Perros",
-            weight: "2kg",
-            price: "$25",
-            category: "Alimentos Balanceados",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 2,
-            name: "Alimento para Gatos Adultos",
-            weight: "1.5kg",
-            price: "$30",
-            category: "Alimentos Balanceados",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 3,
-            name: "Alimento para Aves",
-            weight: "500gr",
-            price: "$15",
-            category: "Alimentos Balanceados",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 4,
-            name: "Alimento para Conejos",
-            weight: "1kg",
-            price: "$20",
-            category: "Alimentos Balanceados",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 5,
-            name: "Alimento para Hamsters",
-            weight: "250gr",
-            price: "$12",
-            category: "Alimentos Balanceados",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 6,
-            name: "Alimento para Peces",
-            weight: "100gr",
-            price: "$8",
-            category: "Alimentos Balanceados",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 7,
-            name: "Alimento para Tortugas",
-            weight: "300gr",
-            price: "$18",
-            category: "Alimentos Balanceados",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 8,
-            name: "Alimento para Perros Cachorros",
-            weight: "3kg",
-            price: "$35",
-            category: "Alimentos Balanceados",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        
-        // Medicamentos Veterinarios (IDs 9-15)
-        {
-            id: 9,
-            name: "Vacuna Triple Felina",
-            weight: "1ml",
-            price: "$45",
-            category: "Medicamentos Veterinarios",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 10,
-            name: "Antiparasitario para Perros",
-            weight: "10ml",
-            price: "$60",
-            category: "Medicamentos Veterinarios",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 11,
-            name: "Vitamina C para Mascotas",
-            weight: "100ml",
-            price: "$35",
-            category: "Medicamentos Veterinarios",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 12,
-            name: "Antibiótico para Gatos",
-            weight: "50ml",
-            price: "$80",
-            category: "Medicamentos Veterinarios",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 13,
-            name: "Vacuna contra la Rabia",
-            weight: "1ml",
-            price: "$55",
-            category: "Medicamentos Veterinarios",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 14,
-            name: "Antiinflamatorio para Perros",
-            weight: "30ml",
-            price: "$70",
-            category: "Medicamentos Veterinarios",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 15,
-            name: "Suplemento de Calcio",
-            weight: "200gr",
-            price: "$40",
-            category: "Medicamentos Veterinarios",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        
-        // Mascotas (IDs 16-22)
-        {
-            id: 16,
-            name: "Comedero Automático",
-            weight: "500gr",
-            price: "$120",
-            category: "Mascotas",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 17,
-            name: "Juguete para Perros",
-            weight: "200gr",
-            price: "$25",
-            category: "Mascotas",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 18,
-            name: "Cama para Gatos",
-            weight: "1kg",
-            price: "$45",
-            category: "Mascotas",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 19,
-            name: "Correa Retráctil",
-            weight: "300gr",
-            price: "$35",
-            category: "Mascotas",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 20,
-            name: "Arena Sanitaria",
-            weight: "4kg",
-            price: "$30",
-            category: "Mascotas",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 21,
-            name: "Cepillo para Mascotas",
-            weight: "150gr",
-            price: "$18",
-            category: "Mascotas",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 22,
-            name: "Transportadora para Gatos",
-            weight: "2kg",
-            price: "$85",
-            category: "Mascotas",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        
-        // Implementos (IDs 23-30)
-        {
-            id: 23,
-            name: "Tijeras de Peluquería",
-            weight: "250gr",
-            price: "$65",
-            category: "Implementos",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 24,
-            name: "Cortauñas para Mascotas",
-            weight: "100gr",
-            price: "$28",
-            category: "Implementos",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 25,
-            name: "Secador de Pelo Profesional",
-            weight: "1.2kg",
-            price: "$150",
-            category: "Implementos",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 26,
-            name: "Mesa de Peluquería",
-            weight: "15kg",
-            price: "$280",
-            category: "Implementos",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 27,
-            name: "Shampoo Profesional",
-            weight: "500ml",
-            price: "$42",
-            category: "Implementos",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 28,
-            name: "Cepillo Profesional",
-            weight: "300gr",
-            price: "$38",
-            category: "Implementos",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 29,
-            name: "Peine de Púas Finas",
-            weight: "80gr",
-            price: "$22",
-            category: "Implementos",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 30,
-            name: "Kit de Peluquería Completo",
-            weight: "2kg",
-            price: "$180",
-            category: "Implementos",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        }
-    ];
+    const [allProducts, setAllProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    // Función para filtrar productos conforme a lo quie se escriba en search
+    // Obtener todos los productos de todas las categorías
+    useEffect(() => {
+        fetchAllProducts();
+    }, []);
+
+    const fetchAllProducts = async () => {
+        try {
+            setLoading(true);
+            const allProductsData = [];
+
+            // 1. Obtener Alimentos Balanceados
+            const { data: alimentosData, error: alimentosError } = await supabase
+                .from('alimentos_balanceados')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (!alimentosError && alimentosData) {
+                const alimentosFormatted = alimentosData.map(item => ({
+                    id: item.id,
+                    name: item.nombre,
+                    weight: `${item.contenido_decimal} ${item.contenido_medida}`,
+                    image: item.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
+                    category: 'Alimentos Balanceados',
+                    // Datos adicionales para la vista detallada
+                    especie: item.especie,
+                    marca: item.marca,
+                    alimento_produccion: item.alimento_produccion,
+                    materias_primas: item.materias_primas,
+                    informacion_adicional: item.informacion_adicional,
+                    created_at: item.created_at,
+                    // Identificador para el modal correcto
+                    modalType: 'alimentos-balanceados'
+                }));
+                allProductsData.push(...alimentosFormatted);
+            }
+
+            // 2. Obtener Implementos
+            const { data: implementosData, error: implementosError } = await supabase
+                .from('implementos')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (!implementosError && implementosData) {
+                const implementosFormatted = implementosData.map(item => ({
+                    id: item.id,
+                    name: item.nombre,
+                    weight: item.informacion_adicional || 'Implemento',
+                    image: item.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
+                    category: 'Implementos',
+                    // Datos adicionales para la vista detallada
+                    que_es: item.que_es,
+                    tipo_animal: item.tipo_animal,
+                    recomendaciones_uso: item.recomendaciones_uso,
+                    informacion_adicional: item.informacion_adicional,
+                    created_at: item.created_at,
+                    // Identificador para el modal correcto
+                    modalType: 'implementos'
+                }));
+                allProductsData.push(...implementosFormatted);
+            }
+
+            // 3. Obtener Mascotas (Alimentos y Accesorios)
+            const { data: mascotasData, error: mascotasError } = await supabase
+                .from('mascotas')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (!mascotasError && mascotasData) {
+                const mascotasWithDetails = await Promise.all(
+                    mascotasData.map(async (item) => {
+                        let weight = '';
+                        let additionalData = {};
+                        let modalType = '';
+                        
+                        if (item.sub_categoria === 'Alimento') {
+                            // Obtener datos de alimentos_mascotas
+                            const { data: alimentoData } = await supabase
+                                .from('alimentos_mascotas')
+                                .select('*')
+                                .eq('id', item.id)
+                                .single();
+                            
+                            if (alimentoData) {
+                                weight = `${alimentoData.contenido_decimal} ${alimentoData.contenido_medida}`;
+                                additionalData = {
+                                    ...alimentoData,
+                                    // Datos para el modal de alimentos
+                                    especie_mascota: alimentoData.especie_mascota,
+                                    etapa_vida: alimentoData.etapa_vida,
+                                    tamano_raza: alimentoData.tamano_raza,
+                                    presentacion: alimentoData.presentacion,
+                                    marca: alimentoData.marca,
+                                    ingredientes_composicion_nutrimental: alimentoData.ingredientes_composicion_nutrimental,
+                                    contenido_decimal: alimentoData.contenido_decimal,
+                                    contenido_medida: alimentoData.contenido_medida,
+                                };
+                                modalType = 'mascotas-alimentos';
+                            }
+                        } else if (item.sub_categoria === 'Accesorio') {
+                            // Obtener datos de accesorios_mascotas
+                            const { data: accesorioData } = await supabase
+                                .from('accesorios_mascotas')
+                                .select('*')
+                                .eq('id', item.id)
+                                .single();
+                            
+                            if (accesorioData) {
+                                weight = item.informacion_adicional || 'Accesorio';
+                                additionalData = {
+                                    ...accesorioData,
+                                    // Datos para el modal de accesorios
+                                    que_es: accesorioData.que_es,
+                                    tipo_animal: accesorioData.tipo_animal,
+                                    recomendaciones_uso: accesorioData.recomendaciones_uso,
+                                };
+                                modalType = 'mascotas-accesorios';
+                            }
+                        }
+                        
+                        return {
+                            id: item.id,
+                            name: item.nombre,
+                            image: item.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
+                            weight: weight,
+                            category: 'Mascotas',
+                            // Datos completos para los modales
+                            url: item.url,
+                            nombre: item.nombre,
+                            created_at: item.created_at,
+                            ...additionalData,
+                            // Identificador para el modal correcto
+                            modalType: modalType
+                        };
+                    })
+                );
+                allProductsData.push(...mascotasWithDetails);
+            }
+
+            // 4. Obtener Medicamentos Veterinarios
+            const { data: medicamentosData, error: medicamentosError } = await supabase
+                .from('medicamentos_veterinarios')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (!medicamentosError && medicamentosData) {
+                const medicamentosFormatted = medicamentosData.map(item => ({
+                    id: item.id,
+                    name: item.nombre,
+                    weight: `${item.contenido_decimal} ${item.contenido_medida}`,
+                    image: item.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
+                    category: 'Medicamentos Veterinarios',
+                    // Datos adicionales para la vista detallada
+                    tipo_medicamento: item.tipo_medicamento,
+                    especie_destinada: item.especie_destinada,
+                    presentacion: item.presentacion,
+                    marca: item.marca,
+                    ingredientes_composicion: item.ingredientes_composicion,
+                    informacion_adicional: item.informacion_adicional,
+                    created_at: item.created_at,
+                    // Identificador para el modal correcto
+                    modalType: 'medicamentos-veterinarios'
+                }));
+                allProductsData.push(...medicamentosFormatted);
+            }
+
+            setAllProducts(allProductsData);
+        } catch (error) {
+            console.error('Error al obtener productos:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Función para filtrar productos conforme a lo que se escriba en search
     const filteredProducts = useMemo(() => {
         if (!searchTerm.trim()) {
-            return allProducts;
+            return [];
         }
         
         const searchLower = searchTerm.toLowerCase();
         return allProducts.filter(product => 
-            product.name.toLowerCase().includes(searchLower) ||
-            product.weight.toLowerCase().includes(searchLower) ||
-            product.price.toLowerCase().includes(searchLower) ||
-            product.category.toLowerCase().includes(searchLower)
+            product.name && product.name.toLowerCase().includes(searchLower) ||
+            product.weight && product.weight.toLowerCase().includes(searchLower) ||
+            product.category && product.category.toLowerCase().includes(searchLower) ||
+            product.especie && product.especie.toLowerCase().includes(searchLower) ||
+            product.marca && product.marca.toLowerCase().includes(searchLower) ||
+            product.tipo_animal && product.tipo_animal.toLowerCase().includes(searchLower) ||
+            product.que_es && product.que_es.toLowerCase().includes(searchLower) ||
+            product.especie_mascota && product.especie_mascota.toLowerCase().includes(searchLower) ||
+            product.tipo_medicamento && product.tipo_medicamento.toLowerCase().includes(searchLower) ||
+            product.especie_destinada && product.especie_destinada.toLowerCase().includes(searchLower)
         );
     }, [allProducts, searchTerm]);
 
@@ -288,6 +224,26 @@ export default function Products(){
     const handleCloseProductModal = () => {
         setShowProductModal(false);
         setSelectedProduct(null);
+    };
+
+    // Función para renderizar el modal correcto según el tipo de producto
+    const renderProductModal = () => {
+        if (!selectedProduct) return null;
+
+        switch (selectedProduct.modalType) {
+            case 'alimentos-balanceados':
+                return <AliBalViewProduct product={selectedProduct} onClose={handleCloseProductModal} />;
+            case 'implementos':
+                return <ImpViewProduct product={selectedProduct} onClose={handleCloseProductModal} />;
+            case 'mascotas-alimentos':
+                return <MascAliViewProduct product={selectedProduct} onClose={handleCloseProductModal} />;
+            case 'mascotas-accesorios':
+                return <MascAccViewProduct product={selectedProduct} onClose={handleCloseProductModal} />;
+            case 'medicamentos-veterinarios':
+                return <ViewProduct product={selectedProduct} onClose={handleCloseProductModal} />;
+            default:
+                return <ViewProduct product={selectedProduct} onClose={handleCloseProductModal} />;
+        }
     };
 
     return(
@@ -311,9 +267,11 @@ export default function Products(){
                         <p>Se encontraron {filteredProducts.length} producto{filteredProducts.length !== 1 ? 's' : ''}</p>
                     </div>
                     <div className="container-card-products">
-                        {filteredProducts.length > 0 ? (
+                        {loading ? (
+                            <div className="loading">Buscando productos...</div>
+                        ) : filteredProducts.length > 0 ? (
                             filteredProducts.map((product) => (
-                                <CardProduct key={product.id} product={product} onViewProduct={handleViewProduct} />
+                                <CardProduct key={`${product.category}-${product.id}`} product={product} onViewProduct={handleViewProduct} />
                             ))
                         ) : (
                             <NoProductsFound searchTerm={searchTerm} />
@@ -321,9 +279,7 @@ export default function Products(){
                     </div>
                 </div>
             )}
-            {showProductModal && (
-                <ViewProduct product={selectedProduct} onClose={handleCloseProductModal} />
-            )}
+            {showProductModal && renderProductModal()}
             <footer className='footer'>
                 <p className="text-contact">&copy; 2025 Todos los derechos reservados || Agropecuaria Tehuitzingo</p>
             </footer>

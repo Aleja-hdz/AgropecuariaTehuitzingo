@@ -1,13 +1,9 @@
 import './tableMain.css';
 import OptionsTable from "../../components/optionsTable/optionsTable"
 
-const TableMain = ({ data = [] }) => {
+const TableMain = ({ data = [], onEdit, onDelete }) => {
   // Si no se pasan datos, usar los datos de ejemplo
   const tableData = data.length > 0 ? data : [
-    { nombre: "Nombre completo del producto", categoria: "Producto" },
-    { nombre: "Nombre completo del producto", categoria: "Oferta" },
-    { nombre: "Nombre completo del producto", categoria: "Producto" },
-    { nombre: "Nombre completo del producto", categoria: "Producto" },
   ];
 
   return (
@@ -36,7 +32,11 @@ const TableMain = ({ data = [] }) => {
               </td>
               <td>
                 <div className="actions">
-                  <OptionsTable />
+                  <OptionsTable 
+                    onEdit={() => onEdit && onEdit(producto)}
+                    onDelete={() => onDelete && onDelete(producto)}
+                    offerId={producto.id}
+                  />
                 </div>
               </td>
             </tr>

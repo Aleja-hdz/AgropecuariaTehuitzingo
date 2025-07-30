@@ -2,6 +2,7 @@ import './tableProducts.css';
 import OptionsTable from '../optionsTable/optionsTable';
 import { useState } from 'react';
 import FormImplementos from '../formNewProduct/forms/implementos/formImplementos';
+import FormAlimentosBalanceados from '../formNewProduct/forms/alimentosBalanceados/formAlimentosBalanceados';
 import FormMascotas from '../formNewProduct/forms/mascotas/formMascotas';
 import FormEditMascotasAccesorios from '../formNewProduct/forms/mascotas/formEditMascotasAccesorios';
 import FormEditMascotasAlimentos from '../formNewProduct/forms/mascotas/formEditMascotasAlimentos';
@@ -10,10 +11,6 @@ import { supabase } from '../../lib/supabaseClient';
 
 const TableProducts = ({ productos = [], onRefresh }) => {
   const productosData = productos.length > 0 ? productos : [
-    "Nombre completo del producto",
-    "Nombre completo del producto",
-    "Nombre completo del producto",
-    "Nombre completo del producto",
   ];
 
   const [editProduct, setEditProduct] = useState(null);
@@ -50,6 +47,9 @@ const TableProducts = ({ productos = [], onRefresh }) => {
       
       setEditProductType('medicamentos-veterinarios');
       setEditProduct(medicamentoData);
+    } else if (producto.categoria === 'Alimentos balanceados') {
+      setEditProductType('alimentos-balanceados');
+      setEditProduct(producto);
     } else {
       setEditProductType('implementos');
       setEditProduct(producto);
@@ -62,8 +62,8 @@ const TableProducts = ({ productos = [], onRefresh }) => {
   };
 
   const handleDelete = async (id, nombre, categoria, url) => {
-    if (categoria !== 'Implementos' && categoria !== 'Mascotas' && categoria !== 'Medicamentos veterinarios') {
-      alert('Solo puedes eliminar productos de las categorías Implementos, Mascotas y Medicamentos veterinarios desde aquí.');
+    if (categoria !== 'Implementos' && categoria !== 'Mascotas' && categoria !== 'Alimentos balanceados' && categoria !== 'Medicamentos veterinarios') {
+      alert('Solo puedes eliminar productos de las categorías Implementos, Mascotas, Alimentos balanceados y Medicamentos veterinarios desde aquí.');
       return;
     }
     const confirm = window.confirm(`Eliminarás el producto: ${nombre}`);
@@ -75,6 +75,9 @@ const TableProducts = ({ productos = [], onRefresh }) => {
     if (categoria === 'Implementos') {
       bucket = 'implementos-img';
       tableName = 'implementos';
+    } else if (categoria === 'Alimentos balanceados') {
+      bucket = 'alimentos-balanceados-img';
+      tableName = 'alimentos_balanceados';
     } else if (categoria === 'Mascotas') {
       // Para mascotas, necesitamos obtener la subcategoría del producto
       const { data: mascotaData } = await supabase
@@ -141,7 +144,7 @@ const TableProducts = ({ productos = [], onRefresh }) => {
               <td>{producto.nombre ? producto.nombre : producto}</td>
               <td>
                 <div className="table-actions">
-                  {(producto.categoria === 'Implementos' || producto.categoria === 'Mascotas' || producto.categoria === 'Medicamentos veterinarios') ? (
+                  {(producto.categoria === 'Implementos' || producto.categoria === 'Mascotas' || producto.categoria === 'Alimentos balanceados' || producto.categoria === 'Medicamentos veterinarios') ? (
                     <OptionsTable
                       onDelete={() => handleDelete(producto.id, producto.nombre, producto.categoria, producto.url)}
                       offerId={producto.id}
@@ -158,6 +161,14 @@ const TableProducts = ({ productos = [], onRefresh }) => {
         <FormImplementos
           onClose={handleCloseEdit}
           implementsData={editProduct}
+          isEdit={true}
+          onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
+        />
+      )}
+      {editProduct && editProduct.categoria === 'Alimentos balanceados' && (
+        <FormAlimentosBalanceados
+          onClose={handleCloseEdit}
+          alimentosData={editProduct}
           isEdit={true}
           onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
         />

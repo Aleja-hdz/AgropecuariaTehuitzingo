@@ -3,7 +3,7 @@
 
 /* Contenedor para la tabla con scroll */
 .table-container {
-  max-height: 600px; /* Altura mínima para mostrar aproximadamente 8 registros */
+  max-height: 500px; /* Altura optimizada para mostrar aproximadamente 10 registros */
   overflow-y: auto;
   border-radius: 12px;
   box-shadow: 0 0 4px rgba(0,0,0,0.1);

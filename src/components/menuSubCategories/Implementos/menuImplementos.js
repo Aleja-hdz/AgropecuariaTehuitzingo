@@ -3,9 +3,31 @@ import { useState } from 'react';
 import "./menuImplementos.css";
 import { Link } from 'react-router-dom';
 
-export default function MenuImplementos() {
-  const [showSpecies, setShowSpecies] = useState(false);
-  const [showBrands, setShowBrands] = useState(false);
+export default function MenuImplementos({
+  selectedAnimalType,
+  selectedWhatIs,
+  onAnimalTypeFilter,
+  onWhatIsFilter
+}) {
+  const [showAnimalType, setShowAnimalType] = useState(false);
+  const [showWhatIs, setShowWhatIs] = useState(false);
+
+  const animalTypes = [
+    'Gallos',
+    'Pollos',
+    'Caballos',
+    'Vacas',
+    'Cerdos',
+    'Ovejas'
+  ];
+
+  const whatIsOptions = [
+    'Comedero',
+    'Bebedero',
+    'Montura',
+    'Cuerda',
+    'Deslanador'
+  ];
 
   return (
     <div className="category-header">
@@ -20,31 +42,40 @@ export default function MenuImplementos() {
         </div>
 
         <div className="filters">
-          <div className="filter" onClick={() => setShowSpecies(!showSpecies)}>
-            <span>Para animales</span>
+          <div className="filter" onClick={() => setShowAnimalType(!showAnimalType)}>
+            <span>Para animales {selectedAnimalType && `(${selectedAnimalType})`}</span>
             <ChevronDown size={16} />
-            {showSpecies && (
+            {showAnimalType && (
               <ul className="dropdown">
-                <li>Gallos</li>
-                <li>Pollos</li>
-                <li>Caballos</li>
-                <li>Vacas</li>
-                <li>Cerdos</li>
-                <li>Ovejas</li>
+                <li onClick={() => onAnimalTypeFilter('')}>Todos</li>
+                {animalTypes.map((animalType) => (
+                  <li 
+                    key={animalType}
+                    onClick={() => onAnimalTypeFilter(animalType)}
+                    className={selectedAnimalType === animalType ? 'selected' : ''}
+                  >
+                    {animalType}
+                  </li>
+                ))}
               </ul>
             )}
           </div>
 
-          <div className="filter" onClick={() => setShowBrands(!showBrands)}>
-            <span>Generales</span>
+          <div className="filter" onClick={() => setShowWhatIs(!showWhatIs)}>
+            <span>Generales {selectedWhatIs && `(${selectedWhatIs})`}</span>
             <ChevronDown size={16} />
-            {showBrands && (
+            {showWhatIs && (
               <ul className="dropdown">
-                <li>Comederos</li>
-                <li>Bebederos</li>
-                <li>Monturas</li>
-                <li>Cuerdas</li>
-                <li>Deslanadores</li>
+                <li onClick={() => onWhatIsFilter('')}>Todos</li>
+                {whatIsOptions.map((option) => (
+                  <li 
+                    key={option}
+                    onClick={() => onWhatIsFilter(option)}
+                    className={selectedWhatIs === option ? 'selected' : ''}
+                  >
+                    {option}
+                  </li>
+                ))}
               </ul>
             )}
           </div>
