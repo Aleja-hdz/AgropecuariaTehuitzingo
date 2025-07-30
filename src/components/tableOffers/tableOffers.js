@@ -4,24 +4,9 @@ import { supabase } from '../../lib/supabaseClient';
 import OptionsTable from '../optionsTable/optionsTable';
 import FormNewOffer from '../formNewOffer/formNewOffer';
 
-const TableOffers = () => {
+const TableOffers = ({ ofertas = [], onRefresh }) => {
 
-  const [ofertas, setOfertas] = useState([]);
   const [editOffer, setEditOffer] = useState(null);
-
-  const fetchOfertas = async () => {
-    const { data, error } = await supabase
-      .from('ofertas')
-      .select('*')
-      .order('id', { ascending: false });
-
-    if (error){
-      console.error('Error al obtener ofertas:', error.message);
-    }
-    else {
-      setOfertas(data);
-    }
-  };
 
   // Modificado: handleDelete ahora recibe también la url de la imagen
   const handleDelete = async (id, nombre, url) => {
@@ -52,7 +37,8 @@ const TableOffers = () => {
     if (error) {
       console.error('Error al eliminar la oferta:', error.message);
     } else {
-      setOfertas(ofertas.filter(oferta => oferta.id !== id));
+      // Refrescar datos desde el componente padre
+      if (onRefresh) onRefresh();
     }
   };
 
@@ -64,9 +50,7 @@ const TableOffers = () => {
   };
 
 
-  useEffect(() => {
-      fetchOfertas();
-  }, []);
+
 
   return (
     <div className="table-container">
@@ -97,10 +81,10 @@ const TableOffers = () => {
       </table>
       {editOffer && (
         <FormNewOffer 
-          onClose={handleCloseEdit} 
+          onClose={handleCloseEdit}
+          onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
           offerData={editOffer}
           isEdit={true}
-          onSave={() => { setEditOffer(null); fetchOfertas(); }}
         />
       )}
     </div>

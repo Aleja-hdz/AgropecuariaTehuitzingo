@@ -9,10 +9,6 @@ import { supabase } from '../../lib/supabaseClient';
 
 const TableProducts = ({ productos = [], onRefresh }) => {
   const productosData = productos.length > 0 ? productos : [
-    "Nombre completo del producto",
-    "Nombre completo del producto",
-    "Nombre completo del producto",
-    "Nombre completo del producto",
   ];
 
   const [editProduct, setEditProduct] = useState(null);
@@ -41,7 +37,7 @@ const TableProducts = ({ productos = [], onRefresh }) => {
       }
     } else {
       setEditProductType('implementos');
-      setEditProduct(producto);
+    setEditProduct(producto);
     }
   };
 

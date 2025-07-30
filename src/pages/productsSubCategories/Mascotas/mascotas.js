@@ -1,75 +1,99 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import './mascotas.css';
 import Searcher from '../../../components/searcher/searcher';
 import MenuMascotas from '../../../components/menuSubCategories/Mascotas/menuMascotas';
 import CardProduct from '../../../components/cardProduct/cardProduct';
 import NoProductsFound from '../../../components/noProductsFound/noProductsFound';
+import MascAccViewProduct from '../../../components/viewProduct/mascAccViewProduct';
+import MascAliViewProduct from '../../../components/viewProduct/mascAliViewProduct';
 import ViewProduct from '../../../components/viewProduct/viewProduct';
+import { supabase } from '../../../lib/supabaseClient';
 
 export default function Mascotas() {
     const [searchTerm, setSearchTerm] = useState('');
     const [showProductModal, setShowProductModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
-    
-    // Datos de ejemplo de productos (en un proyecto real esto vendría de una API)
-    const products = [
-        {
-            id: 3,
-            name: "Comedero Automático",
-            weight: "500gr",
-            price: "$120",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 16,
-            name: "Juguete para Perros",
-            weight: "200gr",
-            price: "$25",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 17,
-            name: "Cama para Gatos",
-            weight: "1kg",
-            price: "$45",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 18,
-            name: "Correa Retráctil",
-            weight: "300gr",
-            price: "$35",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 19,
-            name: "Arena Sanitaria",
-            weight: "4kg",
-            price: "$30",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 20,
-            name: "Cepillo para Mascotas",
-            weight: "150gr",
-            price: "$18",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 21,
-            name: "Transportadora para Gatos",
-            weight: "2kg",
-            price: "$85",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 22,
-            name: "Plato de Agua Automático",
-            weight: "800gr",
-            price: "$55",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        }
-    ];
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        const fetchMascotas = async () => {
+            const { data, error } = await supabase
+                .from('mascotas')
+                .select('*')
+                .order('created_at', { ascending: false });
+            if (error) {
+                console.error('Error al obtener mascotas:', error.message);
+            } else {
+                // Obtener datos específicos para cada producto
+                const productsWithDetails = await Promise.all(
+                    data.map(async (item) => {
+                        let weight = '';
+                        let additionalData = {};
+                        
+                        if (item.sub_categoria === 'Alimento') {
+                            // Obtener datos de alimentos_mascotas
+                            const { data: alimentoData } = await supabase
+                                .from('alimentos_mascotas')
+                                .select('*')
+                                .eq('id', item.id)
+                                .single();
+                            
+                            if (alimentoData) {
+                                weight = `${alimentoData.contenido_decimal} ${alimentoData.contenido_medida}`;
+                                additionalData = {
+                                    ...alimentoData,
+                                    // Datos para el modal de alimentos
+                                    especie_mascota: alimentoData.especie_mascota,
+                                    etapa_vida: alimentoData.etapa_vida,
+                                    tamano_raza: alimentoData.tamano_raza,
+                                    presentacion: alimentoData.presentacion,
+                                    marca: alimentoData.marca,
+                                    ingredientes_composicion_nutrimental: alimentoData.ingredientes_composicion_nutrimental,
+                                    contenido_decimal: alimentoData.contenido_decimal,
+                                    contenido_medida: alimentoData.contenido_medida,
+                                };
+                            }
+                        } else if (item.sub_categoria === 'Accesorio') {
+                            // Obtener datos de accesorios_mascotas
+                            const { data: accesorioData } = await supabase
+                                .from('accesorios_mascotas')
+                                .select('*')
+                                .eq('id', item.id)
+                                .single();
+                            
+                            if (accesorioData) {
+                                weight = item.informacion_adicional || 'Accesorio';
+                                additionalData = {
+                                    ...accesorioData,
+                                    // Datos para el modal de accesorios
+                                    que_es: accesorioData.que_es,
+                                    tipo_animal: accesorioData.tipo_animal,
+                                    recomendaciones_uso: accesorioData.recomendaciones_uso,
+                                };
+                            }
+                        }
+                        
+                        return {
+                            id: item.id,
+                            name: item.nombre,
+                            image: item.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
+                            sub_categoria: item.sub_categoria,
+                            informacion_adicional: item.informacion_adicional,
+                            weight: weight,
+                            // Datos completos para los modales
+                            url: item.url,
+                            nombre: item.nombre,
+                            created_at: item.created_at,
+                            ...additionalData,
+                        };
+                    })
+                );
+                
+                setProducts(productsWithDetails);
+            }
+        };
+        fetchMascotas();
+    }, []);
 
     // Función para filtrar productos basada en el término de búsqueda
     const filteredProducts = useMemo(() => {
@@ -79,9 +103,8 @@ export default function Mascotas() {
         
         const searchLower = searchTerm.toLowerCase();
         return products.filter(product => 
-            product.name.toLowerCase().includes(searchLower) ||
-            product.weight.toLowerCase().includes(searchLower) ||
-            product.price.toLowerCase().includes(searchLower)
+            (product.name && product.name.toLowerCase().includes(searchLower)) ||
+            (product.weight && product.weight.toLowerCase().includes(searchLower))
         );
     }, [products, searchTerm]);
 
@@ -117,8 +140,14 @@ export default function Mascotas() {
                     )}
                 </div>
             </div>
-            {showProductModal && (
-                <ViewProduct product={selectedProduct} onClose={handleCloseProductModal} />
+            {showProductModal && selectedProduct && (
+                selectedProduct.sub_categoria === 'Alimento' ? (
+                    <MascAliViewProduct product={selectedProduct} onClose={handleCloseProductModal} />
+                ) : selectedProduct.sub_categoria === 'Accesorio' ? (
+                    <MascAccViewProduct product={selectedProduct} onClose={handleCloseProductModal} />
+                ) : (
+                    <ViewProduct product={selectedProduct} onClose={handleCloseProductModal} />
+                )
             )}
             <footer className='footer'>
                 <p className="text-contact">&copy; 2025 Todos los derechos reservados || Agropecuaria Tehuitzingo</p>
