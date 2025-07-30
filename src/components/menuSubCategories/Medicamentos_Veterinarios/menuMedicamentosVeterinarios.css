@@ -79,3 +79,13 @@
 .dropdown li:hover {
   background-color: #f0f0f0;
 }
+
+.dropdown li.selected {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  font-weight: 500;
+}
+
+.dropdown li.selected:hover {
+  background-color: #bbdefb;
+}

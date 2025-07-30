@@ -99,6 +99,40 @@
 }
 
 .modal-close-btn:hover {
+  background-color: #0f1f9e;
+}
+
+.producto-details {
+  margin-top: 15px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row strong {
+  font-weight: 600;
+  color: #333;
+  min-width: 140px;
+  margin-right: 15px;
+}
+
+.detail-row span {
+  color: #666;
+  text-align: right;
+  flex: 1;
+}
+
+.modal-close-btn:hover {
   background-color: #141f8a;
 }
 

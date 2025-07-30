@@ -16,6 +16,10 @@ export default function FormNewOffer({ onClose, offerData, isEdit, onSave }) {
     const [contentExtent, setContentExtent] = useState(offerData?.contenido_medida || '');
     const [additionalDetails, setAdditionalDetails] = useState(offerData?.informacion_adicional || '');
     const [imagePreview, setImagePreview] = useState(offerData?.url || null);
+    
+    // Estados para validaciones
+    const [errors, setErrors] = useState({});
+    const [showErrors, setShowErrors] = useState(false);
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -23,6 +27,59 @@ export default function FormNewOffer({ onClose, offerData, isEdit, onSave }) {
             document.body.style.overflow = 'unset';
         };
     }, []);
+
+    // Función para validar campos obligatorios
+    const validateForm = () => {
+        const newErrors = {};
+        
+        // Validar imagen del producto
+        if (!imageFile && !imageUrl) {
+            newErrors.image = 'La imagen del producto es obligatoria';
+        }
+        
+        // Validar nombre del producto
+        if (!nameOffer.trim()) {
+            newErrors.name = 'El nombre del producto es obligatorio';
+        }
+        
+        // Validar precio anterior
+        if (!previousPrice || previousPrice <= 0) {
+            newErrors.previousPrice = 'El precio anterior es obligatorio y debe ser mayor a 0';
+        }
+        
+        // Validar precio de oferta
+        if (!currentPrice || currentPrice <= 0) {
+            newErrors.currentPrice = 'El precio de oferta es obligatorio y debe ser mayor a 0';
+        }
+        
+        // Validar fecha de inicio
+        if (!startDate) {
+            newErrors.startDate = 'La fecha de inicio es obligatoria';
+        }
+        
+        // Validar fecha de fin
+        if (!endDate) {
+            newErrors.endDate = 'La fecha de fin es obligatoria';
+        }
+        
+        // Validar contenido decimal
+        if (!contentNumber || contentNumber <= 0) {
+            newErrors.contentNumber = 'El contenido es obligatorio y debe ser mayor a 0';
+        }
+        
+        // Validar medida del contenido
+        if (!contentExtent) {
+            newErrors.contentExtent = 'La medida del contenido es obligatoria';
+        }
+        
+        // Validar que la fecha de fin sea posterior a la de inicio
+        if (startDate && endDate && new Date(startDate) >= new Date(endDate)) {
+            newErrors.dateRange = 'La fecha de fin debe ser posterior a la fecha de inicio';
+        }
+        
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -35,6 +92,10 @@ export default function FormNewOffer({ onClose, offerData, isEdit, onSave }) {
             reader.onloadend = () => setImagePreview(reader.result);
             reader.readAsDataURL(file);
             setImageFile(file);
+            // Limpiar error de imagen si se selecciona una
+            if (errors.image) {
+                setErrors(prev => ({ ...prev, image: null }));
+            }
         }
     };
 
@@ -87,6 +148,13 @@ export default function FormNewOffer({ onClose, offerData, isEdit, onSave }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // Validar formulario antes de enviar
+        if (!validateForm()) {
+            setShowErrors(true);
+            return;
+        }
+        
         try {
             let url = imageUrl;
             let previousImageUrl = null;
@@ -176,14 +244,31 @@ export default function FormNewOffer({ onClose, offerData, isEdit, onSave }) {
         setContentNumber('');
         setContentExtent('');
         setAdditionalDetails('');
+        setErrors({});
+        setShowErrors(false);
     };
 
-    const removeImage = () => setImagePreview(null);
+    const removeImage = () => {
+        setImagePreview(null);
+        setImageFile(null);
+        // Agregar error si no hay imagen
+        if (!imageUrl) {
+            setErrors(prev => ({ ...prev, image: 'La imagen del producto es obligatoria' }));
+        }
+    };
 
     const handleClose = () => onClose();
 
     const handleOverlayClick = (e) => {
         if (e.target === e.currentTarget) onClose();
+    };
+
+    // Función para limpiar errores cuando el usuario empiece a escribir
+    const handleInputChange = (setter, fieldName, value) => {
+        setter(value);
+        if (errors[fieldName]) {
+            setErrors(prev => ({ ...prev, [fieldName]: null }));
+        }
     };
 
     return (
@@ -194,7 +279,7 @@ export default function FormNewOffer({ onClose, offerData, isEdit, onSave }) {
                 </div>
                 <h1>{isEdit ? 'Editar oferta' : 'Nueva oferta'}</h1>
 
-                <p className='new-offer-text'>Imagen para el producto</p>
+                <p className='new-offer-text'>Imagen para el producto *</p>
                 {!imagePreview ? (
                     <div className="file-input-container">
                         <input
@@ -216,49 +301,101 @@ export default function FormNewOffer({ onClose, offerData, isEdit, onSave }) {
                         </button>
                     </div>
                 )}
+                {showErrors && errors.image && <p className="error-message">{errors.image}</p>}
 
-                <p className='new-offer-text'>Nombre del producto</p>
-                <input className='new-offer-input1' type='text' placeholder='Cerdo Inicia Medicado ...' value={nameOffer} onChange={(e) => setNameOffer(e.target.value)} />
+                <p className='new-offer-text'>Nombre del producto *</p>
+                <input 
+                    className={`new-offer-input1 ${showErrors && errors.name ? 'error-input' : ''}`} 
+                    type='text' 
+                    placeholder='Cerdo Inicia Medicado ...' 
+                    value={nameOffer} 
+                    onChange={(e) => handleInputChange(setNameOffer, 'name', e.target.value)} 
+                />
+                {showErrors && errors.name && <p className="error-message">{errors.name}</p>}
 
-                <p className='new-offer-text'>Mensaje de oferta</p>
-                <input className='new-offer-input1' type='text' placeholder='En la compra de ...' value={messageOffer} onChange={(e) => setMessageOffer(e.target.value)} />
+                <p className='new-offer-text'>Mensaje de oferta (opcional)</p>
+                <input 
+                    className='new-offer-input1' 
+                    type='text' 
+                    placeholder='En la compra de ...' 
+                    value={messageOffer} 
+                    onChange={(e) => setMessageOffer(e.target.value)} 
+                />
 
                 <div className='new-offer-prices-container'>
                     <div className='new-offer-box-price'>
-                        <p>Precio anterior</p>
+                        <p>Precio anterior *</p>
                         <div className='new-offer-price'>
                             <span>$</span>
-                            <input className='new-offer-number-box' type='number' placeholder='0' value={previousPrice} onChange={(e) => setPreviousPrice(e.target.value)} />
+                            <input 
+                                className={`new-offer-number-box ${showErrors && errors.previousPrice ? 'error-input' : ''}`} 
+                                type='number' 
+                                placeholder='0' 
+                                value={previousPrice} 
+                                onChange={(e) => handleInputChange(setPreviousPrice, 'previousPrice', e.target.value)} 
+                            />
                         </div>
+                        {showErrors && errors.previousPrice && <p className="error-message">{errors.previousPrice}</p>}
                     </div>
                     <div className='new-offer-box-price'>
-                        <p>Precio de oferta</p>
+                        <p>Precio de oferta *</p>
                         <div className='new-offer-price'>
                             <span>$</span>
-                            <input className='new-offer-number-box' type='number' placeholder='0' value={currentPrice} onChange={(e) => setCurrentPrice(e.target.value)} />
+                            <input 
+                                className={`new-offer-number-box ${showErrors && errors.currentPrice ? 'error-input' : ''}`} 
+                                type='number' 
+                                placeholder='0' 
+                                value={currentPrice} 
+                                onChange={(e) => handleInputChange(setCurrentPrice, 'currentPrice', e.target.value)} 
+                            />
                         </div>
+                        {showErrors && errors.currentPrice && <p className="error-message">{errors.currentPrice}</p>}
                     </div>
                 </div>
 
                 <div className='new-offer-prices-container'>
                     <div className='new-offer-box-price'>
-                        <p>Fecha de inicio</p>
+                        <p>Fecha de inicio *</p>
                         <div className='new-offer-price'>
-                            <input className='new-offer-number-box' type='date' value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+                            <input 
+                                className={`new-offer-number-box ${showErrors && errors.startDate ? 'error-input' : ''}`} 
+                                type='date' 
+                                value={startDate} 
+                                onChange={(e) => handleInputChange(setStartDate, 'startDate', e.target.value)} 
+                            />
                         </div>
+                        {showErrors && errors.startDate && <p className="error-message">{errors.startDate}</p>}
                     </div>
                     <div className='new-offer-box-price'>
-                        <p>Fecha de fin</p>
+                        <p>Fecha de fin *</p>
                         <div className='new-offer-price'>
-                            <input className='new-offer-number-box' type='date' value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+                            <input 
+                                className={`new-offer-number-box ${showErrors && errors.endDate ? 'error-input' : ''}`} 
+                                type='date' 
+                                value={endDate} 
+                                onChange={(e) => handleInputChange(setEndDate, 'endDate', e.target.value)} 
+                            />
                         </div>
+                        {showErrors && errors.endDate && <p className="error-message">{errors.endDate}</p>}
                     </div>
                 </div>
+                {showErrors && errors.dateRange && <p className="error-message">{errors.dateRange}</p>}
 
                 <div className='new-offer-box'>
-                    <label className='new-offer-text-box'>Contenido: </label>
-                    <input className='new-offer-number-box' type='number' placeholder='0' value={contentNumber} onChange={(e) => setContentNumber(e.target.value)} />
-                    <select className='new-offer-opc-box' name='Opciones' value={contentExtent} onChange={(e) => setContentExtent(e.target.value)}>
+                    <label className='new-offer-text-box'>Contenido *</label>
+                    <input 
+                        className={`new-offer-number-box ${showErrors && errors.contentNumber ? 'error-input' : ''}`} 
+                        type='number' 
+                        placeholder='0' 
+                        value={contentNumber} 
+                        onChange={(e) => handleInputChange(setContentNumber, 'contentNumber', e.target.value)} 
+                    />
+                    <select 
+                        className={`new-offer-opc-box ${showErrors && errors.contentExtent ? 'error-input' : ''}`} 
+                        name='Opciones' 
+                        value={contentExtent} 
+                        onChange={(e) => handleInputChange(setContentExtent, 'contentExtent', e.target.value)}
+                    >
                         <option value=''>-- Selecciona --</option>
                         <option value='mg'>Miligramos (mg)</option>
                         <option value='g'>Gramos (g)</option>
@@ -267,6 +404,8 @@ export default function FormNewOffer({ onClose, offerData, isEdit, onSave }) {
                         <option value='L'>Litros (L)</option>
                     </select>
                 </div>
+                {(showErrors && errors.contentNumber) && <p className="error-message">{errors.contentNumber}</p>}
+                {(showErrors && errors.contentExtent) && <p className="error-message">{errors.contentExtent}</p>}
 
                 <p className='new-offer-text'>Detalles adicionales del producto (opcional)</p>
                 <textarea className='new-offer-input' placeholder='Detalles del producto' value={additionalDetails} onChange={(e) => setAdditionalDetails(e.target.value)} />

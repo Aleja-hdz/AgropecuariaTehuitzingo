@@ -3,10 +3,37 @@ import { useState } from 'react';
 import "./menuMascotas.css";
 import { Link } from 'react-router-dom';
 
-export default function MenuMascotas() {
-  const [showSpecies, setShowSpecies] = useState(false);
-  const [showBrands, setShowBrands] = useState(false);
-  const [showAnimals, setShowAnimals] = useState(false);
+export default function MenuMascotas({
+  selectedFoodType,
+  selectedAccessoryType,
+  selectedAnimalType,
+  onFoodTypeFilter,
+  onAccessoryTypeFilter,
+  onAnimalTypeFilter
+}) {
+  const [showFoodType, setShowFoodType] = useState(false);
+  const [showAccessoryType, setShowAccessoryType] = useState(false);
+  const [showAnimalType, setShowAnimalType] = useState(false);
+
+  const foodTypes = [
+    'Perro',
+    'Gato',
+    'Hamsters',
+    'Peces'
+  ];
+
+  const accessoryTypes = [
+    'Collares',
+    'Correas',
+    'Juguetes'
+  ];
+
+  const animalTypes = [
+    'Perro',
+    'Gato',
+    'Hamsters',
+    'Peces'
+  ];
 
   return (
     <div className="category-header">
@@ -21,40 +48,59 @@ export default function MenuMascotas() {
         </div>
 
         <div className="filters">
-          <div className="filter" onClick={() => setShowSpecies(!showSpecies)}>
-            <span>Alimentos para</span>
+          <div className="filter" onClick={() => setShowFoodType(!showFoodType)}>
+            <span>Alimentos para {selectedFoodType && `(${selectedFoodType})`}</span>
             <ChevronDown size={16} />
-            {showSpecies && (
+            {showFoodType && (
               <ul className="dropdown">
-                <li>Perro</li>
-                <li>Gato</li>
-                <li>Hasmters</li>
-                <li>Peces</li>
+                <li onClick={() => onFoodTypeFilter('')}>Todos</li>
+                {foodTypes.map((foodType) => (
+                  <li 
+                    key={foodType}
+                    onClick={() => onFoodTypeFilter(foodType)}
+                    className={selectedFoodType === foodType ? 'selected' : ''}
+                  >
+                    {foodType}
+                  </li>
+                ))}
               </ul>
             )}
           </div>
 
-          <div className="filter" onClick={() => setShowBrands(!showBrands)}>
-            <span>Accesorios</span>
+          <div className="filter" onClick={() => setShowAccessoryType(!showAccessoryType)}>
+            <span>Accesorios {selectedAccessoryType && `(${selectedAccessoryType})`}</span>
             <ChevronDown size={16} />
-            {showBrands && (
+            {showAccessoryType && (
               <ul className="dropdown">
-                <li>Collares</li>
-                <li>Correas</li>
-                <li>Juguetes</li>
+                <li onClick={() => onAccessoryTypeFilter('')}>Todos</li>
+                {accessoryTypes.map((accessoryType) => (
+                  <li 
+                    key={accessoryType}
+                    onClick={() => onAccessoryTypeFilter(accessoryType)}
+                    className={selectedAccessoryType === accessoryType ? 'selected' : ''}
+                  >
+                    {accessoryType}
+                  </li>
+                ))}
               </ul>
             )}
           </div>
 
-          <div className="filter" onClick={() => setShowAnimals(!showAnimals)}>
-            <span>Animales</span>
+          <div className="filter" onClick={() => setShowAnimalType(!showAnimalType)}>
+            <span>Animales {selectedAnimalType && `(${selectedAnimalType})`}</span>
             <ChevronDown size={16} />
-            {showAnimals && (
+            {showAnimalType && (
               <ul className="dropdown">
-                <li>Perro</li>
-                <li>Gato</li>
-                <li>Hasmters</li>
-                <li>Peces</li>
+                <li onClick={() => onAnimalTypeFilter('')}>Todos</li>
+                {animalTypes.map((animalType) => (
+                  <li 
+                    key={animalType}
+                    onClick={() => onAnimalTypeFilter(animalType)}
+                    className={selectedAnimalType === animalType ? 'selected' : ''}
+                  >
+                    {animalType}
+                  </li>
+                ))}
               </ul>
             )}
           </div>

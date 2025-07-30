@@ -22,6 +22,10 @@ export default function FormEditMascotasAlimentos({ onClose, mascotasData, onSav
     const [presentacion, setPresentacion] = useState('');
     const [marca, setMarca] = useState('');
     const [ingredientesComposicion, setIngredientesComposicion] = useState('');
+    
+    // Estados para validaciones
+    const [errors, setErrors] = useState({});
+    const [showErrors, setShowErrors] = useState(false);
 
     // Cargar datos del producto al inicializar
     useEffect(() => {
@@ -67,6 +71,47 @@ export default function FormEditMascotasAlimentos({ onClose, mascotasData, onSav
         } catch (err) {
             console.error('Error inesperado al cargar datos del alimento:', err);
         }
+    };
+
+    // Función para validar campos obligatorios
+    const validateForm = () => {
+        const newErrors = {};
+        
+        // Validar imagen del producto
+        if (!imageFile && !imageUrl) {
+            newErrors.image = 'La imagen del producto es obligatoria';
+        }
+        
+        // Validar nombre del producto
+        if (!nombre.trim()) {
+            newErrors.name = 'El nombre del producto es obligatorio';
+        }
+        
+        // Validaciones específicas para alimentos
+        if (!especieMascota) {
+            newErrors.especie = 'La especie es obligatoria';
+        }
+        if (!etapaVida.trim()) {
+            newErrors.etapaVida = 'La edad/etapa de vida es obligatoria';
+        }
+        if (!tamanoRaza) {
+            newErrors.tamanoRaza = 'El tamaño o raza es obligatorio';
+        }
+        if (!presentacion) {
+            newErrors.presentacion = 'La presentación es obligatoria';
+        }
+        if (!contenidoDecimal || contenidoDecimal <= 0) {
+            newErrors.contenidoDecimal = 'El contenido es obligatorio y debe ser mayor a 0';
+        }
+        if (!contenidoMedida) {
+            newErrors.contenidoMedida = 'La medida del contenido es obligatoria';
+        }
+        if (!marca.trim()) {
+            newErrors.marca = 'La marca o fabricante es obligatoria';
+        }
+        
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
     // Función para eliminar imagen anterior del bucket
@@ -123,11 +168,27 @@ export default function FormEditMascotasAlimentos({ onClose, mascotasData, onSav
         reader.onloadend = () => setImagePreview(reader.result);
         reader.readAsDataURL(file);
         setImageFile(file);
+        // Limpiar error de imagen si se selecciona una
+        if (errors.image) {
+            setErrors(prev => ({ ...prev, image: null }));
+        }
     };
 
     const removeImage = () => {
         setImagePreview(null);
         setImageFile(null);
+        // Agregar error si no hay imagen
+        if (!imageUrl) {
+            setErrors(prev => ({ ...prev, image: 'La imagen del producto es obligatoria' }));
+        }
+    };
+
+    // Función para limpiar errores cuando el usuario empiece a escribir
+    const handleInputChange = (setter, fieldName, value) => {
+        setter(value);
+        if (errors[fieldName]) {
+            setErrors(prev => ({ ...prev, [fieldName]: null }));
+        }
     };
 
     // Guardar cambios
@@ -136,19 +197,9 @@ export default function FormEditMascotasAlimentos({ onClose, mascotasData, onSav
         setError('');
         setLoading(true);
 
-        // Validaciones
-        if (!imageFile && !imageUrl) {
-            setError('La imagen es obligatoria');
-            setLoading(false);
-            return;
-        }
-        if (!nombre.trim()) {
-            setError('El nombre del producto es obligatorio');
-            setLoading(false);
-            return;
-        }
-        if (!contenidoDecimal || !contenidoMedida) {
-            setError('El contenido es obligatorio para alimentos');
+        // Validar formulario antes de enviar
+        if (!validateForm()) {
+            setShowErrors(true);
             setLoading(false);
             return;
         }
@@ -234,12 +285,11 @@ export default function FormEditMascotasAlimentos({ onClose, mascotasData, onSav
                 <div className='new-product-exit'>
                     <button className='new-product-btn-exit' onClick={onClose}>X</button>
                 </div>
-                <h1>Editar producto - Mascotas Alimentos</h1>
-                <br />
+                <h1>Editar producto</h1>
                 <form onSubmit={handleSubmit}>
                     {/* Imagen */}
                     <div className='new-product-box1'>
-                        <label>Imagen del producto <span style={{color:'red'}}>*</span></label>
+                        <label>Imagen del producto *</label>
                         {!imagePreview ? (
                             <div className="file-input-container">
                                 <input
@@ -261,110 +311,145 @@ export default function FormEditMascotasAlimentos({ onClose, mascotasData, onSav
                                 </button>
                             </div>
                         )}
+                        {showErrors && errors.image && <p className="error-message">{errors.image}</p>}
                     </div>
 
                     {/* Nombre y descripción */}
                     <div className='new-product-box1'>
-                        <label>Nombre del producto <span style={{color:'red'}}>*</span></label>
+                        <label>Nombre del producto *</label>
                         <input 
-                            className='new-product-input1' 
+                            className={`new-product-input1 ${showErrors && errors.name ? 'error-input' : ''}`} 
                             type='text' 
                             placeholder='Nombre...' 
                             value={nombre} 
-                            onChange={e => setNombre(e.target.value)} 
+                            onChange={(e) => handleInputChange(setNombre, 'name', e.target.value)} 
                         />
+                        {showErrors && errors.name && <p className="error-message">{errors.name}</p>}
                     </div>
 
                     <div className='new-product-box1'>
-                        <label>Información adicional</label>
+                        <label>Información adicional (opcional)</label>
                         <input 
                             className='new-product-input1' 
                             type='text' 
                             placeholder='Detalles, uso, etc.' 
                             value={informacionAdicional} 
-                            onChange={e => setInformacionAdicional(e.target.value)} 
+                            onChange={(e) => setInformacionAdicional(e.target.value)} 
                         />
                     </div>
 
                     {/* Campos específicos de alimentos */}
                     <div className='new-product-box2'>
                         <div className='new-product-box1'>
-                            <label>Especie:</label>
-                            <select className='new-product-opc-category' value={especieMascota} onChange={e => setEspecieMascota(e.target.value)}>
+                            <label>Especie *</label>
+                            <select 
+                                className={`new-product-opc-category ${showErrors && errors.especie ? 'error-input' : ''}`} 
+                                value={especieMascota} 
+                                onChange={(e) => handleInputChange(setEspecieMascota, 'especie', e.target.value)}
+                            >
                                 <option value="">-- Selecciona --</option>
                                 <option value='Perro'>Perro</option>
                                 <option value='Gato'>Gato</option>
                                 <option value='Hamsters'>Hamsters</option>
                                 <option value='Peces'>Peces</option>
                             </select>
+                            {showErrors && errors.especie && <p className="error-message">{errors.especie}</p>}
                         </div>
                         <div className='new-product-box1'>
-                            <label>Edad/Etapa de vida:</label>
-                            <input className='new-product-opc-category' type="text" placeholder="Escribe la edad ..." value={etapaVida} onChange={e => setEtapaVida(e.target.value)} />
+                            <label>Edad/Etapa de vida *</label>
+                            <input 
+                                className={`new-product-opc-category ${showErrors && errors.etapaVida ? 'error-input' : ''}`} 
+                                type="text" 
+                                placeholder="Escribe la edad ..." 
+                                value={etapaVida} 
+                                onChange={(e) => handleInputChange(setEtapaVida, 'etapaVida', e.target.value)} 
+                            />
+                            {showErrors && errors.etapaVida && <p className="error-message">{errors.etapaVida}</p>}
                         </div>
                     </div>
 
                     <div className='new-product-box2'>
                         <div className='new-product-box1'>
-                            <label>Tamaño o raza: </label>
-                            <select className='new-product-opc-category' value={tamanoRaza} onChange={e => setTamanoRaza(e.target.value)}>
+                            <label>Tamaño o raza *</label>
+                            <select 
+                                className={`new-product-opc-category ${showErrors && errors.tamanoRaza ? 'error-input' : ''}`} 
+                                value={tamanoRaza} 
+                                onChange={(e) => handleInputChange(setTamanoRaza, 'tamanoRaza', e.target.value)}
+                            >
                                 <option value="">-- Selecciona --</option>
                                 <option value='Razas pequeñas'>Razas pequeñas</option>
                                 <option value='Medianas'>Medianas</option>
                                 <option value='Grandes'>Grandes</option>
                                 <option value='Ninguno'>Ninguno</option>
                             </select>
+                            {showErrors && errors.tamanoRaza && <p className="error-message">{errors.tamanoRaza}</p>}
                         </div>
                         <div className='new-product-box1'>
-                            <label>Presentación: </label>
-                            <select className='new-product-opc-category' value={presentacion} onChange={e => setPresentacion(e.target.value)}>
+                            <label>Presentación *</label>
+                            <select 
+                                className={`new-product-opc-category ${showErrors && errors.presentacion ? 'error-input' : ''}`} 
+                                value={presentacion} 
+                                onChange={(e) => handleInputChange(setPresentacion, 'presentacion', e.target.value)}
+                            >
                                 <option value="">-- Selecciona --</option>
                                 <option value='Croquetas'>Croquetas</option>
                                 <option value='Latas'>Latas</option>
                                 <option value='Sobres'>Sobres</option>
                                 <option value='Snack'>Snack</option>
                             </select>
+                            {showErrors && errors.presentacion && <p className="error-message">{errors.presentacion}</p>}
                         </div>
                     </div>
 
                     <div className='new-product-box2'>
                         <div className='new-product-box1'>
-                            <label>Contenido: <span style={{color:'red'}}>*</span></label>
-                            <input 
-                                className='new-product-number-box' 
-                                type='number' 
-                                placeholder='0' 
-                                value={contenidoDecimal}
-                                onChange={e => setContenidoDecimal(e.target.value)}
-                            />
-                            <select 
-                                className='new-product-opc-box' 
-                                value={contenidoMedida}
-                                onChange={e => setContenidoMedida(e.target.value)}
-                            >
-                                <option value="">-- Selecciona --</option>
-                                <option value='mg'>Miligramos (mg)</option>
-                                <option value='g'>Gramos (g)</option>
-                                <option value='kg'>Kilogramos (kg)</option>
-                                <option value='ml'>Mililitros (ml)</option>
-                                <option value='L'>Litros (L)</option>
-                            </select>
+                            <label>Contenido *</label>
+                            <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
+                                <input 
+                                    className={`new-product-number-box ${showErrors && errors.contenidoDecimal ? 'error-input' : ''}`} 
+                                    type='number' 
+                                    placeholder='0' 
+                                    value={contenidoDecimal}
+                                    onChange={(e) => handleInputChange(setContenidoDecimal, 'contenidoDecimal', e.target.value)}
+                                />
+                                <select 
+                                    className={`new-product-opc-box ${showErrors && errors.contenidoMedida ? 'error-input' : ''}`} 
+                                    value={contenidoMedida}
+                                    onChange={(e) => handleInputChange(setContenidoMedida, 'contenidoMedida', e.target.value)}
+                                >
+                                    <option value="">-- Selecciona --</option>
+                                    <option value='mg'>Miligramos (mg)</option>
+                                    <option value='g'>Gramos (g)</option>
+                                    <option value='kg'>Kilogramos (kg)</option>
+                                    <option value='ml'>Mililitros (ml)</option>
+                                    <option value='L'>Litros (L)</option>
+                                </select>
+                            </div>
+                            {(showErrors && errors.contenidoDecimal) && <p className="error-message">{errors.contenidoDecimal}</p>}
+                            {(showErrors && errors.contenidoMedida) && <p className="error-message">{errors.contenidoMedida}</p>}
                         </div>
                     </div>
 
                     <div className='new-product-box1'>
-                        <label>Marca o fabricante:</label>
-                        <input className='new-product-input1' type='text' placeholder='Minino Plus... ' value={marca} onChange={e => setMarca(e.target.value)} />
+                        <label>Marca o fabricante *</label>
+                        <input 
+                            className={`new-product-input1 ${showErrors && errors.marca ? 'error-input' : ''}`} 
+                            type='text' 
+                            placeholder='Minino Plus... ' 
+                            value={marca} 
+                            onChange={(e) => handleInputChange(setMarca, 'marca', e.target.value)} 
+                        />
+                        {showErrors && errors.marca && <p className="error-message">{errors.marca}</p>}
                     </div>
 
                     <div className='new-product-box1'>
-                        <label style={{fontWeight:'bold'}}>Composición nutrimental / ingredientes principales</label>
+                        <label>Composición nutrimental / ingredientes principales (opcional)</label>
                         <textarea
-                            className='new-product-input1'
-                            style={{minHeight: '80px'}}
+                            className='new-product-input'
+                            style={{minHeight: '200px'}}
                             placeholder='Ejemplo: Proteína cruda 25%, Grasa 10%, Pollo, Arroz, Vitaminas...'
                             value={ingredientesComposicion}
-                            onChange={e => setIngredientesComposicion(e.target.value)}
+                            onChange={(e) => setIngredientesComposicion(e.target.value)}
                         />
                     </div>
 

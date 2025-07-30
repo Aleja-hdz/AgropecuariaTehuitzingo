@@ -9,6 +9,7 @@ import TableOffers from '../../components/tableOffers/tableOffers';
 import FormNewProduct from '../../components/formNewProduct/formNewProduct';
 import FormNewOffer from '../../components/formNewOffer/formNewOffer';
 import FormImplementos from '../../components/formNewProduct/forms/implementos/formImplementos';
+import FormAlimentosBalanceados from '../../components/formNewProduct/forms/alimentosBalanceados/formAlimentosBalanceados';
 import FormMascotas from '../../components/formNewProduct/forms/mascotas/formMascotas';
 import FormEditMascotasAccesorios from '../../components/formNewProduct/forms/mascotas/formEditMascotasAccesorios';
 import FormEditMascotasAlimentos from '../../components/formNewProduct/forms/mascotas/formEditMascotasAlimentos';
@@ -22,7 +23,7 @@ export default function AdminPanel() {
 
     const [ofertas, setOfertas] = useState([]);
     const [implementos, setImplementos] = useState([]);
-    // const [alimentos, setAlimentos] = useState([]);
+    const [alimentos, setAlimentos] = useState([]);
     // const [medicamentos, setMedicamentos] = useState([]);
     const [mascotas, setMascotas] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
@@ -68,21 +69,28 @@ export default function AdminPanel() {
         }
     };
     const fetchAlimentos = async () => {
-        // const { data, error } = await supabase
-        // .from('alimentos_balanceados')
-        // .select('*')
-        // .order('created_at', { ascending: false });
-        // if(error){
-        //     console.error('Error al obtener alimentos:', error.message);
-        // } else {
-        //     setAlimentos(data.map(item => ({
-        //         id: item.id,
-        //         nombre: item.nombre || item.name || '',
-        //         categoria: 'Alimentos balanceados',
-        //         url: item.url || item.image || '',
-        //         created_at: item.created_at,
-        //     })));
-        // }
+        const { data, error } = await supabase
+        .from('alimentos_balanceados')
+        .select('*')
+        .order('created_at', { ascending: false });
+        if(error){
+            console.error('Error al obtener alimentos:', error.message);
+        } else {
+            setAlimentos(data.map(item => ({
+                id: item.id,
+                nombre: item.nombre || item.name || '',
+                categoria: 'Alimentos balanceados',
+                url: item.url || item.image || '',
+                alimento_produccion: item.alimento_produccion || false,
+                contenido_decimal: item.contenido_decimal || '',
+                contenido_medida: item.contenido_medida || '',
+                especie: item.especie || '',
+                marca: item.marca || '',
+                materias_primas: item.materias_primas || '',
+                informacion_adicional: item.informacion_adicional || '',
+                created_at: item.created_at,
+            })));
+        }
     };
     const fetchMedicamentos = async () => {
         // const { data, error } = await supabase
@@ -123,7 +131,7 @@ export default function AdminPanel() {
     useEffect(() => {
         const allProductsCombined = [
             ...implementos,
-            // ...alimentos,
+            ...alimentos,
             // ...medicamentos,
             ...mascotas
         ];
@@ -135,12 +143,12 @@ export default function AdminPanel() {
         
         console.log('Productos ordenados por fecha de creación real (más recientes primero):', sortedProducts);
         setAllProducts(sortedProducts);
-    }, [implementos, /*alimentos, medicamentos,*/ mascotas]);
+    }, [implementos, alimentos, /*medicamentos,*/ mascotas]);
 
     // Fetch inicial
     useEffect(() => {
         fetchImplementos();
-        // fetchAlimentos();
+        fetchAlimentos();
         // fetchMedicamentos();
         fetchMascotas();
     }, []);
@@ -148,7 +156,7 @@ export default function AdminPanel() {
     // Refrescar productos y ofertas tras alta
     const handleRefreshProducts = () => {
         fetchImplementos();
-        // fetchAlimentos();
+        fetchAlimentos();
         // fetchMedicamentos();
         fetchMascotas();
         fetchOfertas();
@@ -213,6 +221,9 @@ export default function AdminPanel() {
                 if (producto.categoria === 'Implementos') {
                     setEditProductType('implementos');
                     setEditProduct(producto);
+                } else if (producto.categoria === 'Alimentos balanceados') {
+                    setEditProductType('alimentos-balanceados');
+                    setEditProduct(producto);
                 } else if (producto.categoria === 'Mascotas') {
                     // Obtener datos completos de mascotas para determinar subcategoría
                     const { data: mascotaData, error } = await supabase
@@ -269,6 +280,19 @@ export default function AdminPanel() {
                         .eq('id', producto.id);
                     if (error) {
                         console.error('Error al eliminar implemento:', error);
+                        alert('Error al eliminar el producto');
+                    } else {
+                        alert('Producto eliminado con éxito');
+                        handleRefreshProducts();
+                    }
+                } else if (producto.categoria === 'Alimentos balanceados') {
+                    // Eliminar alimento balanceado
+                    const { error } = await supabase
+                        .from('alimentos_balanceados')
+                        .delete()
+                        .eq('id', producto.id);
+                    if (error) {
+                        console.error('Error al eliminar alimento balanceado:', error);
                         alert('Error al eliminar el producto');
                     } else {
                         alert('Producto eliminado con éxito');
@@ -371,6 +395,15 @@ export default function AdminPanel() {
                     <FormImplementos
                         onClose={() => { setEditProduct(null); setEditProductType(null); }}
                         implementsData={editProduct}
+                        isEdit={true}
+                        onSave={() => { setEditProduct(null); setEditProductType(null); handleRefreshProducts(); }}
+                    />
+                )}
+
+                {editProduct && editProduct.categoria === 'Alimentos balanceados' && (
+                    <FormAlimentosBalanceados
+                        onClose={() => { setEditProduct(null); setEditProductType(null); }}
+                        alimentosData={editProduct}
                         isEdit={true}
                         onSave={() => { setEditProduct(null); setEditProductType(null); handleRefreshProducts(); }}
                     />
