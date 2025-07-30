@@ -1,75 +1,45 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import './medicamentosVeterinarios.css';
 import Searcher from '../../../components/searcher/searcher';
 import MenuMedicamentosVeterinarios from '../../../components/menuSubCategories/Medicamentos_Veterinarios/menuMedicamentosVeterinarios';
 import CardProduct from '../../../components/cardProduct/cardProduct';
 import NoProductsFound from '../../../components/noProductsFound/noProductsFound';
 import ViewProduct from '../../../components/viewProduct/viewProduct';
+import { supabase } from '../../../lib/supabaseClient';
 
 export default function MedicamentosVeterinarios() {
     const [searchTerm, setSearchTerm] = useState('');
     const [showProductModal, setShowProductModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
-    
-    // Datos de ejemplo de productos (en un proyecto real esto vendría de una API)
-    const products = [
-        {
-            id: 2,
-            name: "Vacuna Triple Felina",
-            weight: "1ml",
-            price: "$45",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 9,
-            name: "Antiparasitario para Perros",
-            weight: "10ml",
-            price: "$60",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 10,
-            name: "Vitamina C para Mascotas",
-            weight: "100ml",
-            price: "$35",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 11,
-            name: "Antibiótico para Gatos",
-            weight: "50ml",
-            price: "$80",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 12,
-            name: "Vacuna contra la Rabia",
-            weight: "1ml",
-            price: "$55",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 13,
-            name: "Antiinflamatorio para Perros",
-            weight: "30ml",
-            price: "$70",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 14,
-            name: "Suplemento de Calcio",
-            weight: "200gr",
-            price: "$40",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 15,
-            name: "Desparasitante para Gatos",
-            weight: "5ml",
-            price: "$50",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        }
-    ];
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    // Obtener productos reales de la base de datos
+    useEffect(() => {
+        const fetchMedicamentos = async () => {
+            const { data, error } = await supabase
+                .from('medicamentos_veterinarios')
+                .select('*')
+                .order('id', { ascending: false });
+            
+            if (error) {
+                console.error('Error al obtener medicamentos veterinarios:', error.message);
+            } else {
+                setProducts(
+                    data.map(item => ({
+                        id: item.id,
+                        name: item.nombre,
+                        weight: item.presentacion || 'Sin especificar',
+                        price: item.marca || 'Sin especificar',
+                        image: item.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
+                    }))
+                );
+            }
+            setLoading(false);
+        };
+        
+        fetchMedicamentos();
+    }, []);
 
     // Función para filtrar productos basada en el término de búsqueda
     const filteredProducts = useMemo(() => {
@@ -79,9 +49,9 @@ export default function MedicamentosVeterinarios() {
         
         const searchLower = searchTerm.toLowerCase();
         return products.filter(product => 
-            product.name.toLowerCase().includes(searchLower) ||
-            product.weight.toLowerCase().includes(searchLower) ||
-            product.price.toLowerCase().includes(searchLower)
+            product.name && product.name.toLowerCase().includes(searchLower) ||
+            product.weight && product.weight.toLowerCase().includes(searchLower) ||
+            product.price && product.price.toLowerCase().includes(searchLower)
         );
     }, [products, searchTerm]);
 
@@ -98,6 +68,23 @@ export default function MedicamentosVeterinarios() {
         setShowProductModal(false);
         setSelectedProduct(null);
     };
+
+    if (loading) {
+        return (
+            <div className="products-container">
+                <div className="categories-container-head">
+                    <h1 className='tittles-h1'>¿Qué producto deseas encontrar?</h1>
+                    <Searcher onSearch={handleSearch} placeholder="Buscar medicamentos veterinarios..." />
+                </div>
+                <div className="categories-container">
+                    <MenuMedicamentosVeterinarios />
+                    <div className="container-card-products">
+                        <p>Cargando productos...</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return(
         <div className="products-container">

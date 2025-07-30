@@ -1,75 +1,46 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import './alimentosBalanceados.css';
 import Searcher from '../../../components/searcher/searcher';
 import MenuAlimentosBalanceados from '../../../components/menuSubCategories/Alimentos_Balanceados/menuAlimentosBalanceados';
 import CardProduct from '../../../components/cardProduct/cardProduct';
 import NoProductsFound from '../../../components/noProductsFound/noProductsFound';
 import ViewProduct from '../../../components/viewProduct/viewProduct';
+import { supabase } from '../../../lib/supabaseClient';
 
 export default function AlimentosBalanceados() {
     const [searchTerm, setSearchTerm] = useState('');
     const [showProductModal, setShowProductModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
-    
-    // Datos de ejemplo de productos (en un proyecto real esto vendría de una API)
-    const products = [
-        {
-            id: 1,
-            name: "Alimento Premium para Perros",
-            weight: "2kg",
-            price: "$25",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 2,
-            name: "Alimento para Gatos Adultos",
-            weight: "1.5kg",
-            price: "$30",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 3,
-            name: "Alimento para Aves",
-            weight: "500gr",
-            price: "$15",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 4,
-            name: "Alimento para Conejos",
-            weight: "1kg",
-            price: "$20",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 5,
-            name: "Alimento para Hamsters",
-            weight: "250gr",
-            price: "$12",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 6,
-            name: "Alimento para Peces",
-            weight: "100gr",
-            price: "$8",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 7,
-            name: "Alimento para Tortugas",
-            weight: "300gr",
-            price: "$18",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        },
-        {
-            id: 8,
-            name: "Alimento para Perros Cachorros",
-            weight: "3kg",
-            price: "$35",
-            image: "https://imgs.search.brave.com/6EdTz-zoom8mWlKflZmTE9uQYrsDSDh_52Qk46F2vHQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/Xzg3ODk3MS1NTE04/MjE3MTE0Mzk0M18w/MTIwMjUtRS53ZWJw"
-        }
-    ];
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    // Obtener productos reales de la base de datos
+    useEffect(() => {
+        const fetchAlimentos = async () => {
+            const { data, error } = await supabase
+                .from('alimentos_balanceados')
+                .select('*')
+                .order('id', { ascending: false });
+            
+            if (error) {
+                console.error('Error al obtener alimentos balanceados:', error.message);
+            } else {
+                setProducts(
+                    data.map(item => ({
+                        id: item.id,
+                        name: item.nombre,
+                        weight: item.especie || 'Sin especificar',
+                        price: item.marca || 'Sin especificar',
+                        image: item.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
+                        details: item.detalles || '',
+                    }))
+                );
+            }
+            setLoading(false);
+        };
+        
+        fetchAlimentos();
+    }, []);
 
     // Función para filtrar productos basada en el término de búsqueda
     const filteredProducts = useMemo(() => {
@@ -79,9 +50,9 @@ export default function AlimentosBalanceados() {
         
         const searchLower = searchTerm.toLowerCase();
         return products.filter(product => 
-            product.name.toLowerCase().includes(searchLower) ||
-            product.weight.toLowerCase().includes(searchLower) ||
-            product.price.toLowerCase().includes(searchLower)
+            product.name && product.name.toLowerCase().includes(searchLower) ||
+            product.weight && product.weight.toLowerCase().includes(searchLower) ||
+            product.price && product.price.toLowerCase().includes(searchLower)
         );
     }, [products, searchTerm]);
 
@@ -98,6 +69,23 @@ export default function AlimentosBalanceados() {
         setShowProductModal(false);
         setSelectedProduct(null);
     };
+
+    if (loading) {
+        return (
+            <div className="products-container">
+                <div className="categories-container-head">
+                    <h1 className='tittles-h1'>¿Qué producto deseas encontrar?</h1>
+                    <Searcher onSearch={handleSearch} placeholder="Buscar alimentos balanceados..." />
+                </div>
+                <div className="categories-container">
+                    <MenuAlimentosBalanceados />
+                    <div className="container-card-products">
+                        <p>Cargando productos...</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return(
         <div className="products-container">

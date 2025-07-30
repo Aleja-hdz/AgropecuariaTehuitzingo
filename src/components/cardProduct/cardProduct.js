@@ -31,6 +31,9 @@ export default function CardProduct({ product, onViewProduct }) {
                 <p className="name">{productData.name}</p>
                 <p className="lot">Peso/Gramos: {productData.weight}</p>
                 <p className="price">{productData.price}</p>
+                {productData.details && (
+                    <p className="details">{productData.details}</p>
+                )}
                 <ButtonLong text={"Ver producto"} onClick={handleViewProduct}/>
             </div>
         </div>

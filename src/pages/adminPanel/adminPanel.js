@@ -15,8 +15,8 @@ export default function AdminPanel() {
 
     const [ofertas, setOfertas] = useState([]);
     const [implementos, setImplementos] = useState([]);
-    // const [alimentos, setAlimentos] = useState([]);
-    // const [medicamentos, setMedicamentos] = useState([]);
+    const [alimentos, setAlimentos] = useState([]);
+    const [medicamentos, setMedicamentos] = useState([]);
     const [mascotas, setMascotas] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
 
@@ -60,36 +60,36 @@ export default function AdminPanel() {
         }
     };
     const fetchAlimentos = async () => {
-        // const { data, error } = await supabase
-        // .from('alimentos_balanceados')
-        // .select('*')
-        // .order('id', { ascending: false });
-        // if(error){
-        //     console.error('Error al obtener alimentos:', error.message);
-        // } else {
-        //     setAlimentos(data.map(item => ({
-        //         id: item.id,
-        //         nombre: item.nombre || item.name || '',
-        //         categoria: 'Alimentos balanceados',
-        //         url: item.url || item.image || '',
-        //     })));
-        // }
+        const { data, error } = await supabase
+        .from('alimentos_balanceados')
+        .select('*')
+        .order('id', { ascending: false });
+        if(error){
+            console.error('Error al obtener alimentos:', error.message);
+        } else {
+            setAlimentos(data.map(item => ({
+                id: item.id,
+                nombre: item.nombre || item.name || '',
+                categoria: 'Alimentos balanceados',
+                url: item.url || item.image || '',
+            })));
+        }
     };
     const fetchMedicamentos = async () => {
-        // const { data, error } = await supabase
-        // .from('medicamentos_veterinarios')
-        // .select('*')
-        // .order('id', { ascending: false });
-        // if(error){
-        //     console.error('Error al obtener medicamentos:', error.message);
-        // } else {
-        //     setMedicamentos(data.map(item => ({
-        //         id: item.id,
-        //         nombre: item.nombre || item.name || '',
-        //         categoria: 'Medicamentos veterinarios',
-        //         url: item.url || item.image || '',
-        //     })));
-        // }
+        const { data, error } = await supabase
+        .from('medicamentos_veterinarios')
+        .select('*')
+        .order('id', { ascending: false });
+        if(error){
+            console.error('Error al obtener medicamentos:', error.message);
+        } else {
+            setMedicamentos(data.map(item => ({
+                id: item.id,
+                nombre: item.nombre || item.name || '',
+                categoria: 'Medicamentos veterinarios',
+                url: item.url || item.image || '',
+            })));
+        }
     };
     const fetchMascotas = async () => {
         const { data, error } = await supabase
@@ -112,25 +112,25 @@ export default function AdminPanel() {
     useEffect(() => {
         setAllProducts([
             ...implementos,
-            // ...alimentos,
-            // ...medicamentos,
+            ...alimentos,
+            ...medicamentos,
             ...mascotas
         ]);
-    }, [implementos, /*alimentos, medicamentos,*/ mascotas]);
+    }, [implementos, alimentos, medicamentos, mascotas]);
 
     // Fetch inicial
     useEffect(() => {
         fetchImplementos();
-        // fetchAlimentos();
-        // fetchMedicamentos();
+        fetchAlimentos();
+        fetchMedicamentos();
         fetchMascotas();
     }, []);
 
     // Refrescar productos tras alta
     const handleRefreshProducts = () => {
         fetchImplementos();
-        // fetchAlimentos();
-        // fetchMedicamentos();
+        fetchAlimentos();
+        fetchMedicamentos();
         fetchMascotas();
     };
 

@@ -5,6 +5,7 @@ import FormImplementos from '../formNewProduct/forms/implementos/formImplementos
 import FormMascotas from '../formNewProduct/forms/mascotas/formMascotas';
 import FormEditMascotasAccesorios from '../formNewProduct/forms/mascotas/formEditMascotasAccesorios';
 import FormEditMascotasAlimentos from '../formNewProduct/forms/mascotas/formEditMascotasAlimentos';
+import FormMedicamentosVeterinarios from '../formNewProduct/forms/medicamentosVeterinarios/formMedicamentosVeterinarios';
 import { supabase } from '../../lib/supabaseClient';
 
 const TableProducts = ({ productos = [], onRefresh }) => {
@@ -39,6 +40,16 @@ const TableProducts = ({ productos = [], onRefresh }) => {
         setEditProductType('mascotas-general');
         setEditProduct(producto);
       }
+    } else if (producto.categoria === 'Medicamentos veterinarios') {
+      // Obtener todos los datos del producto de medicamentos veterinarios
+      const { data: medicamentoData } = await supabase
+        .from('medicamentos_veterinarios')
+        .select('*')
+        .eq('id', producto.id)
+        .single();
+      
+      setEditProductType('medicamentos-veterinarios');
+      setEditProduct(medicamentoData);
     } else {
       setEditProductType('implementos');
       setEditProduct(producto);
@@ -51,8 +62,8 @@ const TableProducts = ({ productos = [], onRefresh }) => {
   };
 
   const handleDelete = async (id, nombre, categoria, url) => {
-    if (categoria !== 'Implementos' && categoria !== 'Mascotas') {
-      alert('Solo puedes eliminar productos de las categorías Implementos y Mascotas desde aquí.');
+    if (categoria !== 'Implementos' && categoria !== 'Mascotas' && categoria !== 'Medicamentos veterinarios') {
+      alert('Solo puedes eliminar productos de las categorías Implementos, Mascotas y Medicamentos veterinarios desde aquí.');
       return;
     }
     const confirm = window.confirm(`Eliminarás el producto: ${nombre}`);
@@ -80,6 +91,9 @@ const TableProducts = ({ productos = [], onRefresh }) => {
         bucket = 'mascotas-alimentos-img'; // Por defecto
       }
       tableName = 'mascotas';
+    } else if (categoria === 'Medicamentos veterinarios') {
+      bucket = 'medicamentos-veterinarios-img';
+      tableName = 'medicamentos_veterinarios';
     }
     
     // Eliminar imagen del bucket si existe
@@ -127,7 +141,7 @@ const TableProducts = ({ productos = [], onRefresh }) => {
               <td>{producto.nombre ? producto.nombre : producto}</td>
               <td>
                 <div className="table-actions">
-                  {(producto.categoria === 'Implementos' || producto.categoria === 'Mascotas') ? (
+                  {(producto.categoria === 'Implementos' || producto.categoria === 'Mascotas' || producto.categoria === 'Medicamentos veterinarios') ? (
                     <OptionsTable
                       onDelete={() => handleDelete(producto.id, producto.nombre, producto.categoria, producto.url)}
                       offerId={producto.id}
@@ -166,6 +180,14 @@ const TableProducts = ({ productos = [], onRefresh }) => {
         <FormMascotas
           onClose={handleCloseEdit}
           mascotasData={editProduct}
+          isEdit={true}
+          onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
+        />
+      )}
+      {editProduct && editProductType === 'medicamentos-veterinarios' && (
+        <FormMedicamentosVeterinarios
+          onClose={handleCloseEdit}
+          medicamentosData={editProduct}
           isEdit={true}
           onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
         />
