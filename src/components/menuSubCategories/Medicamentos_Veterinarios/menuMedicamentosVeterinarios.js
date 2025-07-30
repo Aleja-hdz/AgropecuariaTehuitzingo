@@ -3,8 +3,18 @@ import { useState } from 'react';
 import "./menuMedicamentosVeterinarios.css";
 import { Link } from 'react-router-dom';
 
-export default function MenuMedicamentosVeterinarios() {
-  const [showSpecies, setShowSpecies] = useState(false);
+export default function MenuMedicamentosVeterinarios({
+  selectedOption,
+  onOptionFilter
+}) {
+  const [showOptions, setShowOptions] = useState(false);
+
+  const options = [
+    'Desparasitantes',
+    'Vitaminas',
+    'Suplementos',
+    'Vacunas'
+  ];
 
   return (
     <div className="category-header">
@@ -19,15 +29,21 @@ export default function MenuMedicamentosVeterinarios() {
         </div>
 
         <div className="filters">
-          <div className="filter" onClick={() => setShowSpecies(!showSpecies)}>
-            <span>Opciones</span>
+          <div className="filter" onClick={() => setShowOptions(!showOptions)}>
+            <span>Opciones {selectedOption && `(${selectedOption})`}</span>
             <ChevronDown size={16} />
-            {showSpecies && (
+            {showOptions && (
               <ul className="dropdown">
-                <li>Desparasitantes</li>
-                <li>Vitaminas</li>
-                <li>Suplementos</li>
-                <li>Vacunas</li>
+                <li onClick={() => onOptionFilter('')}>Todos</li>
+                {options.map((option) => (
+                  <li 
+                    key={option}
+                    onClick={() => onOptionFilter(option)}
+                    className={selectedOption === option ? 'selected' : ''}
+                  >
+                    {option}
+                  </li>
+                ))}
               </ul>
             )}
           </div>

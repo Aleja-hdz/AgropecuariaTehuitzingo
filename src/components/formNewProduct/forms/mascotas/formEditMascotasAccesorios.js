@@ -17,6 +17,10 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
     const [queEs, setQueEs] = useState('');
     const [tipoAnimal, setTipoAnimal] = useState('');
     const [recomendacionesUso, setRecomendacionesUso] = useState('');
+    
+    // Estados para validaciones
+    const [errors, setErrors] = useState({});
+    const [showErrors, setShowErrors] = useState(false);
 
     // Cargar datos del producto al inicializar
     useEffect(() => {
@@ -57,6 +61,32 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
         } catch (err) {
             console.error('Error inesperado al cargar datos del accesorio:', err);
         }
+    };
+
+    // Función para validar campos obligatorios
+    const validateForm = () => {
+        const newErrors = {};
+        
+        // Validar imagen del producto
+        if (!imageFile && !imageUrl) {
+            newErrors.image = 'La imagen del producto es obligatoria';
+        }
+        
+        // Validar nombre del producto
+        if (!nombre.trim()) {
+            newErrors.name = 'El nombre del producto es obligatorio';
+        }
+        
+        // Validaciones específicas para accesorios
+        if (!queEs.trim()) {
+            newErrors.queEs = 'El campo "¿Qué es?" es obligatorio';
+        }
+        if (!tipoAnimal.trim()) {
+            newErrors.tipoAnimal = 'El tipo de animal es obligatorio';
+        }
+        
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
     // Función para eliminar imagen anterior del bucket
@@ -113,11 +143,27 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
         reader.onloadend = () => setImagePreview(reader.result);
         reader.readAsDataURL(file);
         setImageFile(file);
+        // Limpiar error de imagen si se selecciona una
+        if (errors.image) {
+            setErrors(prev => ({ ...prev, image: null }));
+        }
     };
 
     const removeImage = () => {
         setImagePreview(null);
         setImageFile(null);
+        // Agregar error si no hay imagen
+        if (!imageUrl) {
+            setErrors(prev => ({ ...prev, image: 'La imagen del producto es obligatoria' }));
+        }
+    };
+
+    // Función para limpiar errores cuando el usuario empiece a escribir
+    const handleInputChange = (setter, fieldName, value) => {
+        setter(value);
+        if (errors[fieldName]) {
+            setErrors(prev => ({ ...prev, [fieldName]: null }));
+        }
     };
 
     // Guardar cambios
@@ -126,14 +172,9 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
         setError('');
         setLoading(true);
 
-        // Validaciones
-        if (!imageFile && !imageUrl) {
-            setError('La imagen es obligatoria');
-            setLoading(false);
-            return;
-        }
-        if (!nombre.trim()) {
-            setError('El nombre del producto es obligatorio');
+        // Validar formulario antes de enviar
+        if (!validateForm()) {
+            setShowErrors(true);
             setLoading(false);
             return;
         }
@@ -214,12 +255,10 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
                 <div className='new-product-exit'>
                     <button className='new-product-btn-exit' onClick={onClose}>X</button>
                 </div>
-                <h1>Editar producto - Mascotas Accesorios</h1>
-                <br />
-                <form onSubmit={handleSubmit}>
+                <h1>Editar producto</h1>                <form onSubmit={handleSubmit}>
                     {/* Imagen */}
                     <div className='new-product-box1'>
-                        <label>Imagen del producto <span style={{color:'red'}}>*</span></label>
+                        <label>Imagen del producto *</label>
                         {!imagePreview ? (
                             <div className="file-input-container">
                                 <input
@@ -241,62 +280,66 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
                                 </button>
                             </div>
                         )}
+                        {showErrors && errors.image && <p className="error-message">{errors.image}</p>}
                     </div>
 
                     {/* Nombre y descripción */}
                     <div className='new-product-box1'>
-                        <label>Nombre del producto <span style={{color:'red'}}>*</span></label>
+                        <label>Nombre del producto *</label>
                         <input 
-                            className='new-product-input1' 
+                            className={`new-product-input1 ${showErrors && errors.name ? 'error-input' : ''}`} 
                             type='text' 
                             placeholder='Nombre...' 
                             value={nombre} 
-                            onChange={e => setNombre(e.target.value)} 
+                            onChange={(e) => handleInputChange(setNombre, 'name', e.target.value)} 
                         />
+                        {showErrors && errors.name && <p className="error-message">{errors.name}</p>}
                     </div>
 
                     <div className='new-product-box1'>
-                        <label>Información adicional</label>
+                        <label>Información adicional (opcional)</label>
                         <input 
                             className='new-product-input1' 
                             type='text' 
                             placeholder='Detalles, uso, etc.' 
                             value={informacionAdicional} 
-                            onChange={e => setInformacionAdicional(e.target.value)} 
+                            onChange={(e) => setInformacionAdicional(e.target.value)} 
                         />
                     </div>
 
                     {/* Campos específicos de accesorios */}
                     <div className='new-product-box1'>
-                        <label>¿Qué es?</label>
+                        <label>¿Qué es? *</label>
                         <input 
-                            className='new-product-input1' 
+                            className={`new-product-input1 ${showErrors && errors.queEs ? 'error-input' : ''}`} 
                             type='text' 
                             placeholder='Collar, Juguete, etc.' 
                             value={queEs} 
-                            onChange={e => setQueEs(e.target.value)} 
+                            onChange={(e) => handleInputChange(setQueEs, 'queEs', e.target.value)} 
                         />
+                        {showErrors && errors.queEs && <p className="error-message">{errors.queEs}</p>}
                     </div>
 
                     <div className='new-product-box1'>
-                        <label>Tipo de animal:</label>
+                        <label>Tipo de animal *</label>
                         <input 
-                            className='new-product-input1' 
+                            className={`new-product-input1 ${showErrors && errors.tipoAnimal ? 'error-input' : ''}`} 
                             type='text' 
                             placeholder='Perro, Gato, etc.' 
                             value={tipoAnimal} 
-                            onChange={e => setTipoAnimal(e.target.value)} 
+                            onChange={(e) => handleInputChange(setTipoAnimal, 'tipoAnimal', e.target.value)} 
                         />
+                        {showErrors && errors.tipoAnimal && <p className="error-message">{errors.tipoAnimal}</p>}
                     </div>
 
                     <div className='new-product-box1'>
-                        <label>Recomendaciones de uso (opcional):</label>
+                        <label>Recomendaciones de uso (opcional)</label>
                         <input 
                             type='text' 
                             placeholder='Recomendado para  ...' 
                             className='new-product-input1' 
                             value={recomendacionesUso} 
-                            onChange={e => setRecomendacionesUso(e.target.value)} 
+                            onChange={(e) => setRecomendacionesUso(e.target.value)} 
                         />
                     </div>
 

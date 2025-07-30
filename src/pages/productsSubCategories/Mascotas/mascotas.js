@@ -14,15 +14,28 @@ export default function Mascotas() {
     const [showProductModal, setShowProductModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    
+    // Estados para filtros
+    const [selectedFoodType, setSelectedFoodType] = useState('');
+    const [selectedAccessoryType, setSelectedAccessoryType] = useState('');
+    const [selectedAnimalType, setSelectedAnimalType] = useState('');
 
+    // Obtener productos de Supabase
     useEffect(() => {
-        const fetchMascotas = async () => {
+        fetchProducts();
+    }, []);
+
+    const fetchProducts = async () => {
+        try {
+            setLoading(true);
             const { data, error } = await supabase
                 .from('mascotas')
                 .select('*')
                 .order('created_at', { ascending: false });
+
             if (error) {
-                console.error('Error al obtener mascotas:', error.message);
+                console.error('Error al obtener mascotas:', error);
             } else {
                 // Obtener datos específicos para cada producto
                 const productsWithDetails = await Promise.all(
@@ -91,22 +104,55 @@ export default function Mascotas() {
                 
                 setProducts(productsWithDetails);
             }
-        };
-        fetchMascotas();
-    }, []);
-
-    // Función para filtrar productos basada en el término de búsqueda
-    const filteredProducts = useMemo(() => {
-        if (!searchTerm.trim()) {
-            return products;
+        } catch (error) {
+            console.error('Error inesperado:', error);
+        } finally {
+            setLoading(false);
         }
-        
-        const searchLower = searchTerm.toLowerCase();
-        return products.filter(product => 
-            (product.name && product.name.toLowerCase().includes(searchLower)) ||
-            (product.weight && product.weight.toLowerCase().includes(searchLower))
-        );
-    }, [products, searchTerm]);
+    };
+
+    // Función para filtrar productos basada en el término de búsqueda y filtros
+    const filteredProducts = useMemo(() => {
+        let filtered = products;
+
+        // Filtro por búsqueda
+        if (searchTerm.trim()) {
+            const searchLower = searchTerm.toLowerCase();
+            filtered = filtered.filter(product => 
+                (product.name && product.name.toLowerCase().includes(searchLower)) ||
+                (product.weight && product.weight.toLowerCase().includes(searchLower)) ||
+                (product.especie_mascota && product.especie_mascota.toLowerCase().includes(searchLower)) ||
+                (product.tipo_animal && product.tipo_animal.toLowerCase().includes(searchLower)) ||
+                (product.que_es && product.que_es.toLowerCase().includes(searchLower))
+            );
+        }
+
+        // Filtro por tipo de alimento
+        if (selectedFoodType) {
+            filtered = filtered.filter(product => 
+                product.sub_categoria === 'Alimento' && 
+                product.especie_mascota === selectedFoodType
+            );
+        }
+
+        // Filtro por tipo de accesorio
+        if (selectedAccessoryType) {
+            filtered = filtered.filter(product => 
+                product.sub_categoria === 'Accesorio' && 
+                product.que_es === selectedAccessoryType
+            );
+        }
+
+        // Filtro por tipo de animal
+        if (selectedAnimalType) {
+            filtered = filtered.filter(product => 
+                (product.sub_categoria === 'Alimento' && product.especie_mascota === selectedAnimalType) ||
+                (product.sub_categoria === 'Accesorio' && product.tipo_animal === selectedAnimalType)
+            );
+        }
+
+        return filtered;
+    }, [products, searchTerm, selectedFoodType, selectedAccessoryType, selectedAnimalType]);
 
     const handleSearch = (term) => {
         setSearchTerm(term);
@@ -122,6 +168,19 @@ export default function Mascotas() {
         setSelectedProduct(null);
     };
 
+    // Funciones para manejar filtros
+    const handleFoodTypeFilter = (foodType) => {
+        setSelectedFoodType(selectedFoodType === foodType ? '' : foodType);
+    };
+
+    const handleAccessoryTypeFilter = (accessoryType) => {
+        setSelectedAccessoryType(selectedAccessoryType === accessoryType ? '' : accessoryType);
+    };
+
+    const handleAnimalTypeFilter = (animalType) => {
+        setSelectedAnimalType(selectedAnimalType === animalType ? '' : animalType);
+    };
+
     return(
         <div className="products-container">
             <div className="categories-container-head">
@@ -129,9 +188,18 @@ export default function Mascotas() {
                 <Searcher onSearch={handleSearch} placeholder="Buscar productos para mascotas..." />
             </div>
             <div className="categories-container">
-                <MenuMascotas />
+                <MenuMascotas 
+                    selectedFoodType={selectedFoodType}
+                    selectedAccessoryType={selectedAccessoryType}
+                    selectedAnimalType={selectedAnimalType}
+                    onFoodTypeFilter={handleFoodTypeFilter}
+                    onAccessoryTypeFilter={handleAccessoryTypeFilter}
+                    onAnimalTypeFilter={handleAnimalTypeFilter}
+                />
                 <div className="container-card-products">
-                    {filteredProducts.length > 0 ? (
+                    {loading ? (
+                        <div className="loading">Cargando productos...</div>
+                    ) : filteredProducts.length > 0 ? (
                         filteredProducts.map((product) => (
                             <CardProduct key={product.id} product={product} onViewProduct={handleViewProduct} />
                         ))
