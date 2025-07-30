@@ -39,8 +39,10 @@ export default function AlimentosBalanceados() {
                 const formattedProducts = data.map(product => ({
                     id: product.id,
                     name: product.nombre,
-                    weight: `${product.contenido_decimal} ${product.contenido_medida}`,
-                    image: product.url,
+                    weight: product.especie || 'Sin especificar',
+                    price: product.marca || 'Sin especificar',
+                    image: product.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
+                    details: product.detalles || '',
                     // Datos adicionales para la vista detallada
                     especie: product.especie,
                     marca: product.marca,
@@ -66,8 +68,9 @@ export default function AlimentosBalanceados() {
         if (searchTerm.trim()) {
             const searchLower = searchTerm.toLowerCase();
             filtered = filtered.filter(product => 
-                product.name.toLowerCase().includes(searchLower) ||
-                product.weight.toLowerCase().includes(searchLower) ||
+                product.name && product.name.toLowerCase().includes(searchLower) ||
+                product.weight && product.weight.toLowerCase().includes(searchLower) ||
+                product.price && product.price.toLowerCase().includes(searchLower) ||
                 product.especie?.toLowerCase().includes(searchLower) ||
                 product.marca?.toLowerCase().includes(searchLower)
             );

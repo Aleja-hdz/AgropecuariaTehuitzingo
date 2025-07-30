@@ -253,7 +253,7 @@ export default function FormAlimentosBalanceados({ onClose, alimentosData, isEdi
       setShowErrors(false);
   };
 
-    return (
+  return (
       <div className='container-general' onClick={e => { if (e.target.className === 'container-general') onClose(); }}>
           <div className='new-product-container'>
               <div className='new-product-exit'>
