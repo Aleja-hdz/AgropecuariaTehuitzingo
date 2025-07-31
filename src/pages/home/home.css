@@ -14,7 +14,7 @@ html {
 
 .container-home {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   background-color: rgb(22, 40, 196);
   display: flex;
   justify-content: center;
@@ -23,6 +23,8 @@ html {
   font-weight: 300;
   font-size: 14px;
   color: white;
+  padding: 70px 20px 20px;
+  box-sizing: border-box;
 }
 
 .home-head-tittle{
@@ -34,7 +36,8 @@ html {
 }
 
 .section-home {
-  width: 60%;
+  width: 100%;
+  max-width: 1200px;
   height: 100%;
   display: flex;
   gap: 30px;
@@ -56,6 +59,7 @@ html {
 
 .image-home img {
   height: 100%;
+  max-width: 100%;
 }
 
 .img-portada {
@@ -105,18 +109,19 @@ html {
   font-family: 'Inter', sans-serif;
   font-weight: 300;
   font-size: 14px;
-  padding-bottom: 25px;
+  padding: 75px 20px 25px;
   color: black;
+  box-sizing: border-box;
 }
 
 .section-about {
-  width: 85%;
+  width: 100%;
+  max-width: 1200px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 75px;
-  padding-bottom: 75px;
+  padding: 0 0 75px;
 }
 
 .tittle-hr {
@@ -164,7 +169,8 @@ html {
   gap: 100px;
   justify-content: center;
   margin-top: 20px;
-  margin-bottom: -20px;;
+  margin-bottom: -20px;
+  flex-wrap: wrap;
 }
 
 .box-distributors {
@@ -187,25 +193,26 @@ html {
   font-family: 'Inter', sans-serif;
   font-weight: 300;
   font-size: 14px;
-  padding-bottom: 50px;
+  padding: 75px 20px 50px;
   color: black;
+  box-sizing: border-box;
 }
 
 .section-service {
-  width: 85%;
+  width: 100%;
+  max-width: 1200px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 75px;
-  padding-bottom: 75px;
+  padding: 0 0 75px;
 }
 
 .tittles-services {
   font-family: 'Inter', sans-serif;
   font-weight: bold;
   font-size: 14px;
-  margin-bottom: 20px;;
+  margin-bottom: 20px;
 }
 
 .text-service {
@@ -222,6 +229,7 @@ html {
   justify-content: center;
   align-items: center;
   gap: 30px;
+  flex-wrap: wrap;
 }
 
 .box-container-services {
@@ -236,7 +244,7 @@ html {
 .images-service {
   background-color: gray;
   width: 70%;
-  height: 200px;;
+  height: 200px;
 }
 
 .tittle-hr-service {
@@ -259,23 +267,25 @@ html {
   font-family: 'Inter', sans-serif;
   font-weight: 300;
   font-size: 14px;
-  padding-top: 25px;
-  padding-bottom: 50px;
+  padding: 25px 20px 50px;
   color: white;
+  box-sizing: border-box;
 }
 
 .section-contact {
-  width: 75%;
+  width: 100%;
+  max-width: 1200px;
   display: flex;
   gap: 70px;
   justify-content: center;
   align-items: center;
-  padding-top: 30px;
-  padding-bottom: 75px;
+  padding: 30px 0 75px;
+  flex-wrap: wrap;
 }
 
 .box-contact {
   width: 30%;
+  min-width: 250px;
   display:flex;
   flex-direction: column; 
   align-items: flex-start;
@@ -337,4 +347,144 @@ html {
 .box-icons a:hover{
   cursor: pointer;
   color: #FACC15;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .section-home {
+    max-width: 1000px;
+  }
+  
+  .section-about,
+  .section-service {
+    max-width: 1000px;
+  }
+  
+  .section-contact {
+    max-width: 1000px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container-home {
+    padding: 70px 15px 20px;
+  }
+  
+  .section-home {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+  
+  .image-home {
+    width: 100%;
+    margin-top: 0;
+    height: auto;
+  }
+  
+  .container-info {
+    width: 100%;
+    padding: 0;
+    align-items: center;
+  }
+  
+  .home-head-tittle {
+    font-size: 32px;
+    text-align: center;
+  }
+  
+  .text-home {
+    text-align: center;
+  }
+  
+  .btns-home {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .container-about,
+  .container-service,
+  .container-contact {
+    padding: 50px 15px 25px;
+  }
+  
+  .box-about {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .divs-about {
+    width: 100%;
+  }
+  
+  .box-services {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .box-container-services {
+    width: 100%;
+  }
+  
+  .section-contact {
+    flex-direction: column;
+    gap: 40px;
+    text-align: center;
+  }
+  
+  .box-contact {
+    width: 100%;
+    align-items: center;
+  }
+  
+  .text-contact {
+    text-align: center;
+  }
+  
+  .distributors {
+    gap: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container-home {
+    padding: 60px 10px 20px;
+  }
+  
+  .home-head-tittle {
+    font-size: 28px;
+  }
+  
+  .btns-home {
+    gap: 15px;
+  }
+  
+  .container-about,
+  .container-service,
+  .container-contact {
+    padding: 40px 10px 20px;
+  }
+  
+  .tittles-h1 {
+    font-size: 24px;
+  }
+  
+  .tittles {
+    font-size: 12px;
+  }
+  
+  .text-about,
+  .text-service,
+  .text-contact {
+    font-size: 13px;
+  }
+  
+  .distributors {
+    gap: 30px;
+  }
+  
+  .box-distributors {
+    width: 60px;
+    height: 60px;
+  }
 }

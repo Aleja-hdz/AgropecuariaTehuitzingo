@@ -37,11 +37,12 @@ export default function MedicamentosVeterinarios() {
                 const formattedProducts = data.map(item => ({
                     id: item.id,
                     name: item.nombre,
-                    weight: `${item.contenido_decimal} ${item.contenido_medida}`,
+                    weight: item.presentacion || 'Sin especificar',
+                    price: item.marca || 'Sin especificar',
                     image: item.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
                     // Datos adicionales para la vista detallada
-                    tipo_medicamento: item.tipo_medicamento,
-                    especie_destinada: item.especie_destinada,
+                    tipo_medicamento: item.tipo,
+                    especie_destinada: item.especie,
                     presentacion: item.presentacion,
                     marca: item.marca,
                     ingredientes_composicion: item.ingredientes_composicion,
@@ -67,6 +68,7 @@ export default function MedicamentosVeterinarios() {
             filtered = filtered.filter(product => 
                 product.name && product.name.toLowerCase().includes(searchLower) ||
                 product.weight && product.weight.toLowerCase().includes(searchLower) ||
+                product.price && product.price.toLowerCase().includes(searchLower) ||
                 product.tipo_medicamento && product.tipo_medicamento.toLowerCase().includes(searchLower) ||
                 product.especie_destinada && product.especie_destinada.toLowerCase().includes(searchLower) ||
                 product.marca && product.marca.toLowerCase().includes(searchLower)

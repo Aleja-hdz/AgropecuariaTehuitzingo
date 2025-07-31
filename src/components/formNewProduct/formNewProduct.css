@@ -38,6 +38,8 @@ body {
   z-index: 10000;
   backdrop-filter: blur(5px);
   animation: fadeIn 0.3s ease-out;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 @keyframes fadeIn {
@@ -98,108 +100,113 @@ body {
 .new-product-container h1 {
   font-size: 28px;
   font-weight: 700;
-  color: var(--primary-dark);
   margin-bottom: 20px;
   text-align: center;
-  margin-top: 0px;
 }
 
 .new-product-text {
-  margin-top: 17px;
-  margin-bottom: 5px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--text);
 }
 
 .new-product-photo {
-  margin-bottom: 15px;
-  width: 100%;
+  margin-bottom: 20px;
 }
 
 .new-product-input {
   width: 100%;
   padding: var(--padding);
-  border-radius: var(--radius);
   border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--font);
+  font-size: 14px;
   resize: vertical;
-  min-height: 60px;
-  margin-bottom: 15px;
-  height: 200px;
-  color: rgb(255, 255, 255);
-  background-color: rgb(37, 58, 241);
+  min-height: 100px;
+  box-sizing: border-box;
 }
 
 .new-product-input1 {
-  flex: 1 1 100%;
+  width: 100%;
   padding: var(--padding);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  margin-top: 5px;
-  margin-bottom: 5px;
-  color: rgb(255, 255, 255);
-  background-color: rgb(37, 58, 241);
+  font-family: var(--font);
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
 .new-product-box {
   display: flex;
   gap: 10px;
-  margin-bottom: 15px;
   align-items: center;
-  flex-wrap: wrap;
+  margin-bottom: 15px;
 }
 
 .new-product-text-box {
-  flex: 1 1 100%;
-  margin-top: 25px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--text);
+  white-space: nowrap;
 }
 
 .new-product-number-box {
-  flex: 1 1 40%;
+  flex: 1;
   padding: var(--padding);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  color: rgb(255, 255, 255);
-  background-color: rgb(37, 58, 241);
+  font-family: var(--font);
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
 .new-product-opc-box {
-  flex: 1 1 55%;
+  flex: 1;
   padding: var(--padding);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  color: rgb(255, 255, 255);
-  background-color: rgb(37, 58, 241);
+  font-family: var(--font);
+  font-size: 14px;
+  background-color: white;
+  box-sizing: border-box;
 }
 
 .new-product-btn-keep {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .image-preview-container {
-  width: 100%;
+  position: relative;
   margin-bottom: 15px;
-  text-align: center;
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
 .image-preview {
-  max-width: 100%;
-  height: auto;
-  border-radius: 10px;
-  margin-bottom: 10px;
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: var(--radius);
 }
 
 .btn-remove-image {
-  background-color: var(--accent);
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(220, 38, 38, 0.9);
+  color: white;
   border: none;
-  color: black;
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: 4px;
   cursor: pointer;
-  font-weight: 500;
+  font-size: 12px;
+  transition: background-color 0.2s ease;
 }
 
 .btn-remove-image:hover {
-  background-color: #eab308;
+  background: rgba(220, 38, 38, 1);
 }
 
 .input-hidden {
@@ -208,27 +215,29 @@ body {
 
 .custom-file-button {
   display: inline-block;
-  padding: 10px 15px;
-  background-color: var(--accent);
-  color: black;
-  border: none;
-  border-radius: 8px;
+  padding: 12px 20px;
+  background-color: var(--primary);
+  color: white;
+  border-radius: var(--radius);
   cursor: pointer;
+  font-family: var(--font);
+  font-size: 14px;
   font-weight: 500;
   text-align: center;
-  transition: background-color 0.3s ease;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  transition: background-color 0.2s ease;
+  border: none;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .custom-file-button:hover {
-  background-color: #eab308;
+  background-color: var(--primary-dark);
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: #dfdede;
-  opacity: 5;
+  color: var(--text-muted);
+  opacity: 0.7;
 }
 
 .new-product-category {
@@ -237,7 +246,6 @@ textarea::placeholder {
   margin-top: 25px;
   align-items: center;
 }
-
 
 .new-product-opc-category {
   flex: 1 1 100%;
@@ -265,7 +273,8 @@ textarea::placeholder {
 
 .new-product-box2 {
   display: flex;
-  gap: 50px
+  gap: 50px;
+  flex-wrap: wrap;
 }
 
 .new-product-box3 {
@@ -290,14 +299,6 @@ textarea::placeholder {
 .text-label {
   text-align: center;
   line-height: 20px;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .new-product-container {
-    max-width: 90vw;
-    padding: 20px;
-  }
 }
 
 /* Estilos para validaciones y errores */
@@ -329,5 +330,94 @@ textarea::placeholder {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .new-product-container {
+    max-width: 450px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container-general {
+    padding: 15px;
+  }
+  
+  .new-product-container {
+    max-width: 95vw;
+    padding: 20px;
+    max-height: 95vh;
+  }
+  
+  .new-product-container h1 {
+    font-size: 24px;
+  }
+  
+  .new-product-box2 {
+    gap: 30px;
+  }
+  
+  .new-product-box {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  
+  .new-product-text-box {
+    white-space: normal;
+  }
+  
+  .new-product-number-box,
+  .new-product-opc-box {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .container-general {
+    padding: 10px;
+  }
+  
+  .new-product-container {
+    max-width: 100vw;
+    padding: 15px;
+    border-radius: 6px;
+  }
+  
+  .new-product-container h1 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .new-product-text {
+    font-size: 13px;
+  }
+  
+  .new-product-input,
+  .new-product-input1,
+  .new-product-number-box,
+  .new-product-opc-box {
+    padding: 10px;
+    font-size: 13px;
+  }
+  
+  .custom-file-button {
+    padding: 10px 15px;
+    font-size: 13px;
+  }
+  
+  .new-product-box2 {
+    gap: 20px;
+  }
+  
+  .btn-remove-image {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  
+  .image-preview {
+    max-height: 150px;
   }
 }

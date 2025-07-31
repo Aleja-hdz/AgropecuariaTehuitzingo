@@ -24,7 +24,7 @@ export default function AdminPanel() {
     const [ofertas, setOfertas] = useState([]);
     const [implementos, setImplementos] = useState([]);
     const [alimentos, setAlimentos] = useState([]);
-    // const [medicamentos, setMedicamentos] = useState([]);
+    const [medicamentos, setMedicamentos] = useState([]);
     const [mascotas, setMascotas] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
 
@@ -93,21 +93,21 @@ export default function AdminPanel() {
         }
     };
     const fetchMedicamentos = async () => {
-        // const { data, error } = await supabase
-        // .from('medicamentos_veterinarios')
-        // .select('*')
-        // .order('created_at', { ascending: false });
-        // if(error){
-        //     console.error('Error al obtener medicamentos:', error.message);
-        //     } else {
-        //     setMedicamentos(data.map(item => ({
-        //         id: item.id,
-        //         nombre: item.nombre || item.name || '',
-        //         categoria: 'Medicamentos veterinarios',
-        //         url: item.url || item.image || '',
-        //         created_at: item.created_at,
-        //     })));
-        // }
+        const { data, error } = await supabase
+        .from('medicamentos_veterinarios')
+        .select('*')
+        .order('created_at', { ascending: false });
+        if(error){
+            console.error('Error al obtener medicamentos:', error.message);
+        } else {
+            setMedicamentos(data.map(item => ({
+                id: item.id,
+                nombre: item.nombre || item.name || '',
+                categoria: 'Medicamentos veterinarios',
+                url: item.url || item.image || '',
+                created_at: item.created_at,
+            })));
+        }
     };
     const fetchMascotas = async () => {
         const { data, error } = await supabase
@@ -132,7 +132,7 @@ export default function AdminPanel() {
         const allProductsCombined = [
             ...implementos,
             ...alimentos,
-            // ...medicamentos,
+            ...medicamentos,
             ...mascotas
         ];
         
@@ -143,13 +143,13 @@ export default function AdminPanel() {
         
         console.log('Productos ordenados por fecha de creación real (más recientes primero):', sortedProducts);
         setAllProducts(sortedProducts);
-    }, [implementos, alimentos, /*medicamentos,*/ mascotas]);
+    }, [implementos, alimentos, medicamentos, mascotas]);
 
     // Fetch inicial
     useEffect(() => {
         fetchImplementos();
         fetchAlimentos();
-        // fetchMedicamentos();
+        fetchMedicamentos();
         fetchMascotas();
     }, []);
 
@@ -157,7 +157,7 @@ export default function AdminPanel() {
     const handleRefreshProducts = () => {
         fetchImplementos();
         fetchAlimentos();
-        // fetchMedicamentos();
+        fetchMedicamentos();
         fetchMascotas();
         fetchOfertas();
     };
@@ -223,6 +223,9 @@ export default function AdminPanel() {
                     setEditProduct(producto);
                 } else if (producto.categoria === 'Alimentos balanceados') {
                     setEditProductType('alimentos-balanceados');
+                    setEditProduct(producto);
+                } else if (producto.categoria === 'Medicamentos veterinarios') {
+                    setEditProductType('medicamentos-veterinarios');
                     setEditProduct(producto);
                 } else if (producto.categoria === 'Mascotas') {
                     // Obtener datos completos de mascotas para determinar subcategoría
@@ -293,6 +296,19 @@ export default function AdminPanel() {
                         .eq('id', producto.id);
                     if (error) {
                         console.error('Error al eliminar alimento balanceado:', error);
+                        alert('Error al eliminar el producto');
+                    } else {
+                        alert('Producto eliminado con éxito');
+                        handleRefreshProducts();
+                    }
+                } else if (producto.categoria === 'Medicamentos veterinarios') {
+                    // Eliminar medicamento veterinario
+                    const { error } = await supabase
+                        .from('medicamentos_veterinarios')
+                        .delete()
+                        .eq('id', producto.id);
+                    if (error) {
+                        console.error('Error al eliminar medicamento veterinario:', error);
                         alert('Error al eliminar el producto');
                     } else {
                         alert('Producto eliminado con éxito');
