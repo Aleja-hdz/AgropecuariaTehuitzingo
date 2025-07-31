@@ -13,8 +13,11 @@ import { FaFacebook } from "react-icons/fa";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../auth/authContext';
 
 export default function Home() {
+  const { user } = useAuth();
+
   useEffect(() => {
     if (window.location.hash) {
       const id = window.location.hash.replace('#', '');
@@ -36,8 +39,19 @@ export default function Home() {
               <p className="text-home">Venta y distribución de las mejores marcas de alimento balanceado, materias primas y accesorios para todas las especies.<br></br>Ganarnos tu confianza es nuestro mayor  objetivo.</p>
             </div>
             <div className="btns-home">
-              <a href="/registro"><ButtonSmall text="Regístrate" /></a>
-              <a href="/ingreso"><ButtonSmall text="Iniciar sesión" /></a>
+              {!user ? (
+                <>
+                  <a href="/registro"><ButtonSmall text="Regístrate" /></a>
+                  <a href="/ingreso"><ButtonSmall text="Iniciar sesión" /></a>
+                </>
+              ) : (
+                <div style={{ textAlign: 'center' }}>
+                  <Link to="/productos">
+                    <ButtonSmall text="Ver catálogo ->" />
+                  </Link>
+                  <p className="text-home">¡Conoce nuestro catálogo de productos!</p>
+                </div>
+              )}
             </div>
           </div>
           <div className="image-home">
@@ -51,7 +65,7 @@ export default function Home() {
           <h1 className="tittles-h1">Nosotros</h1>
           <hr className="tittle-hr-service"></hr>
           <p className="tittles">Historia</p>
-          <p className="text-about">En Agropecuaria Tehuitzingo, trabajamos con pasión y compromiso por el bienestar animal. Somos un negocio dedicado a la atención médico-veterinaria, la venta de alimentos balanceados y medicamentos, tanto para mascotas como para animales de producción.</p>
+          <p className="text-about">En Agropecuaria Tehuitzingo, trabajamos con pasión y compromiso por el bienestar animal. Nos respaldan 20 años de experiencia en el mercado, somos un negocio dedicado a la atención médico-veterinaria, la venta de alimentos balanceados y medicamentos, tanto para mascotas como para animales de producción.</p>
           <div className="box-about">
             <div className="divs-about">
               <p className="tittles">Misión</p>

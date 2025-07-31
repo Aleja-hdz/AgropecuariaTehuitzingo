@@ -2,6 +2,8 @@ import ButtonLong from '../../../components/buttonLong/buttonLong';
 import './changePassword.css';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../../../lib/supabaseClient';
+import { useAuth } from '../../../auth/authContext';
 
 export default function ChangePassword() {
     const [currentPassword, setCurrentPassword] = useState('');
@@ -9,49 +11,65 @@ export default function ChangePassword() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     const handleChangePassword = async () => {
         setError('');
         setSuccess('');
+        setIsLoading(true);
 
         // Validación básica
         if (!currentPassword || !newPassword || !confirmPassword) {
             setError('Por favor completa todos los campos.');
+            setIsLoading(false);
             return;
         }
 
         if (newPassword !== confirmPassword) {
             setError('Las contraseñas nuevas no coinciden.');
+            setIsLoading(false);
+            return;
+        }
+
+        if (newPassword.length < 6) {
+            setError('La nueva contraseña debe tener al menos 6 caracteres.');
+            setIsLoading(false);
             return;
         }
 
         try {
-            const response = await fetch('http://localhost:5000/api/change-password', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Agrega token si usas autenticación con JWT
-                    // 'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    current_password: currentPassword,
-                    new_password: newPassword
-                })
+            // Primero verificar la contraseña actual
+            const { error: signInError } = await supabase.auth.signInWithPassword({
+                email: user.email,
+                password: currentPassword
             });
 
-            const data = await response.json();
+            if (signInError) {
+                setError('La contraseña actual es incorrecta.');
+                setIsLoading(false);
+                return;
+            }
 
-            if (response.ok) {
-                setSuccess('¡Contraseña cambiada exitosamente!');
-                setTimeout(() => navigate('/perfil'), 2000); // Redirigir a home o login
+            // Cambiar la contraseña
+            const { error: updateError } = await supabase.auth.updateUser({
+                password: newPassword
+            });
+
+            if (updateError) {
+                setError('Error al cambiar la contraseña: ' + updateError.message);
             } else {
-                setError(data.msg || 'No se pudo cambiar la contraseña.');
+                setSuccess('¡Contraseña cambiada exitosamente!');
+                setTimeout(() => navigate('/userProfile'), 2000);
             }
 
         } catch (err) {
-            setError('Error del servidor. Intenta más tarde.');
+            setError('Error inesperado. Intenta más tarde.');
+            console.error('Error al cambiar contraseña:', err);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -68,6 +86,7 @@ export default function ChangePassword() {
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
                     required
+                    disabled={isLoading}
                 /><br />
 
                 <input
@@ -77,21 +96,33 @@ export default function ChangePassword() {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     required
+                    disabled={isLoading}
                 /><br />
 
                 <input
                     type="password"
-                    placeholder="Confirmar nueva"
+                    placeholder="Confirmar nueva contraseña"
                     className='changeP-input'
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
+                    disabled={isLoading}
                 /><br />
 
-                <ButtonLong text="Cambiar contraseña" onClick={handleChangePassword} />
+                <ButtonLong 
+                    text={isLoading ? "Cambiando contraseña..." : "Cambiar contraseña"} 
+                    onClick={handleChangePassword}
+                    disabled={isLoading}
+                />
 
                 {error && <p className="error-message">{error}</p>}
                 {success && <p className="success-message">{success}</p>}
+                
+                <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                    <a href="/userProfile" style={{ color: '#007bff', textDecoration: 'none' }}>
+                        ← Volver al perfil
+                    </a>
+                </div>
             </div>
         </div>
     );

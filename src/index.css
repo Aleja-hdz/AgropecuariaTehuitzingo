@@ -11,3 +11,28 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Estilos globales para el footer */
+.footer {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1628c4;
+  color: white;
+  margin-top: auto;
+}
+
+/* Clase utilitaria para contenedores que necesitan ocupar toda la altura */
+.full-height-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.full-height-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}

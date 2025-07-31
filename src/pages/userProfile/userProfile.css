@@ -3,13 +3,13 @@
 
 .user-profile {
     width: 100%;
-    height: auto;
+    min-height: 100vh;
     margin: 0;
     padding: 0;
     background-color: rgb(37, 58, 241);
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     font-family: 'Inter', sans-serif;
     font-weight: 300;
@@ -53,6 +53,7 @@
     width: 80%;
     height: auto;
     display: flex;
+    flex: 1;
 }
 
 .profile-body-box1 {
@@ -115,6 +116,27 @@ h2 {
     border-radius: 5px;
 }
 
+/* Mensajes de éxito y error */
+.success-message {
+    color: #28a745;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    font-weight: 500;
+}
+
+.error-message {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    font-weight: 500;
+}
+
 /*Final*/
 
 .profile-footer {
@@ -122,6 +144,7 @@ h2 {
     display: flex;
     flex-direction: column;
     flex-direction: flex-start;
+    margin-top: auto;
 }
 
 h3 {
@@ -170,4 +193,93 @@ h3 {
     cursor: pointer;
     background-color: rgb(209, 209, 209);
     color: red;
+}
+
+.profile-footer-btns.disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+    background-color: rgb(200, 200, 200) !important;
+    color: rgb(100, 100, 100) !important;
+}
+
+.profile-footer-btns.disabled:hover {
+    background-color: rgb(200, 200, 200) !important;
+    color: rgb(100, 100, 100) !important;
+}
+
+/* Modal de confirmación para eliminar cuenta */
+.delete-confirm-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.delete-confirm-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.delete-confirm-content h3 {
+    color: #dc3545;
+    margin-bottom: 15px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.delete-confirm-content p {
+    color: #666;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+.delete-confirm-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.delete-confirm-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.delete-confirm-btn.cancel {
+    background-color: #6c757d;
+    color: white;
+}
+
+.delete-confirm-btn.cancel:hover {
+    background-color: #5a6268;
+}
+
+.delete-confirm-btn.confirm {
+    background-color: #dc3545;
+    color: white;
+}
+
+.delete-confirm-btn.confirm:hover {
+    background-color: #c82333;
+}
+
+.delete-confirm-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }

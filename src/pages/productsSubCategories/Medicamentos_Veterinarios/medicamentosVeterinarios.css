@@ -4,6 +4,9 @@
 .products-container {
     font-family: 'Inter', sans-serif;
     font-weight: 300;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .products-container hr {
@@ -19,6 +22,7 @@
     width: 100%;
     margin-bottom: 30px;
     background-color: #FCFAF5;
+    flex: 1;
 }
 
 .container-card-products {
@@ -30,6 +34,7 @@
     overflow: hidden;
     gap: 35px;
     padding-bottom: 25px;
+    flex: 1;
 }
 
 .footer {
@@ -40,6 +45,7 @@
     justify-content: center;
     background-color: #1628c4;
     color: white;
+    margin-top: auto;
 }
 
 .loading {

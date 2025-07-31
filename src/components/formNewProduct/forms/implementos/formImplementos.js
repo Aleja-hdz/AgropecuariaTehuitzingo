@@ -28,6 +28,27 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
     setImagePreview(implementsData?.url || null);
   }, [implementsData]);
 
+  // Ocultar navbar cuando se abre el modal
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    
+    // Ocultar el navbar cuando se abre el modal
+    const navbar = document.querySelector('.navbar');
+    if (navbar) {
+      navbar.classList.add('hidden');
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+      
+      // Mostrar el navbar cuando se cierra el modal
+      const navbar = document.querySelector('.navbar');
+      if (navbar) {
+        navbar.classList.remove('hidden');
+      }
+    };
+  }, []);
+
   // Función para validar campos obligatorios
   const validateForm = () => {
     const newErrors = {};

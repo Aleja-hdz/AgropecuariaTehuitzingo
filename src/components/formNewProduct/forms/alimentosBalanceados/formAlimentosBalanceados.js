@@ -34,6 +34,27 @@ export default function FormAlimentosBalanceados({ onClose, alimentosData, isEdi
     setImagePreview(alimentosData?.url || null);
   }, [alimentosData]);
 
+  // Ocultar navbar cuando se abre el modal
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    
+    // Ocultar el navbar cuando se abre el modal
+    const navbar = document.querySelector('.navbar');
+    if (navbar) {
+      navbar.classList.add('hidden');
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+      
+      // Mostrar el navbar cuando se cierra el modal
+      const navbar = document.querySelector('.navbar');
+      if (navbar) {
+        navbar.classList.remove('hidden');
+      }
+    };
+  }, []);
+
   // Función para validar campos obligatorios
   const validateForm = () => {
     const newErrors = {};

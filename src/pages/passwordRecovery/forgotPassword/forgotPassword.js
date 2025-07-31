@@ -1,33 +1,41 @@
 import ButtonLong from '../../../components/buttonLong/buttonLong';
 import './forgotPassword.css';
-import React, {  useState} from 'react';
+import React, { useState } from 'react';
+import { supabase } from '../../../lib/supabaseClient';
 
 export default function ForgotPassword() {
-
-    const [identifier, setIdentifier] = useState('');
+    const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async () => {
         setMessage('');
         setError('');
+        setIsLoading(true);
         
         try {
-            const response = await fetch('http://localhost:5000/api/forgot-password', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email_or_phone: identifier }),
+            // Validación básica de email
+            if (!email || !email.includes('@')) {
+                setError('Por favor ingresa un email válido');
+                setIsLoading(false);
+                return;
+            }
+
+            const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: `${window.location.origin}/reset-password`
             });
 
-            const data = await response.json();
-
-            if (response.ok) {
-                setMessage('Se ha enviado un enlace de recuperación. Revisa tu correo o SMS.');
+            if (error) {
+                setError('Error al enviar el email de recuperación: ' + error.message);
             } else {
-                setError(data.msg || 'Hubo un error al procesar la solicitud.');
+                setMessage('Se ha enviado un enlace de recuperación a tu correo electrónico. Revisa tu bandeja de entrada y sigue las instrucciones.');
             }
         } catch (err) {
-            setError('Error del servidor. Intenta de nuevo más tarde o verifique sus datos.');
+            setError('Error inesperado. Intenta de nuevo más tarde.');
+            console.error('Error en recuperación de contraseña:', err);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -35,12 +43,29 @@ export default function ForgotPassword() {
         <div className='forgotP-body'>
             <div className="forgotP-container">
                 <h1>Recuperación de contraseña</h1>
-                <p>Escriba el correo electrónico o teléfono con el que se haya registrado anteriormente</p>
-                <input type="text" placeholder="Correo electrónico/ Teléfono" className='forgotP-input' value={identifier} onChange={(e) => setIdentifier(e.target.value)} required />
+                <p>Escribe el correo electrónico con el que te registraste</p>
+                <input 
+                    type="email" 
+                    placeholder="Correo electrónico" 
+                    className='forgotP-input' 
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)} 
+                    required 
+                    disabled={isLoading}
+                />
                 <br></br>
-                <ButtonLong text="Enviar código de verificación" onClick={handleSubmit}/>
+                <ButtonLong 
+                    text={isLoading ? "Enviando..." : "Enviar enlace de recuperación"} 
+                    onClick={handleSubmit}
+                    disabled={isLoading}
+                />
                 {message && <p className="success-message">{message}</p>}
                 {error && <p className="error-message">{error}</p>}
+                <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                    <a href="/login" style={{ color: '#007bff', textDecoration: 'none' }}>
+                        ← Volver al inicio de sesión
+                    </a>
+                </div>
             </div>
         </div>
     );
