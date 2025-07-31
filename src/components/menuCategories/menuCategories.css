@@ -2,8 +2,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap');
 
 .menu-categories {
-    width: 45%;
-    height: 60vh;
+    width: 100%;
+    max-width: 800px;
+    min-height: 60vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -11,21 +12,24 @@
     justify-content: center;
     background-color: transparent;
     gap: 20px;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .order-categories {
     display: flex;
     width: 100%;
-    height: 45%;
+    height: auto;
     gap: 20px;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 /*Balanceados*/
 
 .btn-categorie-balanceados {
     width: 100%;
-    height: 100%;
+    height: 200px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -38,6 +42,11 @@
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.btn-categorie-balanceados:hover {
+    transform: scale(1.02);
 }
 
 .btn-balanceados {
@@ -68,7 +77,7 @@
 
 .btn-categorie-mv {
     width: 100%;
-    height: 100%;
+    height: 200px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -81,6 +90,11 @@
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.btn-categorie-mv:hover {
+    transform: scale(1.02);
 }
 
 .btn-mv {
@@ -111,7 +125,7 @@
 
 .btn-categorie-mascotas {
     width: 100%;
-    height: 100%;
+    height: 200px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -124,6 +138,11 @@
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.btn-categorie-mascotas:hover {
+    transform: scale(1.02);
 }
 
 .btn-mascotas {
@@ -154,7 +173,7 @@
 
 .btn-categorie-implementos {
     width: 100%;
-    height: 100%;
+    height: 200px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -167,6 +186,11 @@
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.btn-categorie-implementos:hover {
+    transform: scale(1.02);
 }
 
 .btn-implementos {
@@ -191,4 +215,63 @@
 .btn-implementos span {
   position: relative;
   z-index: 2;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+    .menu-categories {
+        max-width: 700px;
+    }
+    
+    .order-categories {
+        gap: 15px;
+    }
+    
+    .btn-categorie-balanceados,
+    .btn-categorie-mv,
+    .btn-categorie-mascotas,
+    .btn-categorie-implementos {
+        height: 180px;
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .menu-categories {
+        max-width: 100%;
+        padding: 15px;
+        min-height: 50vh;
+    }
+    
+    .order-categories {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .btn-categorie-balanceados,
+    .btn-categorie-mv,
+    .btn-categorie-mascotas,
+    .btn-categorie-implementos {
+        height: 150px;
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-categories {
+        padding: 10px;
+        min-height: 40vh;
+    }
+    
+    .order-categories {
+        gap: 10px;
+    }
+    
+    .btn-categorie-balanceados,
+    .btn-categorie-mv,
+    .btn-categorie-mascotas,
+    .btn-categorie-implementos {
+        height: 120px;
+        font-size: 20px;
+    }
 }

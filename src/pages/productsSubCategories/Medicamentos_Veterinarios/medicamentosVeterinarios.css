@@ -4,6 +4,9 @@
 .products-container {
     font-family: 'Inter', sans-serif;
     font-weight: 300;
+    width: 100%;
+    overflow-x: hidden;
+    padding-top: 70px;
 }
 
 .products-container hr {
@@ -19,17 +22,21 @@
     width: 100%;
     margin-bottom: 30px;
     background-color: #FCFAF5;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .container-card-products {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     justify-content: center;
-    align-items: center;
-    width: 80%;
-    overflow: hidden;
+    align-items: start;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
     gap: 35px;
-    padding-bottom: 25px;
+    padding: 0 20px 25px;
+    box-sizing: border-box;
 }
 
 .footer {
@@ -40,6 +47,9 @@
     justify-content: center;
     background-color: #1628c4;
     color: white;
+    text-align: center;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
 .loading {
@@ -51,4 +61,70 @@
     font-size: 18px;
     color: #666;
     font-weight: 500;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+    .container-card-products {
+        width: 95%;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .products-container {
+        padding-top: 60px;
+    }
+    
+    .categories-container {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .container-card-products {
+        width: 95%;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 20px;
+        padding: 0 15px 20px;
+    }
+    
+    .footer {
+        height: 50px;
+        padding: 0 15px;
+    }
+    
+    .loading {
+        height: 150px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .products-container {
+        padding-top: 60px;
+    }
+    
+    .categories-container {
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .container-card-products {
+        width: 100%;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 15px;
+        padding: 0 10px 15px;
+    }
+    
+    .footer {
+        height: 45px;
+        padding: 0 10px;
+        font-size: 14px;
+    }
+    
+    .loading {
+        height: 120px;
+        font-size: 14px;
+    }
 }

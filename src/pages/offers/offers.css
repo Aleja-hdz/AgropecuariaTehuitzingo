@@ -10,15 +10,21 @@
     align-items: center;
     padding-top: 45px;
     background-color: rgb(24, 43, 209);
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .container-info {
-    width: 80%;
+    width: 90%;
+    max-width: 1200px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     color: white;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .tittle-hr {
@@ -41,21 +47,24 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     justify-content: center;
-    align-items: center;
-    width: 80%;
-    overflow: hidden;
+    align-items: start;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
     gap: 35px;
-    padding-top: 25px;
+    padding: 25px 20px 0;
+    box-sizing: border-box;
 }
 
 .text-offers {
   text-align: center;
   line-height: 25px;
   margin-bottom: -10px;
+  max-width: 600px;
 }
 
 .separador {
-    width: 99.9%;
+    width: 100%;
     margin-top: 0px;
     margin-bottom: 0px;
     border-width: 1px;
@@ -69,4 +78,76 @@
     justify-content: center;
     background-color: #1628c4;
     color: white;
+    text-align: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+    .container-info {
+        width: 95%;
+    }
+    
+    .container-card-offers {
+        width: 95%;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .offers-container {
+        padding-top: 40px;
+    }
+    
+    .container-info {
+        width: 100%;
+        padding: 15px;
+    }
+    
+    .container-card-offers {
+        width: 95%;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 20px;
+        padding: 20px 15px 0;
+    }
+    
+    .text-offers {
+        font-size: 13px;
+        line-height: 22px;
+    }
+    
+    .footer {
+        height: 50px;
+        padding: 0 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .offers-container {
+        padding-top: 35px;
+    }
+    
+    .container-info {
+        padding: 10px;
+    }
+    
+    .container-card-offers {
+        width: 100%;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 15px;
+        padding: 15px 10px 0;
+    }
+    
+    .text-offers {
+        font-size: 12px;
+        line-height: 20px;
+    }
+    
+    .footer {
+        height: 45px;
+        padding: 0 10px;
+        font-size: 14px;
+    }
 }
