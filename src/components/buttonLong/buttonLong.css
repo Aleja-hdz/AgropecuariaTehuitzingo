@@ -3,17 +3,56 @@
 
 .btn-long{
     width: 200px;
-    height: 35px;
+    height: 40px;
     background-color: #FACC15;
     color: #000000;
     border-radius: 10px;
     border: none;
     font-family: 'Inter', sans-serif;
-    font-weight: 400;
+    font-weight: 500;
     font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-sizing: border-box;
 }
 
 .btn-long:hover{
     background-color: #ad8e11;
     cursor: pointer;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.btn-long:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.btn-long:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .btn-long {
+        width: 180px;
+        height: 38px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn-long {
+        width: 160px;
+        height: 36px;
+        font-size: 12px;
+    }
 }
