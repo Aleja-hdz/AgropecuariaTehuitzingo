@@ -4,7 +4,7 @@ import Searcher from '../../../components/searcher/searcher';
 import MenuMedicamentosVeterinarios from '../../../components/menuSubCategories/Medicamentos_Veterinarios/menuMedicamentosVeterinarios';
 import CardProduct from '../../../components/cardProduct/cardProduct';
 import NoProductsFound from '../../../components/noProductsFound/noProductsFound';
-import ViewProduct from '../../../components/viewProduct/viewProduct';
+import MvViewProduct from '../../../components/viewProduct/mvViewProduct';
 import { supabase } from '../../../lib/supabaseClient';
 
 export default function MedicamentosVeterinarios() {
@@ -15,7 +15,10 @@ export default function MedicamentosVeterinarios() {
     const [loading, setLoading] = useState(true);
     
     // Estados para filtros
-    const [selectedOption, setSelectedOption] = useState('');
+    const [selectedTipo, setSelectedTipo] = useState('');
+    const [selectedEspecie, setSelectedEspecie] = useState('');
+    const [selectedVia, setSelectedVia] = useState('');
+    const [selectedPresentacion, setSelectedPresentacion] = useState('');
 
     // Obtener productos de Supabase
     useEffect(() => {
@@ -37,14 +40,15 @@ export default function MedicamentosVeterinarios() {
                 const formattedProducts = data.map(item => ({
                     id: item.id,
                     name: item.nombre,
-                    weight: `${item.contenido_decimal} ${item.contenido_medida}`,
+                    weight: `${item.edad} - ${item.via_administracion}`,
                     image: item.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
                     // Datos adicionales para la vista detallada
-                    tipo_medicamento: item.tipo_medicamento,
-                    especie_destinada: item.especie_destinada,
+                    tipo: item.tipo,
+                    especie: item.especie,
+                    edad: item.edad,
+                    via_administracion: item.via_administracion,
                     presentacion: item.presentacion,
                     marca: item.marca,
-                    ingredientes_composicion: item.ingredientes_composicion,
                     informacion_adicional: item.informacion_adicional,
                     created_at: item.created_at
                 }));
@@ -67,19 +71,36 @@ export default function MedicamentosVeterinarios() {
             filtered = filtered.filter(product => 
                 product.name && product.name.toLowerCase().includes(searchLower) ||
                 product.weight && product.weight.toLowerCase().includes(searchLower) ||
-                product.tipo_medicamento && product.tipo_medicamento.toLowerCase().includes(searchLower) ||
-                product.especie_destinada && product.especie_destinada.toLowerCase().includes(searchLower) ||
-                product.marca && product.marca.toLowerCase().includes(searchLower)
+                product.tipo && product.tipo.toLowerCase().includes(searchLower) ||
+                product.especie && product.especie.toLowerCase().includes(searchLower) ||
+                product.marca && product.marca.toLowerCase().includes(searchLower) ||
+                product.via_administracion && product.via_administracion.toLowerCase().includes(searchLower) ||
+                product.presentacion && product.presentacion.toLowerCase().includes(searchLower)
             );
         }
 
         // Filtro por tipo de medicamento
-        if (selectedOption) {
-            filtered = filtered.filter(product => product.tipo_medicamento === selectedOption);
+        if (selectedTipo) {
+            filtered = filtered.filter(product => product.tipo === selectedTipo);
+        }
+
+        // Filtro por especie
+        if (selectedEspecie) {
+            filtered = filtered.filter(product => product.especie === selectedEspecie);
+        }
+
+        // Filtro por vía de administración
+        if (selectedVia) {
+            filtered = filtered.filter(product => product.via_administracion === selectedVia);
+        }
+
+        // Filtro por presentación
+        if (selectedPresentacion) {
+            filtered = filtered.filter(product => product.presentacion === selectedPresentacion);
         }
 
         return filtered;
-    }, [products, searchTerm, selectedOption]);
+    }, [products, searchTerm, selectedTipo, selectedEspecie, selectedVia, selectedPresentacion]);
 
     const handleSearch = (term) => {
         setSearchTerm(term);
@@ -96,8 +117,20 @@ export default function MedicamentosVeterinarios() {
     };
 
     // Funciones para manejar filtros
-    const handleOptionFilter = (option) => {
-        setSelectedOption(selectedOption === option ? '' : option);
+    const handleTipoFilter = (tipo) => {
+        setSelectedTipo(selectedTipo === tipo ? '' : tipo);
+    };
+
+    const handleEspecieFilter = (especie) => {
+        setSelectedEspecie(selectedEspecie === especie ? '' : especie);
+    };
+
+    const handleViaFilter = (via) => {
+        setSelectedVia(selectedVia === via ? '' : via);
+    };
+
+    const handlePresentacionFilter = (presentacion) => {
+        setSelectedPresentacion(selectedPresentacion === presentacion ? '' : presentacion);
     };
 
     return(
@@ -108,8 +141,14 @@ export default function MedicamentosVeterinarios() {
             </div>
             <div className="categories-container">
                 <MenuMedicamentosVeterinarios 
-                    selectedOption={selectedOption}
-                    onOptionFilter={handleOptionFilter}
+                    selectedTipo={selectedTipo}
+                    selectedEspecie={selectedEspecie}
+                    selectedVia={selectedVia}
+                    selectedPresentacion={selectedPresentacion}
+                    onTipoFilter={handleTipoFilter}
+                    onEspecieFilter={handleEspecieFilter}
+                    onViaFilter={handleViaFilter}
+                    onPresentacionFilter={handlePresentacionFilter}
                 />
                 <div className="container-card-products">
                     {loading ? (
@@ -124,7 +163,7 @@ export default function MedicamentosVeterinarios() {
                 </div>
             </div>
             {showProductModal && (
-                <ViewProduct product={selectedProduct} onClose={handleCloseProductModal} />
+                <MvViewProduct product={selectedProduct} onClose={handleCloseProductModal} />
             )}
             <footer className='footer'>
                 <p className="text-contact">&copy; 2025 Todos los derechos reservados || Agropecuaria Tehuitzingo</p>

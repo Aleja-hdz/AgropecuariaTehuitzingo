@@ -10,6 +10,7 @@ import FormNewProduct from '../../components/formNewProduct/formNewProduct';
 import FormNewOffer from '../../components/formNewOffer/formNewOffer';
 import FormImplementos from '../../components/formNewProduct/forms/implementos/formImplementos';
 import FormAlimentosBalanceados from '../../components/formNewProduct/forms/alimentosBalanceados/formAlimentosBalanceados';
+import FormMedicamentosVeterinarios from '../../components/formNewProduct/forms/medicamentosVeterinarios/formMedicamentosVeterinarios';
 import FormMascotas from '../../components/formNewProduct/forms/mascotas/formMascotas';
 import FormEditMascotasAccesorios from '../../components/formNewProduct/forms/mascotas/formEditMascotasAccesorios';
 import FormEditMascotasAlimentos from '../../components/formNewProduct/forms/mascotas/formEditMascotasAlimentos';
@@ -24,7 +25,7 @@ export default function AdminPanel() {
     const [ofertas, setOfertas] = useState([]);
     const [implementos, setImplementos] = useState([]);
     const [alimentos, setAlimentos] = useState([]);
-    // const [medicamentos, setMedicamentos] = useState([]);
+    const [medicamentos, setMedicamentos] = useState([]);
     const [mascotas, setMascotas] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
 
@@ -93,21 +94,28 @@ export default function AdminPanel() {
         }
     };
     const fetchMedicamentos = async () => {
-        // const { data, error } = await supabase
-        // .from('medicamentos_veterinarios')
-        // .select('*')
-        // .order('created_at', { ascending: false });
-        // if(error){
-        //     console.error('Error al obtener medicamentos:', error.message);
-        //     } else {
-        //     setMedicamentos(data.map(item => ({
-        //         id: item.id,
-        //         nombre: item.nombre || item.name || '',
-        //         categoria: 'Medicamentos veterinarios',
-        //         url: item.url || item.image || '',
-        //         created_at: item.created_at,
-        //     })));
-        // }
+        const { data, error } = await supabase
+        .from('medicamentos_veterinarios')
+        .select('*')
+        .order('created_at', { ascending: false });
+        if(error){
+            console.error('Error al obtener medicamentos:', error.message);
+        } else {
+            setMedicamentos(data.map(item => ({
+                id: item.id,
+                nombre: item.nombre || item.name || '',
+                categoria: 'Medicamentos Veterinarios',
+                url: item.url || item.image || '',
+                tipo: item.tipo || '',
+                especie: item.especie || '',
+                edad: item.edad || '',
+                via_administracion: item.via_administracion || '',
+                presentacion: item.presentacion || '',
+                marca: item.marca || '',
+                informacion_adicional: item.informacion_adicional || '',
+                created_at: item.created_at,
+            })));
+        }
     };
     const fetchMascotas = async () => {
         const { data, error } = await supabase
@@ -132,7 +140,7 @@ export default function AdminPanel() {
         const allProductsCombined = [
             ...implementos,
             ...alimentos,
-            // ...medicamentos,
+            ...medicamentos,
             ...mascotas
         ];
         
@@ -143,13 +151,13 @@ export default function AdminPanel() {
         
         console.log('Productos ordenados por fecha de creación real (más recientes primero):', sortedProducts);
         setAllProducts(sortedProducts);
-    }, [implementos, alimentos, /*medicamentos,*/ mascotas]);
+    }, [implementos, alimentos, medicamentos, mascotas]);
 
     // Fetch inicial
     useEffect(() => {
         fetchImplementos();
         fetchAlimentos();
-        // fetchMedicamentos();
+        fetchMedicamentos();
         fetchMascotas();
     }, []);
 
@@ -157,7 +165,7 @@ export default function AdminPanel() {
     const handleRefreshProducts = () => {
         fetchImplementos();
         fetchAlimentos();
-        // fetchMedicamentos();
+        fetchMedicamentos();
         fetchMascotas();
         fetchOfertas();
     };
@@ -224,6 +232,9 @@ export default function AdminPanel() {
                 } else if (producto.categoria === 'Alimentos balanceados') {
                     setEditProductType('alimentos-balanceados');
                     setEditProduct(producto);
+                } else if (producto.categoria === 'Medicamentos Veterinarios') {
+                    setEditProductType('medicamentos-veterinarios');
+                    setEditProduct(producto);
                 } else if (producto.categoria === 'Mascotas') {
                     // Obtener datos completos de mascotas para determinar subcategoría
                     const { data: mascotaData, error } = await supabase
@@ -273,6 +284,23 @@ export default function AdminPanel() {
             const producto = allProducts.find(p => p.id === item.id);
             if (producto) {
                 if (producto.categoria === 'Implementos') {
+                    // Eliminar imagen del bucket si existe
+                    if (producto.url) {
+                        try {
+                            const parts = producto.url.split('/');
+                            const fileName = parts[parts.length - 1].split('?')[0];
+                            const { error: storageError } = await supabase
+                                .storage
+                                .from('implementos-img')
+                                .remove([fileName]);
+                            if (storageError) {
+                                console.error('Error al eliminar la imagen del bucket:', storageError);
+                            }
+                        } catch (err) {
+                            console.error('Error al procesar la eliminación de la imagen:', err);
+                        }
+                    }
+                    
                     // Eliminar implemento
                     const { error } = await supabase
                         .from('implementos')
@@ -286,6 +314,23 @@ export default function AdminPanel() {
                         handleRefreshProducts();
                     }
                 } else if (producto.categoria === 'Alimentos balanceados') {
+                    // Eliminar imagen del bucket si existe
+                    if (producto.url) {
+                        try {
+                            const parts = producto.url.split('/');
+                            const fileName = parts[parts.length - 1].split('?')[0];
+                            const { error: storageError } = await supabase
+                                .storage
+                                .from('alimentos-balanceados-img')
+                                .remove([fileName]);
+                            if (storageError) {
+                                console.error('Error al eliminar la imagen del bucket:', storageError);
+                            }
+                        } catch (err) {
+                            console.error('Error al procesar la eliminación de la imagen:', err);
+                        }
+                    }
+                    
                     // Eliminar alimento balanceado
                     const { error } = await supabase
                         .from('alimentos_balanceados')
@@ -298,7 +343,71 @@ export default function AdminPanel() {
                         alert('Producto eliminado con éxito');
                         handleRefreshProducts();
                     }
+                } else if (producto.categoria === 'Medicamentos Veterinarios') {
+                    // Eliminar imagen del bucket si existe
+                    if (producto.url) {
+                        try {
+                            const parts = producto.url.split('/');
+                            const fileName = parts[parts.length - 1].split('?')[0];
+                            const { error: storageError } = await supabase
+                                .storage
+                                .from('medicamentos-veterinarios-img')
+                                .remove([fileName]);
+                            if (storageError) {
+                                console.error('Error al eliminar la imagen del bucket:', storageError);
+                            }
+                        } catch (err) {
+                            console.error('Error al procesar la eliminación de la imagen:', err);
+                        }
+                    }
+                    
+                    // Eliminar medicamento veterinario
+                    const { error } = await supabase
+                        .from('medicamentos_veterinarios')
+                        .delete()
+                        .eq('id', producto.id);
+                    if (error) {
+                        console.error('Error al eliminar medicamento veterinario:', error);
+                        alert('Error al eliminar el producto');
+                    } else {
+                        alert('Producto eliminado con éxito');
+                        handleRefreshProducts();
+                    }
                 } else if (producto.categoria === 'Mascotas') {
+                    // Para mascotas, necesitamos obtener la subcategoría para determinar el bucket correcto
+                    const { data: mascotaData } = await supabase
+                        .from('mascotas')
+                        .select('sub_categoria')
+                        .eq('id', producto.id)
+                        .single();
+                    
+                    // Determinar el bucket según la subcategoría
+                    let bucket = '';
+                    if (mascotaData?.sub_categoria === 'Alimento') {
+                        bucket = 'mascotas-alimentos-img';
+                    } else if (mascotaData?.sub_categoria === 'Accesorio') {
+                        bucket = 'mascotas-accesorios-img';
+                    } else {
+                        bucket = 'mascotas-alimentos-img'; // Por defecto
+                    }
+                    
+                    // Eliminar imagen del bucket si existe
+                    if (producto.url && bucket) {
+                        try {
+                            const parts = producto.url.split('/');
+                            const fileName = parts[parts.length - 1].split('?')[0];
+                            const { error: storageError } = await supabase
+                                .storage
+                                .from(bucket)
+                                .remove([fileName]);
+                            if (storageError) {
+                                console.error('Error al eliminar la imagen del bucket:', storageError);
+                            }
+                        } catch (err) {
+                            console.error('Error al procesar la eliminación de la imagen:', err);
+                        }
+                    }
+                    
                     // Eliminar mascota (esto eliminará también los registros relacionados)
                     const { error } = await supabase
                         .from('mascotas')
@@ -404,6 +513,15 @@ export default function AdminPanel() {
                     <FormAlimentosBalanceados
                         onClose={() => { setEditProduct(null); setEditProductType(null); }}
                         alimentosData={editProduct}
+                        isEdit={true}
+                        onSave={() => { setEditProduct(null); setEditProductType(null); handleRefreshProducts(); }}
+                    />
+                )}
+
+                {editProduct && editProduct.categoria === 'Medicamentos Veterinarios' && (
+                    <FormMedicamentosVeterinarios
+                        onClose={() => { setEditProduct(null); setEditProductType(null); }}
+                        medicamentosData={editProduct}
                         isEdit={true}
                         onSave={() => { setEditProduct(null); setEditProductType(null); handleRefreshProducts(); }}
                     />
