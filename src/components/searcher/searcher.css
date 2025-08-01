@@ -68,14 +68,70 @@
   font-style: italic;
 }
 
-/* Responsive design */
+/* Media Queries para Responsividad */
+
+/* Tablets (768px - 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .searcher-input-wrapper {
+    width: 40%;
+  }
+  
+  .searcher-input {
+    width: 100%;
+    max-width: 180px;
+    font-size: 13px;
+  }
+  
+  .searcher-input::placeholder {
+    font-size: 13px;
+  }
+}
+
+/* Móviles (hasta 768px) */
 @media (max-width: 768px) {
   .searcher-input-wrapper {
     width: 80%;
+    padding: 8px 12px;
   }
   
   .searcher-input {
     width: 100%;
     max-width: 150px;
+    font-size: 14px;
+  }
+  
+  .searcher-input::placeholder {
+    font-size: 14px;
+  }
+  
+  .clear-search-btn {
+    width: 18px !important;
+    height: 18px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* Móviles pequeños (hasta 480px) */
+@media (max-width: 480px) {
+  .searcher-input-wrapper {
+    width: 90%;
+    padding: 6px 10px;
+  }
+  
+  .searcher-input {
+    width: 100%;
+    max-width: 120px;
+    font-size: 13px;
+  }
+  
+  .searcher-input::placeholder {
+    font-size: 13px;
+  }
+  
+  .clear-search-btn {
+    width: 16px !important;
+    height: 16px !important;
+    font-size: 11px !important;
+    margin-left: 6px !important;
   }
 }

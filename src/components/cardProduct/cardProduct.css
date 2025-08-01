@@ -59,3 +59,75 @@
     font-size: 16px;
     text-align: center;
 }
+
+/* Media Queries para Responsividad */
+
+/* Tablets (768px - 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .card-product {
+        width: 180px;
+        height: 320px;
+    }
+    
+    .name {
+        font-size: 13px;
+    }
+    
+    .lot {
+        font-size: 11px;
+    }
+    
+    .price {
+        font-size: 15px;
+    }
+}
+
+/* Móviles (hasta 768px) */
+@media (max-width: 768px) {
+    .card-product {
+        width: 160px;
+        height: 280px;
+    }
+    
+    .name {
+        font-size: 12px;
+        line-height: 1.1;
+    }
+    
+    .lot {
+        font-size: 10px;
+    }
+    
+    .price {
+        font-size: 14px;
+    }
+    
+    .info-container {
+        padding: 6px 0;
+    }
+}
+
+/* Móviles pequeños (hasta 480px) */
+@media (max-width: 480px) {
+    .card-product {
+        width: 140px;
+        height: 250px;
+    }
+    
+    .name {
+        font-size: 11px;
+        line-height: 1.1;
+    }
+    
+    .lot {
+        font-size: 9px;
+    }
+    
+    .price {
+        font-size: 13px;
+    }
+    
+    .info-container {
+        padding: 5px 0;
+    }
+}

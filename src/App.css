@@ -74,3 +74,41 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/* Media Queries para Responsividad */
+
+/* Tablets (768px - 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .main-content {
+    padding-top: 70px;
+  }
+}
+
+/* Móviles (hasta 768px) */
+@media (max-width: 768px) {
+  .main-content {
+    padding-top: 70px;
+  }
+  
+  /* Ajustes generales para móviles */
+  body {
+    font-size: 14px;
+  }
+  
+  /* Mejorar la legibilidad en pantallas pequeñas */
+  * {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+}
+
+/* Móviles pequeños (hasta 480px) */
+@media (max-width: 480px) {
+  .main-content {
+    padding-top: 60px;
+  }
+  
+  body {
+    font-size: 13px;
+  }
+}

@@ -93,3 +93,93 @@
     color: #222;
     opacity: 1;
 }
+
+/* Media Queries para Responsividad */
+
+/* Tablets (768px - 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .login-container {
+        width: 350px;
+        height: 450px;
+    }
+    
+    .inputs-login {
+        height: 30px;
+        font-size: 15px;
+    }
+    
+    .view-password {
+        height: 25px;
+    }
+}
+
+/* Móviles (hasta 768px) */
+@media (max-width: 768px) {
+    .login-body {
+        padding: 20px;
+    }
+    
+    .login-container {
+        width: 100%;
+        max-width: 320px;
+        height: auto;
+        min-height: 380px;
+        padding: 30px 20px;
+    }
+    
+    .inputs-login {
+        width: 85%;
+        height: 35px;
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+    
+    .view-password {
+        width: 85%;
+        height: 25px;
+        margin-bottom: 10px;
+        margin-top: -5px;
+    }
+    
+    .links-register {
+        margin-top: 10px;
+    }
+    
+    .ac {
+        margin-top: 10px;
+    }
+}
+
+/* Móviles pequeños (hasta 480px) */
+@media (max-width: 480px) {
+    .login-body {
+        padding: 15px;
+    }
+    
+    .login-container {
+        max-width: 280px;
+        min-height: 350px;
+        padding: 25px 15px;
+    }
+    
+    .inputs-login {
+        width: 90%;
+        height: 32px;
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+    
+    .view-password {
+        width: 90%;
+        height: 22px;
+        margin-bottom: 8px;
+    }
+    
+    .links-register {
+        margin-top: 8px;
+    }
+    
+    .ac {
+        margin-top: 8px;
+    }
+}

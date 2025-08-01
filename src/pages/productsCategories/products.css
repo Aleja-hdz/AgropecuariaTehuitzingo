@@ -92,23 +92,6 @@
     margin-top: auto;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-    .container-card-products {
-        width: 90%;
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 20px;
-    }
-    
-    .search-results-header h2 {
-        font-size: 24px;
-    }
-    
-    .search-results-header p {
-        font-size: 14px;
-    }
-}
-
 .loading {
     display: flex;
     justify-content: center;
@@ -118,4 +101,129 @@
     font-size: 18px;
     color: #666;
     font-weight: 500;
+}
+
+/* Media Queries para Responsividad */
+
+/* Tablets (768px - 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .container-card-products {
+        width: 85%;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 25px;
+    }
+    
+    .search-results-header h2 {
+        font-size: 26px;
+    }
+    
+    .search-results-header p {
+        font-size: 15px;
+    }
+    
+    .categories-container-menu p {
+        font-size: 13px;
+    }
+}
+
+/* Móviles (hasta 768px) */
+@media (max-width: 768px) {
+    .products-container {
+        padding-top: 60px;
+    }
+    
+    .container-card-products {
+        width: 90%;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 20px;
+        padding-bottom: 20px;
+    }
+    
+    .search-results-header {
+        margin-bottom: 25px;
+        padding: 0 15px;
+    }
+    
+    .search-results-header h2 {
+        font-size: 24px;
+    }
+    
+    .search-results-header p {
+        font-size: 14px;
+    }
+    
+    .categories-container-menu {
+        padding-bottom: 15px;
+        padding-top: 10px;
+    }
+    
+    .categories-container-menu p {
+        font-size: 13px;
+        margin-bottom: 15px;
+    }
+    
+    .categories-container-head {
+        padding-bottom: 25px;
+    }
+    
+    .footer {
+        height: 50px;
+        font-size: 14px;
+    }
+    
+    .loading {
+        height: 150px;
+        font-size: 16px;
+    }
+}
+
+/* Móviles pequeños (hasta 480px) */
+@media (max-width: 480px) {
+    .products-container {
+        padding-top: 55px;
+    }
+    
+    .container-card-products {
+        width: 95%;
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 15px;
+        padding-bottom: 15px;
+    }
+    
+    .search-results-header {
+        margin-bottom: 20px;
+        padding: 0 10px;
+    }
+    
+    .search-results-header h2 {
+        font-size: 22px;
+    }
+    
+    .search-results-header p {
+        font-size: 13px;
+    }
+    
+    .categories-container-menu {
+        padding-bottom: 10px;
+        padding-top: 8px;
+    }
+    
+    .categories-container-menu p {
+        font-size: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .categories-container-head {
+        padding-bottom: 20px;
+    }
+    
+    .footer {
+        height: 45px;
+        font-size: 13px;
+    }
+    
+    .loading {
+        height: 120px;
+        font-size: 15px;
+    }
 }
