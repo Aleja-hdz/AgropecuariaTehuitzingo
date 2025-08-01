@@ -9,6 +9,7 @@ import AliBalViewProduct from '../../components/viewProduct/aliBalViewProduct';
 import ImpViewProduct from '../../components/viewProduct/impViewProduct';
 import MascAccViewProduct from '../../components/viewProduct/mascAccViewProduct';
 import MascAliViewProduct from '../../components/viewProduct/mascAliViewProduct';
+import MvViewProduct from '../../components/viewProduct/mvViewProduct';
 import { supabase } from '../../lib/supabaseClient';
 
 export default function Products(){
@@ -166,15 +167,16 @@ export default function Products(){
                 const medicamentosFormatted = medicamentosData.map(item => ({
                     id: item.id,
                     name: item.nombre,
-                    weight: `${item.contenido_decimal} ${item.contenido_medida}`,
+                    weight: `${item.edad} - ${item.via_administracion}`,
                     image: item.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
                     category: 'Medicamentos Veterinarios',
                     // Datos adicionales para la vista detallada
-                    tipo_medicamento: item.tipo_medicamento,
-                    especie_destinada: item.especie_destinada,
+                    tipo: item.tipo,
+                    especie: item.especie,
+                    edad: item.edad,
+                    via_administracion: item.via_administracion,
                     presentacion: item.presentacion,
                     marca: item.marca,
-                    ingredientes_composicion: item.ingredientes_composicion,
                     informacion_adicional: item.informacion_adicional,
                     created_at: item.created_at,
                     // Identificador para el modal correcto
@@ -207,8 +209,8 @@ export default function Products(){
             product.tipo_animal && product.tipo_animal.toLowerCase().includes(searchLower) ||
             product.que_es && product.que_es.toLowerCase().includes(searchLower) ||
             product.especie_mascota && product.especie_mascota.toLowerCase().includes(searchLower) ||
-            product.tipo_medicamento && product.tipo_medicamento.toLowerCase().includes(searchLower) ||
-            product.especie_destinada && product.especie_destinada.toLowerCase().includes(searchLower)
+            product.tipo && product.tipo.toLowerCase().includes(searchLower) ||
+            product.especie && product.especie.toLowerCase().includes(searchLower)
         );
     }, [allProducts, searchTerm]);
 
@@ -240,7 +242,7 @@ export default function Products(){
             case 'mascotas-accesorios':
                 return <MascAccViewProduct product={selectedProduct} onClose={handleCloseProductModal} />;
             case 'medicamentos-veterinarios':
-                return <ViewProduct product={selectedProduct} onClose={handleCloseProductModal} />;
+                return <MvViewProduct product={selectedProduct} onClose={handleCloseProductModal} />;
             default:
                 return <ViewProduct product={selectedProduct} onClose={handleCloseProductModal} />;
         }
