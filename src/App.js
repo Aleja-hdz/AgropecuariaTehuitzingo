@@ -19,7 +19,7 @@ import Implementos from './pages/productsSubCategories/Implementos/implementos';
 import ForgotPassword from './pages/passwordRecovery/forgotPassword/forgotPassword';
 import ChangePassword from './pages/passwordRecovery/changePassword/changePassword';
 import ResetPassword from './pages/passwordRecovery/resetPassword/resetPassword';
-import ChangeTypeUser from './pages/changeTypeUser/changeTypeUser';
+
 
 function ScrollToTop() {
   const location = useLocation();
@@ -55,7 +55,7 @@ function App() {
       '/change-password',
       '/reset-password',
       '/nuevaContraseña',
-      '/cambioUsuario'
+
     ];
     setIsNotFound(!definedRoutes.includes(location.pathname) && !location.pathname.startsWith('/producto/'));
   }, [location.pathname]);
@@ -68,7 +68,7 @@ function App() {
                      location.pathname === '/change-password' ||
                      location.pathname === '/reset-password' ||
                      location.pathname === '/nuevaContraseña' ||
-                     location.pathname === '/cambioUsuario' ||
+
                      location.pathname === '/userProfile' ||
                      isNotFound;
 
@@ -115,11 +115,7 @@ function App() {
             </ProtectedRoute>
           }/>
           <Route path='/reset-password' element={<ResetPassword />}/>
-          <Route path='/cambioUsuario' element={
-            <ProtectedRoute>
-              <ChangeTypeUser />
-            </ProtectedRoute>
-          }/>
+
           <Route path='*' element={<NotFound />}/>
         </Routes>
       </main>

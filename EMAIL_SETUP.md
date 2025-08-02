@@ -23,10 +23,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Solicitud de cambio de tipo de usuario</title>
+    <title>Solicitud de contacto</title>
 </head>
 <body>
-    <h2>Solicitud de cambio de tipo de usuario</h2>
+    <h2>Solicitud de contacto</h2>
     <p><strong>De:</strong> {{from_name}} ({{from_email}})</p>
     <p><strong>Para:</strong> {{to_name}} ({{to_email}})</p>
     <p><strong>Asunto:</strong> {{subject}}</p>
@@ -62,9 +62,8 @@ npm install @emailjs/browser
 ```
 
 ### 7. Probar la funcionalidad
-- Ve a tu perfil de usuario
-- Haz clic en "Cambiar tipo de usuario"
-- Completa la solicitud
+- Ve a la página de contacto
+- Completa el formulario de contacto
 - Verifica que los administradores reciban el email
 
 ## Notas importantes:
