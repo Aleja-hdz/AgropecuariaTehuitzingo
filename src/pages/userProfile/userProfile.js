@@ -258,17 +258,7 @@ export default function UserProfile() {
                 <h3>Opciones de cuenta</h3>
                 <div className='profile-footer-buttons'>
                     <a href="/nuevaContraseña" className='profile-footer-btns'>Cambiar contraseña</a>
-                    <a 
-                        href="/cambioUsuario" 
-                        className={`profile-footer-btns ${userProfile?.tipo_usuario === 'admin' ? 'disabled' : ''}`}
-                        style={{
-                            opacity: userProfile?.tipo_usuario === 'admin' ? 0.5 : 1,
-                            cursor: userProfile?.tipo_usuario === 'admin' ? 'not-allowed' : 'pointer',
-                            pointerEvents: userProfile?.tipo_usuario === 'admin' ? 'none' : 'auto'
-                        }}
-                    >
-                        Cambiar tipo de usuario
-                    </a>
+
                     <button className='profile-footer-btns' onClick={handleLogout}>Cerrar sesión</button>
                     <button className='profile-footer-btns-red' onClick={handleDeleteAccount}>Eliminar cuenta</button>
                 </div>
