@@ -18,6 +18,39 @@ export default function Products(){
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [allProducts, setAllProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isVisible, setIsVisible] = useState({
+        header: false,
+        categories: false,
+        searchResults: false
+    });
+
+    // Animación de entrada inicial
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsVisible(prev => ({ ...prev, header: true }));
+        }, 100);
+
+        const timer2 = setTimeout(() => {
+            setIsVisible(prev => ({ ...prev, categories: true }));
+        }, 300);
+
+        return () => {
+            clearTimeout(timer);
+            clearTimeout(timer2);
+        };
+    }, []);
+
+    // Animación para resultados de búsqueda
+    useEffect(() => {
+        if (searchTerm.trim()) {
+            const timer = setTimeout(() => {
+                setIsVisible(prev => ({ ...prev, searchResults: true }));
+            }, 200);
+            return () => clearTimeout(timer);
+        } else {
+            setIsVisible(prev => ({ ...prev, searchResults: false }));
+        }
+    }, [searchTerm]);
 
     // Obtener todos los productos de todas las categorías
     useEffect(() => {
@@ -250,20 +283,20 @@ export default function Products(){
 
     return(
         <div className="products-container">
-            <div className="categories-container-head">
+            <div className={`categories-container-head ${isVisible.header ? 'animate-fade-in' : ''}`}>
                 <h1 className='tittles-h1'>¿Qué producto deseas encontrar?</h1>
                 <Searcher onSearch={handleSearch} placeholder="Buscar en todos los productos..." />
             </div>
             
             {!searchTerm.trim() ? (
                 // Mostrar categorías cuando no hay búsqueda
-                <div className="categories-container-menu">
+                <div className={`categories-container-menu ${isVisible.categories ? 'animate-fade-in-delay' : ''}`}>
                     <p>Elíge la categoría de tu interés</p>
                     <MenuCategories />
                 </div>
             ) : (
                 // Mostrar resultados de búsqueda
-                <div className="search-results-container">
+                <div className={`search-results-container ${isVisible.searchResults ? 'animate-fade-in' : ''}`}>
                     <div className="search-results-header">
                         <h2>Resultados de búsqueda</h2>
                         <p>Se encontraron {filteredProducts.length} producto{filteredProducts.length !== 1 ? 's' : ''}</p>
@@ -272,8 +305,14 @@ export default function Products(){
                         {loading ? (
                             <div className="loading">Buscando productos...</div>
                         ) : filteredProducts.length > 0 ? (
-                            filteredProducts.map((product) => (
-                                <CardProduct key={`${product.category}-${product.id}`} product={product} onViewProduct={handleViewProduct} />
+                            filteredProducts.map((product, index) => (
+                                <div 
+                                    key={`${product.category}-${product.id}`} 
+                                    className="animate-card-product"
+                                    style={{ animationDelay: `${index * 0.05}s` }}
+                                >
+                                    <CardProduct product={product} onViewProduct={handleViewProduct} />
+                                </div>
                             ))
                         ) : (
                             <NoProductsFound searchTerm={searchTerm} />

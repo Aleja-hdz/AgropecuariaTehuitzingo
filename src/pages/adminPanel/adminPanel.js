@@ -4,8 +4,8 @@ import { supabase } from '../../lib/supabaseClient';
 import CurrentInformation from "../../components/currentInformation/currentInformation";
 import TableMain from "../../components/tableMain/tableMain";
 import ButtonLong from '../../components/buttonLong/buttonLong';
-import TableProducts from '../../components/tableProducts/tableProducts';
-import TableOffers from '../../components/tableOffers/tableOffers';
+import TableProducts from "../../components/tableProducts/tableProducts";
+import TableOffers from "../../components/tableOffers/tableOffers";
 import FormNewProduct from '../../components/formNewProduct/formNewProduct';
 import FormNewOffer from '../../components/formNewOffer/formNewOffer';
 import FormImplementos from '../../components/formNewProduct/forms/implementos/formImplementos';
@@ -28,6 +28,40 @@ export default function AdminPanel() {
     const [medicamentos, setMedicamentos] = useState([]);
     const [mascotas, setMascotas] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
+
+    // Estados para animaciones
+    const [isVisible, setIsVisible] = useState({
+        header: false,
+        info: false,
+        tables: false,
+        buttons: false
+    });
+
+    // Animación de entrada inicial
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsVisible(prev => ({ ...prev, header: true }));
+        }, 100);
+
+        const timer2 = setTimeout(() => {
+            setIsVisible(prev => ({ ...prev, info: true }));
+        }, 300);
+
+        const timer3 = setTimeout(() => {
+            setIsVisible(prev => ({ ...prev, tables: true }));
+        }, 500);
+
+        const timer4 = setTimeout(() => {
+            setIsVisible(prev => ({ ...prev, buttons: true }));
+        }, 700);
+
+        return () => {
+            clearTimeout(timer);
+            clearTimeout(timer2);
+            clearTimeout(timer3);
+            clearTimeout(timer4);
+        };
+    }, []);
 
     const fetchOfertas = async () => {
         const { data, error } = await supabase
@@ -463,32 +497,36 @@ export default function AdminPanel() {
         <>
             <div className="admin-container">
                 <div className='admin-content'>
-                    <div className='admin-head'>
-                        <div className='admin-box1-head'>
+                    <div className={`admin-head ${isVisible.header ? 'animate-fade-in' : ''}`}>
+                        <div className='admin-box1-head animate-title'>
                             <h1 className='tittles-h1'>Panel de gestión</h1>
-                            <hr className='admin-line'></hr>
+                            <hr className='admin-line animate-hr'></hr>
                         </div>
-                        <div className='admin-box2-head'>
+                        <div className={`admin-box2-head ${isVisible.info ? 'animate-fade-in-delay' : ''}`}>
                             <CurrentInformation products={totalProductos} offers={ofertas.length} />
                         </div>
                     </div>
-                    <div className="admin-first-table">
-                        <p>Últimas creaciones</p>
+                    <div className={`admin-first-table ${isVisible.tables ? 'animate-fade-in-delay-2' : ''}`}>
+                        <p className="animate-text">Últimas creaciones</p>
                         <TableMain 
                             data={ultimasCreacionesData} 
                             onEdit={handleEditFromMain}
                             onDelete={handleDeleteFromMain}
                         />
                     </div>
-                    <div className='admin-others-tables'>
-                        <div className='admin-table-products'>
-                            <ButtonLong text={"Nuevo producto"} onClick={handleNewProduct}/>
-                            <p>Productos registrados</p>
+                    <div className={`admin-others-tables ${isVisible.buttons ? 'animate-fade-in-delay-3' : ''}`}>
+                        <div className='admin-table-products animate-table-section'>
+                            <div className="animate-button-container">
+                                <ButtonLong text={"Nuevo producto"} onClick={handleNewProduct}/>
+                            </div>
+                            <p className="animate-text-delay">Productos registrados</p>
                             <TableProducts productos={allProducts} onRefresh={handleRefreshProducts} />
                         </div>
-                        <div className='admin-table-offers'>
-                            <ButtonLong text={"Nueva oferta"} onClick={handleNewOffer}/>
-                            <p>Ofertas registradas</p>
+                        <div className='admin-table-offers animate-table-section'>
+                            <div className="animate-button-container">
+                                <ButtonLong text={"Nueva oferta"} onClick={handleNewOffer}/>
+                            </div>
+                            <p className="animate-text-delay">Ofertas registradas</p>
                             <TableOffers ofertas={ofertas} onRefresh={handleRefreshProducts} />
                         </div>
                     </div>
@@ -567,7 +605,7 @@ export default function AdminPanel() {
                     />
                 )}
             </div>
-            <footer className='footer'>
+            <footer className='footer animate-footer'>
                 <p className="text-contact">&copy; 2025 Todos los derechos reservados || Agropecuaria Tehuitzingo</p>
             </footer>
         </>

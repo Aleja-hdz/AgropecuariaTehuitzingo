@@ -21,6 +21,40 @@ export default function UserProfile() {
     const [phone, setPhone] = useState('');
     const [location, setLocation] = useState('');
 
+    // Estados para animaciones
+    const [isVisible, setIsVisible] = useState({
+        header: false,
+        info: false,
+        form: false,
+        buttons: false
+    });
+
+    // Animación de entrada inicial
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsVisible(prev => ({ ...prev, header: true }));
+        }, 100);
+
+        const timer2 = setTimeout(() => {
+            setIsVisible(prev => ({ ...prev, info: true }));
+        }, 300);
+
+        const timer3 = setTimeout(() => {
+            setIsVisible(prev => ({ ...prev, form: true }));
+        }, 500);
+
+        const timer4 = setTimeout(() => {
+            setIsVisible(prev => ({ ...prev, buttons: true }));
+        }, 700);
+
+        return () => {
+            clearTimeout(timer);
+            clearTimeout(timer2);
+            clearTimeout(timer3);
+            clearTimeout(timer4);
+        };
+    }, []);
+
     // Cargar datos del usuario
     useEffect(() => {
         const loadUserProfile = async () => {
@@ -174,93 +208,95 @@ export default function UserProfile() {
 
     return (
         <div className='user-profile'>
-            <div className='profile-head-box1'>
+            <div className={`profile-head-box1 ${isVisible.header ? 'animate-fade-in' : ''}`}>
                 <a href="/">
                     <ButtonSmall text='<- Regresar' />
                 </a>
             </div>
-            <div className='profile-head'>
-                    <h1 className='profile-head-h1'>Mi perfil</h1>
-                    <p className='profile-head-text'>Administra tu información y haz cualquier cambio dependiendo de tus preferencias</p>
+            <div className={`profile-head ${isVisible.header ? 'animate-fade-in-delay' : ''}`}>
+                    <h1 className='profile-head-h1 animate-title'>Mi perfil</h1>
+                    <p className='profile-head-text animate-text'>Administra tu información y haz cualquier cambio dependiendo de tus preferencias</p>
             </div>
-            <div className='profile-body'>
-                <div className='profile-body-box1'>
-                    <h2>Información que necesitas saber</h2>
-                    <p>Cuando te registras en nuestra página, la información que nos compartes (como tu nombre, correo electrónico y otros datos) se almacena de manera segura y solo se utiliza para brindarte acceso a nuestros servicios, personalizar tu experiencia y mantenerte informado sobre novedades relevantes. Nos comprometemos a proteger tu privacidad y no compartiremos tus datos con terceros sin tu consentimiento, excepto cuando sea necesario por motivos legales o para cumplir con nuestros términos de servicio.</p>
+            <div className={`profile-body ${isVisible.info ? 'animate-fade-in-delay-2' : ''}`}>
+                <div className='profile-body-box1 animate-info-section'>
+                    <h2 className="animate-text-delay">Información que necesitas saber</h2>
+                    <p className="animate-text-delay-2">Cuando te registras en nuestra página, la información que nos compartes (como tu nombre, correo electrónico y otros datos) se almacena de manera segura y solo se utiliza para brindarte acceso a nuestros servicios, personalizar tu experiencia y mantenerte informado sobre novedades relevantes. Nos comprometemos a proteger tu privacidad y no compartiremos tus datos con terceros sin tu consentimiento, excepto cuando sea necesario por motivos legales o para cumplir con nuestros términos de servicio.</p>
                 </div>
-                <div className='profile-body-box2'>
-                    <h2>Datos básicos</h2>
-                    {message && <p className="success-message">{message}</p>}
-                    {error && <p className="error-message">{error}</p>}
-                    <div className='profile-body-box2-info-container'>
-                        <div className='profile-body-box2-info'>
+                <div className={`profile-body-box2 ${isVisible.form ? 'animate-fade-in-delay-3' : ''}`}>
+                    <h2 className="animate-text-delay">Datos básicos</h2>
+                    {message && <p className="success-message animate-success">{message}</p>}
+                    {error && <p className="error-message animate-error">{error}</p>}
+                    <div className='profile-body-box2-info-container animate-form-section'>
+                        <div className='profile-body-box2-info animate-input-group'>
                             <p>Nombre</p>
                             <input 
                                 type='text' 
                                 placeholder='Nombre' 
-                                className='profile-body-box2-input'
+                                className='profile-body-box2-input animate-input'
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                             />
                         </div>
-                        <div className='profile-body-box2-info'>
+                        <div className='profile-body-box2-info animate-input-group'>
                             <p>Apellidos</p>
                             <input 
                                 type='text' 
                                 placeholder='Apellidos' 
-                                className='profile-body-box2-input'
+                                className='profile-body-box2-input animate-input'
                                 value={lastName}
                                 onChange={(e) => setLastName(e.target.value)}
                             />
                         </div>
                     </div>
-                    <div className='profile-body-box2-info-container'>
-                        <div className='profile-body-box2-info'>
+                    <div className='profile-body-box2-info-container animate-form-section'>
+                        <div className='profile-body-box2-info animate-input-group'>
                             <p>Correo electrónico</p>
                             <input 
                                 type='email' 
                                 placeholder='Correo electrónico' 
-                                className='profile-body-box2-input'
+                                className='profile-body-box2-input animate-input'
                                 value={email}
                                 disabled
                             />
                         </div>
-                        <div className='profile-body-box2-info'>
+                        <div className='profile-body-box2-info animate-input-group'>
                             <p>Teléfono</p>
                             <input 
                                 type='tel' 
                                 placeholder='Teléfono' 
-                                className='profile-body-box2-input'
+                                className='profile-body-box2-input animate-input'
                                 value={phone}
                                 onChange={(e) => setPhone(e.target.value)}
                             />
                         </div>
                     </div>
                     <br></br>
-                    <h2>Información adicional</h2>
+                    <h2 className="animate-text-delay">Información adicional</h2>
                     <p>Dirección</p>
                     <input 
                         type='text' 
                         placeholder='Dirección' 
-                        className='profile-body-box2-input'
+                        className='profile-body-box2-input animate-input'
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
                     />
                     <br></br>
                     <p>Tipo de usuario: <strong>{userProfile?.tipo_usuario || 'Usuario'}</strong></p>
-                    <ButtonSmall 
-                        text={loading ? 'Actualizando...' : 'Actualizar perfil'} 
-                        onClick={handleUpdateProfile}
-                    />
+                    <div className="animate-button-container">
+                        <ButtonSmall 
+                            text={loading ? 'Actualizando...' : 'Actualizar perfil'} 
+                            onClick={handleUpdateProfile}
+                        />
+                    </div>
                 </div>
             </div>
-            <div className='profile-footer'>
-                <h3>Opciones de cuenta</h3>
-                <div className='profile-footer-buttons'>
-                    <a href="/nuevaContraseña" className='profile-footer-btns'>Cambiar contraseña</a>
+            <div className={`profile-footer ${isVisible.buttons ? 'animate-fade-in-delay-4' : ''}`}>
+                <h3 className="animate-text-delay">Opciones de cuenta</h3>
+                <div className='profile-footer-buttons animate-buttons-section'>
+                    <a href="/nuevaContraseña" className='profile-footer-btns animate-button'>Cambiar contraseña</a>
 
-                    <button className='profile-footer-btns' onClick={handleLogout}>Cerrar sesión</button>
-                    <button className='profile-footer-btns-red' onClick={handleDeleteAccount}>Eliminar cuenta</button>
+                    <button className='profile-footer-btns animate-button' onClick={handleLogout}>Cerrar sesión</button>
+                    <button className='profile-footer-btns-red animate-button' onClick={handleDeleteAccount}>Eliminar cuenta</button>
                 </div>
             </div>
             
@@ -290,7 +326,7 @@ export default function UserProfile() {
                 </div>
             )}
             
-            <footer className='footer'>
+            <footer className='footer animate-footer'>
                 <p className="text-contact">&copy; 2025 Todos los derechos reservados || Agropecuaria Tehuitzingo</p>
             </footer>
         </div>

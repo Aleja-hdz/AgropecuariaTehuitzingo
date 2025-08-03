@@ -18,6 +18,34 @@ export default function Implementos() {
     const [selectedAnimalType, setSelectedAnimalType] = useState('');
     const [selectedWhatIs, setSelectedWhatIs] = useState('');
 
+    // Estados para animaciones
+    const [isVisible, setIsVisible] = useState({
+        header: false,
+        menu: false,
+        products: false
+    });
+
+    // Animación de entrada inicial
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsVisible(prev => ({ ...prev, header: true }));
+        }, 100);
+
+        const timer2 = setTimeout(() => {
+            setIsVisible(prev => ({ ...prev, menu: true }));
+        }, 300);
+
+        const timer3 = setTimeout(() => {
+            setIsVisible(prev => ({ ...prev, products: true }));
+        }, 500);
+
+        return () => {
+            clearTimeout(timer);
+            clearTimeout(timer2);
+            clearTimeout(timer3);
+        };
+    }, []);
+
     // Obtener productos de Supabase
     useEffect(() => {
         fetchProducts();
@@ -109,23 +137,29 @@ export default function Implementos() {
 
     return(
         <div className="products-container">
-            <div className="categories-container-head">
+            <div className={`categories-container-head ${isVisible.header ? 'animate-fade-in' : ''}`}>
                 <h1 className='tittles-h1'>¿Qué producto deseas encontrar?</h1>
                 <Searcher onSearch={handleSearch} placeholder="Buscar implementos..." />
             </div>
-            <div className="categories-container">
+            <div className={`categories-container ${isVisible.menu ? 'animate-fade-in-delay' : ''}`}>
                 <MenuImplementos 
                     selectedAnimalType={selectedAnimalType}
                     selectedWhatIs={selectedWhatIs}
                     onAnimalTypeFilter={handleAnimalTypeFilter}
                     onWhatIsFilter={handleWhatIsFilter}
                 />
-                <div className="container-card-products">
+                <div className={`container-card-products ${isVisible.products ? 'animate-fade-in-delay-2' : ''}`}>
                     {loading ? (
                         <div className="loading">Cargando productos...</div>
                     ) : filteredProducts.length > 0 ? (
-                        filteredProducts.map((product) => (
-                            <CardProduct key={product.id} product={product} onViewProduct={handleViewProduct} />
+                        filteredProducts.map((product, index) => (
+                            <div 
+                                key={product.id} 
+                                className="animate-card-product"
+                                style={{ animationDelay: `${index * 0.05}s` }}
+                            >
+                                <CardProduct product={product} onViewProduct={handleViewProduct} />
+                            </div>
                         ))
                     ) : (
                         <NoProductsFound searchTerm={searchTerm} />

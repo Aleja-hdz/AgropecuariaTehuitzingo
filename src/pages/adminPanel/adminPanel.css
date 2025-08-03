@@ -106,3 +106,170 @@
     color: white;
     margin-top: auto;
 }
+
+/* ===== ANIMACIONES PARA ADMIN PANEL ===== */
+
+/* Animaciones de entrada */
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out;
+}
+
+.animate-fade-in-delay {
+  animation: fadeIn 0.8s ease-out 0.2s both;
+}
+
+.animate-fade-in-delay-2 {
+  animation: fadeIn 0.8s ease-out 0.4s both;
+}
+
+.animate-fade-in-delay-3 {
+  animation: fadeIn 0.8s ease-out 0.6s both;
+}
+
+.animate-title {
+  animation: slideInLeft 0.8s ease-out;
+}
+
+.animate-hr {
+  animation: expandWidth 0.8s ease-out 0.2s both;
+}
+
+.animate-text {
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+.animate-text-delay {
+  animation: fadeInUp 0.6s ease-out 0.5s both;
+}
+
+.animate-table-section {
+  animation: slideInUp 0.6s ease-out 0.7s both;
+}
+
+.animate-button-container {
+  animation: buttonPulse 0.6s ease-out 0.8s both;
+  transition: all 0.3s ease;
+}
+
+.animate-button-container:hover {
+  transform: scale(1.05);
+}
+
+.animate-footer {
+  animation: fadeInUp 0.6s ease-out 1s both;
+}
+
+/* ===== KEYFRAMES ===== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes expandWidth {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 80px;
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes buttonPulse {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===== RESPONSIVE ANIMACIONES ===== */
+
+@media (max-width: 768px) {
+  .animate-title {
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  .animate-hr {
+    animation: fadeIn 0.6s ease-out 0.2s both;
+  }
+  
+  .animate-table-section {
+    animation: fadeIn 0.5s ease-out 0.7s both;
+  }
+}
+
+/* ===== OPTIMIZACIONES DE RENDIMIENTO ===== */
+
+.animate-fade-in,
+.animate-fade-in-delay,
+.animate-fade-in-delay-2,
+.animate-fade-in-delay-3,
+.animate-title,
+.animate-hr,
+.animate-text,
+.animate-text-delay,
+.animate-table-section,
+.animate-button-container,
+.animate-footer {
+  will-change: transform, opacity;
+}
+
+/* Reducir animaciones en dispositivos que prefieren menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-fade-in-delay,
+  .animate-fade-in-delay-2,
+  .animate-fade-in-delay-3,
+  .animate-title,
+  .animate-hr,
+  .animate-text,
+  .animate-text-delay,
+  .animate-table-section,
+  .animate-button-container,
+  .animate-footer {
+    animation: none;
+  }
+}
