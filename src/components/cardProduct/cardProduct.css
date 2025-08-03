@@ -131,3 +131,116 @@
         padding: 5px 0;
     }
 }
+
+/* ===== ANIMACIONES PARA CARD PRODUCT ===== */
+
+/* Animaciones de hover para la tarjeta */
+.animate-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Animaciones para la imagen */
+.animate-image-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-card-hover:hover .animate-image-hover {
+  transform: scale(1.05);
+}
+
+/* Animaciones para el texto */
+.animate-text-fade-in {
+  animation: textFadeIn 0.6s ease-out;
+}
+
+.animate-text-fade-in-delay {
+  animation: textFadeIn 0.6s ease-out 0.1s both;
+}
+
+.animate-text-fade-in-delay-2 {
+  animation: textFadeIn 0.6s ease-out 0.2s both;
+}
+
+/* Animación para el contenedor del botón */
+.animate-button-container {
+  animation: buttonSlideIn 0.6s ease-out 0.3s both;
+  transition: all 0.3s ease;
+  bottom: 0;
+}
+
+.animate-card-hover:hover .animate-button-container {
+  transform: translateY(-2px);
+}
+
+/* ===== KEYFRAMES ===== */
+
+@keyframes textFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes buttonSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== RESPONSIVE ANIMACIONES ===== */
+
+@media (max-width: 768px) {
+  .animate-card-hover:hover {
+    transform: translateY(-2px);
+  }
+  
+  .animate-card-hover:hover .animate-image-hover {
+    transform: scale(1.02);
+  }
+}
+
+/* ===== OPTIMIZACIONES DE RENDIMIENTO ===== */
+
+.animate-card-hover,
+.animate-image-hover,
+.animate-text-fade-in,
+.animate-text-fade-in-delay,
+.animate-text-fade-in-delay-2,
+.animate-button-container {
+  will-change: transform, opacity;
+}
+
+/* Reducir animaciones en dispositivos que prefieren menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .animate-card-hover,
+  .animate-image-hover,
+  .animate-text-fade-in,
+  .animate-text-fade-in-delay,
+  .animate-text-fade-in-delay-2,
+  .animate-button-container {
+    transition: none;
+    animation: none;
+  }
+  
+  .animate-card-hover:hover {
+    transform: none;
+  }
+  
+  .animate-card-hover:hover .animate-image-hover {
+    transform: none;
+  }
+}

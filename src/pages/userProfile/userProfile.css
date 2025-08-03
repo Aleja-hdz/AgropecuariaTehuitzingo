@@ -283,3 +283,280 @@ h3 {
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+/* ===== ANIMACIONES PARA USER PROFILE ===== */
+
+/* Animaciones de entrada */
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out;
+}
+
+.animate-fade-in-delay {
+  animation: fadeIn 0.8s ease-out 0.2s both;
+}
+
+.animate-fade-in-delay-2 {
+  animation: fadeIn 0.8s ease-out 0.4s both;
+}
+
+.animate-fade-in-delay-3 {
+  animation: fadeIn 0.8s ease-out 0.6s both;
+}
+
+.animate-fade-in-delay-4 {
+  animation: fadeIn 0.8s ease-out 0.8s both;
+}
+
+.animate-title {
+  animation: slideInDown 0.8s ease-out;
+}
+
+.animate-text {
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+.animate-text-delay {
+  animation: fadeInUp 0.6s ease-out 0.5s both;
+}
+
+.animate-text-delay-2 {
+  animation: fadeInUp 0.6s ease-out 0.7s both;
+}
+
+.animate-info-section {
+  animation: slideInLeft 0.6s ease-out 0.6s both;
+}
+
+.animate-form-section {
+  animation: slideInRight 0.6s ease-out 0.8s both;
+}
+
+.animate-input-group {
+  animation: fadeInUp 0.6s ease-out 0.9s both;
+}
+
+.animate-input {
+  transition: all 0.3s ease;
+}
+
+.animate-input:focus {
+  transform: scale(1.02);
+  box-shadow: 0 0 10px rgba(37, 58, 241, 0.3);
+}
+
+.animate-button-container {
+  animation: buttonPulse 0.6s ease-out 1s both;
+  transition: all 0.3s ease;
+}
+
+.animate-button-container:hover {
+  transform: scale(1.05);
+}
+
+.animate-buttons-section {
+  animation: slideInUp 0.6s ease-out 1.1s both;
+}
+
+.animate-button {
+  transition: all 0.3s ease;
+}
+
+.animate-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.animate-success {
+  animation: successSlideIn 0.6s ease-out;
+}
+
+.animate-error {
+  animation: errorSlideIn 0.6s ease-out;
+}
+
+.animate-footer {
+  animation: fadeInUp 0.6s ease-out 1.2s both;
+}
+
+/* ===== KEYFRAMES ===== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes buttonPulse {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes successSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes errorSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ===== RESPONSIVE ANIMACIONES ===== */
+
+@media (max-width: 768px) {
+  .animate-title {
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  .animate-info-section {
+    animation: fadeIn 0.5s ease-out 0.6s both;
+  }
+  
+  .animate-form-section {
+    animation: fadeIn 0.5s ease-out 0.8s both;
+  }
+  
+  .animate-input:focus {
+    transform: scale(1.01);
+  }
+  
+  .animate-button:hover {
+    transform: translateY(-1px);
+  }
+}
+
+/* ===== OPTIMIZACIONES DE RENDIMIENTO ===== */
+
+.animate-fade-in,
+.animate-fade-in-delay,
+.animate-fade-in-delay-2,
+.animate-fade-in-delay-3,
+.animate-fade-in-delay-4,
+.animate-title,
+.animate-text,
+.animate-text-delay,
+.animate-text-delay-2,
+.animate-info-section,
+.animate-form-section,
+.animate-input-group,
+.animate-input,
+.animate-button-container,
+.animate-buttons-section,
+.animate-button,
+.animate-success,
+.animate-error,
+.animate-footer {
+  will-change: transform, opacity;
+}
+
+/* Reducir animaciones en dispositivos que prefieren menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-fade-in-delay,
+  .animate-fade-in-delay-2,
+  .animate-fade-in-delay-3,
+  .animate-fade-in-delay-4,
+  .animate-title,
+  .animate-text,
+  .animate-text-delay,
+  .animate-text-delay-2,
+  .animate-info-section,
+  .animate-form-section,
+  .animate-input-group,
+  .animate-input,
+  .animate-button-container,
+  .animate-buttons-section,
+  .animate-button,
+  .animate-success,
+  .animate-error,
+  .animate-footer {
+    animation: none;
+    transition: none;
+  }
+  
+  .animate-input:focus {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .animate-button:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}

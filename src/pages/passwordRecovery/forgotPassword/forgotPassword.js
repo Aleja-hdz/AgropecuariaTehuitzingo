@@ -1,4 +1,5 @@
 import ButtonLong from '../../../components/buttonLong/buttonLong';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import './forgotPassword.css';
 import React, { useState } from 'react';
 import { supabase } from '../../../lib/supabaseClient';
@@ -22,8 +23,11 @@ export default function ForgotPassword() {
                 return;
             }
 
+            // Configurar la URL de redirección con los parámetros necesarios
+            const redirectUrl = `${window.location.origin}/reset-password?type=recovery`;
+
             const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: `${window.location.origin}/reset-password`
+                redirectTo: redirectUrl
             });
 
             if (error) {
@@ -44,21 +48,33 @@ export default function ForgotPassword() {
             <div className="forgotP-container">
                 <h1>Recuperación de contraseña</h1>
                 <p>Escribe el correo electrónico con el que te registraste</p>
-                <input 
-                    type="email" 
-                    placeholder="Correo electrónico" 
-                    className='forgotP-input' 
-                    value={email} 
-                    onChange={(e) => setEmail(e.target.value)} 
-                    required 
-                    disabled={isLoading}
-                />
-                <br></br>
-                <ButtonLong 
-                    text={isLoading ? "Enviando..." : "Enviar enlace de recuperación"} 
-                    onClick={handleSubmit}
-                    disabled={isLoading}
-                />
+                
+                {isLoading ? (
+                    <LoadingSpinner 
+                        message="Enviando enlace de recuperación..." 
+                        size="medium"
+                        fullScreen={false}
+                    />
+                ) : (
+                    <>
+                        <input 
+                            type="email" 
+                            placeholder="Correo electrónico" 
+                            className='forgotP-input' 
+                            value={email} 
+                            onChange={(e) => setEmail(e.target.value)} 
+                            required 
+                            disabled={isLoading}
+                        />
+                        <br></br>
+                        <ButtonLong 
+                            text={isLoading ? "Enviando..." : "Enviar enlace de recuperación"} 
+                            onClick={handleSubmit}
+                            disabled={isLoading}
+                        />
+                    </>
+                )}
+                
                 {message && <p className="success-message">{message}</p>}
                 {error && <p className="error-message">{error}</p>}
                 <div style={{ marginTop: '20px', textAlign: 'center' }}>

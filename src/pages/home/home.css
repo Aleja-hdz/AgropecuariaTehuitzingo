@@ -613,3 +613,572 @@ html {
     line-height: 20px;
   }
 }
+
+/* ===== ANIMACIONES MEJORADAS ===== */
+
+/* Animaciones de entrada con efectos más suaves */
+.animate-hero {
+  animation: fadeInHero 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-fade-in {
+  animation: fadeIn 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-fade-in-up-delay {
+  animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
+}
+
+.animate-fade-in-up-delay-2 {
+  animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.6s both;
+}
+
+.animate-fade-in-up-delay-3 {
+  animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.9s both;
+}
+
+.animate-fade-in-up-delay-4 {
+  animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) 1.2s both;
+}
+
+.animate-fade-in-up-delay-5 {
+  animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) 1.5s both;
+}
+
+.animate-zoom-in {
+  animation: zoomIn 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-expand {
+  animation: expand 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animación flotante mejorada para la imagen principal */
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Animaciones de hover mejoradas */
+.animate-hover-scale {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-hover-scale::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s ease;
+  z-index: 1;
+}
+
+.animate-hover-scale:hover::before {
+  left: 100%;
+}
+
+.animate-hover-scale:hover {
+  transform: scale(1.08) rotate(1deg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.animate-hover-bounce {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.animate-hover-bounce::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(250, 204, 21, 0.1), rgba(22, 40, 196, 0.1));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 8px;
+}
+
+.animate-hover-bounce:hover::after {
+  opacity: 1;
+}
+
+.animate-hover-bounce:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.animate-hover-glow {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-hover-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(250, 204, 21, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.animate-hover-glow:hover::before {
+  left: 100%;
+}
+
+.animate-hover-glow:hover {
+  color: #FACC15;
+  text-shadow: 0 0 15px rgba(250, 204, 21, 0.6);
+  transform: translateY(-2px);
+}
+
+.animate-hover-pulse {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.animate-hover-pulse::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(250, 204, 21, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+}
+
+.animate-hover-pulse:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+.animate-hover-pulse:hover {
+  transform: scale(1.3);
+  color: #FACC15;
+  box-shadow: 0 0 20px rgba(250, 204, 21, 0.4);
+}
+
+/* Animación de pulso mejorada para distribuidores */
+.animate-pulse {
+  animation: pulse 3s ease-in-out infinite;
+  position: relative;
+}
+
+.animate-pulse::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: rgba(250, 204, 21, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulseRing 3s ease-in-out infinite;
+}
+
+.animate-pulse-delay-1 {
+  animation: pulse 3s ease-in-out infinite 0.5s;
+}
+
+.animate-pulse-delay-1::before {
+  animation: pulseRing 3s ease-in-out infinite 0.5s;
+}
+
+.animate-pulse-delay-2 {
+  animation: pulse 3s ease-in-out infinite 1s;
+}
+
+.animate-pulse-delay-2::before {
+  animation: pulseRing 3s ease-in-out infinite 1s;
+}
+
+.animate-pulse-delay-3 {
+  animation: pulse 3s ease-in-out infinite 1.5s;
+}
+
+.animate-pulse-delay-3::before {
+  animation: pulseRing 3s ease-in-out infinite 1.5s;
+}
+
+/* Animación para botones mejorada */
+.btn-animate {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-animate::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.btn-animate:hover::before {
+  left: 100%;
+}
+
+.btn-animate:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Nuevas animaciones especiales */
+.animate-typing {
+  animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+  border-right: 3px solid #FACC15;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.animate-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 2s infinite;
+}
+
+.animate-breathe {
+  animation: breathe 4s ease-in-out infinite;
+}
+
+/* ===== KEYFRAMES MEJORADOS ===== */
+
+@keyframes fadeInHero {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-80px) rotate(-5deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(80px) rotate(5deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.7) rotate(-10deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes expand {
+  from {
+    width: 0;
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    width: 100%;
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-8px) rotate(-1deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulseRing {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: #FACC15; }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* ===== EFECTOS ESPECIALES ===== */
+
+/* Efecto de partículas para elementos importantes */
+.animate-particles {
+  position: relative;
+}
+
+.animate-particles::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(250, 204, 21, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(22, 40, 196, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(76, 175, 80, 0.1) 0%, transparent 50%);
+  animation: particleFloat 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes particleFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-10px) rotate(180deg);
+    opacity: 0.6;
+  }
+}
+
+/* Efecto de gradiente animado */
+.animate-gradient {
+  background: linear-gradient(-45deg, #1628c4, #4CAF50, #FACC15, #FF6B35);
+  background-size: 400% 400%;
+  animation: gradientShift 4s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ===== RESPONSIVE ANIMACIONES MEJORADAS ===== */
+
+@media (max-width: 768px) {
+  .animate-slide-in-left,
+  .animate-slide-in-right {
+    animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .animate-float {
+    animation: none;
+  }
+  
+  .animate-hover-scale:hover {
+    transform: scale(1.02);
+  }
+  
+  .animate-hover-bounce:hover {
+    transform: translateY(-3px);
+  }
+  
+  .animate-particles::after {
+    display: none;
+  }
+}
+
+/* ===== OPTIMIZACIONES DE RENDIMIENTO MEJORADAS ===== */
+
+/* Usar transform en lugar de propiedades que causan reflow */
+.animate-hero,
+.animate-slide-in-left,
+.animate-slide-in-right,
+.animate-slide-in-up,
+.animate-fade-in,
+.animate-fade-in-up,
+.animate-zoom-in,
+.animate-expand,
+.animate-float,
+.animate-pulse,
+.animate-pulse-delay-1,
+.animate-pulse-delay-2,
+.animate-pulse-delay-3 {
+  will-change: transform, opacity;
+}
+
+/* Reducir animaciones en dispositivos que prefieren menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero,
+  .animate-slide-in-left,
+  .animate-slide-in-right,
+  .animate-slide-in-up,
+  .animate-fade-in,
+  .animate-fade-in-up,
+  .animate-zoom-in,
+  .animate-expand,
+  .animate-float,
+  .animate-pulse,
+  .animate-pulse-delay-1,
+  .animate-pulse-delay-2,
+  .animate-pulse-delay-3,
+  .animate-typing,
+  .animate-shimmer,
+  .animate-breathe,
+  .animate-particles,
+  .animate-gradient {
+    animation: none;
+  }
+  
+  .animate-hover-scale:hover,
+  .animate-hover-bounce:hover,
+  .animate-hover-glow:hover,
+  .animate-hover-pulse:hover,
+  .btn-animate:hover {
+    transform: none;
+  }
+  
+  .animate-particles::after {
+    display: none;
+  }
+}
+
+/* Optimización para dispositivos de gama baja */
+@media (max-width: 480px) {
+  .animate-float,
+  .animate-pulse,
+  .animate-pulse-delay-1,
+  .animate-pulse-delay-2,
+  .animate-pulse-delay-3 {
+    animation: none;
+  }
+}

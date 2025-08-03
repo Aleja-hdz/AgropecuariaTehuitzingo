@@ -13,6 +13,8 @@ export default function Navbar() {
   const [userProfile, setUserProfile] = useState(null);
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
@@ -38,6 +40,24 @@ export default function Navbar() {
 
     getUserProfile();
   }, [user]);
+
+  // Control de visibilidad del navbar al hacer scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsNavbarVisible(false);
+      } else {
+        setIsNavbarVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   // Cerrar dropdown cuando se hace clic fuera
   useEffect(() => {
@@ -113,7 +133,7 @@ export default function Navbar() {
     return createPortal(
       <div 
         ref={dropdownRef}
-        className="user-dropdown-portal"
+        className="user-dropdown-portal animate-dropdown"
         style={{
           position: 'fixed',
           top: dropdownPosition.top,
@@ -125,19 +145,18 @@ export default function Navbar() {
           minWidth: '180px',
           overflow: 'hidden',
           border: '1px solid #e0e0e0',
-          animation: 'dropdownFadeIn 0.2s ease'
         }}
       >
         <button 
           onClick={handleProfileClick}
-          className="dropdown-item"
+          className="dropdown-item animate-dropdown-item"
         >
           <User size={16} />
           Mi perfil
         </button>
         <button 
           onClick={handleLogout}
-          className="dropdown-item"
+          className="dropdown-item animate-dropdown-item"
         >
           <LogOut size={16} />
           Cerrar sesión
@@ -148,14 +167,14 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="navbar">
-      <div className="nav-logo">
-        <img src={logo} alt="Logo" />
+    <nav className={`navbar ${isNavbarVisible ? 'navbar-visible' : 'navbar-hidden'}`}>
+      <div className="nav-logo animate-logo">
+        <img src={logo} alt="Logo" className="logo-image" />
       </div>
       
       {/* Menú hamburguesa para móviles */}
       <button 
-        className={`hamburger ${isMobileMenuOpen ? 'active' : ''}`}
+        className={`hamburger ${isMobileMenuOpen ? 'active' : ''} animate-hamburger`}
         onClick={toggleMobileMenu}
         aria-label="Toggle menu"
       >
@@ -165,18 +184,30 @@ export default function Navbar() {
       </button>
 
       <ul className={`nav-links ${isMobileMenuOpen ? 'active' : ''}`}>
-        <li><a href="/#inicio" onClick={handleMobileLinkClick}>Inicio</a></li>
-        <li><a href="/#nosotros" onClick={handleMobileLinkClick}>Nosotros</a></li>
-        <li><a href="/#servicios" onClick={handleMobileLinkClick}>Servicios</a></li>
-        <li><a href="/#contactanos" onClick={handleMobileLinkClick}>Contáctanos</a></li>
-        <li><a href="/productos" onClick={handleMobileLinkClick}>Productos</a></li>
-        <li>
-          <a href="/ofertas" onClick={handleOfertasClick}>
+        <li className="nav-item animate-nav-item">
+          <a href="/#inicio" onClick={handleMobileLinkClick} className="nav-link">Inicio</a>
+        </li>
+        <li className="nav-item animate-nav-item">
+          <a href="/#nosotros" onClick={handleMobileLinkClick} className="nav-link">Nosotros</a>
+        </li>
+        <li className="nav-item animate-nav-item">
+          <a href="/#servicios" onClick={handleMobileLinkClick} className="nav-link">Servicios</a>
+        </li>
+        <li className="nav-item animate-nav-item">
+          <a href="/#contactanos" onClick={handleMobileLinkClick} className="nav-link">Contáctanos</a>
+        </li>
+        <li className="nav-item animate-nav-item">
+          <a href="/productos" onClick={handleMobileLinkClick} className="nav-link">Productos</a>
+        </li>
+        <li className="nav-item animate-nav-item">
+          <a href="/ofertas" onClick={handleOfertasClick} className="nav-link">
             Ofertas
           </a>
         </li>
         {user && userProfile?.tipo_usuario === 'admin' && (
-          <li><Link to="/dashboard" onClick={handleMobileLinkClick}>Gestión</Link></li>
+          <li className="nav-item animate-nav-item">
+            <Link to="/dashboard" onClick={handleMobileLinkClick} className="nav-link">Gestión</Link>
+          </li>
         )}
       </ul>
       
@@ -185,15 +216,11 @@ export default function Navbar() {
           <div className="user-dropdown-container">
             <button 
               ref={buttonRef}
-              className="user-button"
+              className="user-button animate-user-button"
               onClick={toggleDropdown}
             >
               {userProfile?.nombre ? (
-                <span style={{
-                  color: 'white',
-                  fontSize: '16px',
-                  fontWeight: 'bold'
-                }}>
+                <span className="user-initial">
                   {getInitial()}
                 </span>
               ) : (
@@ -204,7 +231,7 @@ export default function Navbar() {
           </div>
         ) : (
           <Link to="/login">
-            <button className="user-button">
+            <button className="user-button animate-user-button">
               <User color='white' size={22} />
             </button>
           </Link>

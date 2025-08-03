@@ -23,15 +23,17 @@ export default function CardProduct({ product, onViewProduct }) {
     };
     
     return(
-        <div className="card-product">
+        <div className="card-product animate-card-hover">
             <div className="image-container">
-                <img className="image-product" src={productData.image} alt={productData.name} />
+                <img className="image-product animate-image-hover" src={productData.image} alt={productData.name} />
             </div>
             <div className="info-container">
-                <p className="name">{productData.name}</p>
-                <p className="lot">Peso/Gramos: {productData.weight}</p>
-                {productData.price && <p className="price">{productData.price}</p>}
-                <ButtonLong text={"Ver producto"} onClick={handleViewProduct}/>
+                <p className="name animate-text-fade-in">{productData.name}</p>
+                <p className="lot animate-text-fade-in-delay">Peso/Gramos: {productData.weight}</p>
+                {productData.price && <p className="price animate-text-fade-in-delay-2">{productData.price}</p>}
+                <div className="animate-button-container">
+                    <ButtonLong text={"Ver producto"} onClick={handleViewProduct}/>
+                </div>
             </div>
         </div>
     );

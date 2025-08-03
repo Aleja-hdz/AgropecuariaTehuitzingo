@@ -74,3 +74,153 @@
     color: white;
     margin-top: auto;
 }
+
+/* ===== ANIMACIONES PARA OFERTAS ===== */
+
+/* Animaciones de entrada */
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out;
+}
+
+.animate-fade-in-delay {
+  animation: fadeIn 0.8s ease-out 0.2s both;
+}
+
+.animate-title {
+  animation: slideInDown 0.8s ease-out;
+}
+
+.animate-hr {
+  animation: expandWidth 0.8s ease-out 0.2s both;
+}
+
+.animate-text-delay {
+  animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+.animate-text-delay-2 {
+  animation: fadeInUp 0.6s ease-out 0.6s both;
+}
+
+.animate-separator {
+  animation: slideInRight 0.6s ease-out 0.8s both;
+}
+
+.animate-card-offer {
+  animation: cardSlideIn 0.6s ease-out both;
+}
+
+.animate-footer {
+  animation: fadeInUp 0.6s ease-out 1s both;
+}
+
+/* ===== KEYFRAMES ===== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes expandWidth {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 80px;
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes cardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== RESPONSIVE ANIMACIONES ===== */
+
+@media (max-width: 768px) {
+  .animate-card-offer {
+    animation: fadeIn 0.5s ease-out both;
+  }
+  
+  .animate-title {
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  .animate-hr {
+    animation: fadeIn 0.6s ease-out 0.2s both;
+  }
+}
+
+/* ===== OPTIMIZACIONES DE RENDIMIENTO ===== */
+
+.animate-fade-in,
+.animate-fade-in-delay,
+.animate-title,
+.animate-hr,
+.animate-text-delay,
+.animate-text-delay-2,
+.animate-separator,
+.animate-card-offer,
+.animate-footer {
+  will-change: transform, opacity;
+}
+
+/* Reducir animaciones en dispositivos que prefieren menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-fade-in-delay,
+  .animate-title,
+  .animate-hr,
+  .animate-text-delay,
+  .animate-text-delay-2,
+  .animate-separator,
+  .animate-card-offer,
+  .animate-footer {
+    animation: none;
+  }
+}

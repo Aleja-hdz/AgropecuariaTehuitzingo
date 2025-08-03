@@ -1,4 +1,5 @@
 import ButtonLong from '../../../components/buttonLong/buttonLong';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import './changePassword.css';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -79,41 +80,51 @@ export default function ChangePassword() {
                 <h1>Cambio de contraseña</h1>
                 <p>Llene los siguientes campos para hacer el cambio de su contraseña.</p>
 
-                <input
-                    type="password"
-                    placeholder="Contraseña actual"
-                    className='changeP-input'
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                    required
-                    disabled={isLoading}
-                /><br />
+                {isLoading ? (
+                    <LoadingSpinner 
+                        message="Cambiando contraseña..." 
+                        size="medium"
+                        fullScreen={false}
+                    />
+                ) : (
+                    <>
+                        <input
+                            type="password"
+                            placeholder="Contraseña actual"
+                            className='changeP-input'
+                            value={currentPassword}
+                            onChange={(e) => setCurrentPassword(e.target.value)}
+                            required
+                            disabled={isLoading}
+                        /><br />
 
-                <input
-                    type="password"
-                    placeholder="Nueva contraseña"
-                    className='changeP-input'
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    required
-                    disabled={isLoading}
-                /><br />
+                        <input
+                            type="password"
+                            placeholder="Nueva contraseña"
+                            className='changeP-input'
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            required
+                            disabled={isLoading}
+                        /><br />
 
-                <input
-                    type="password"
-                    placeholder="Confirmar nueva contraseña"
-                    className='changeP-input'
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    disabled={isLoading}
-                /><br />
+                        <input
+                            type="password"
+                            placeholder="Confirmar nueva contraseña"
+                            className='changeP-input'
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            required
+                            disabled={isLoading}
+                        /><br />
 
-                <ButtonLong 
-                    text={isLoading ? "Cambiando contraseña..." : "Cambiar contraseña"} 
-                    onClick={handleChangePassword}
-                    disabled={isLoading}
-                />
+                        <ButtonLong 
+                            text={isLoading ? "Cambiando contraseña..." : "Cambiar contraseña"} 
+                            onClick={handleChangePassword}
+                            disabled={isLoading}
+                        />
+                    </>
+                )}
 
                 {error && <p className="error-message">{error}</p>}
                 {success && <p className="success-message">{success}</p>}

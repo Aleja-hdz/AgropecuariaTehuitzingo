@@ -147,3 +147,71 @@
         font-size: 15px;
     }
 }
+
+/* ===== ANIMACIONES PARA IMPLEMENTOS ===== */
+
+/* Animaciones de entrada simples */
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-fade-in-delay {
+  animation: fadeIn 0.6s ease-out 0.2s both;
+}
+
+.animate-fade-in-delay-2 {
+  animation: fadeIn 0.6s ease-out 0.4s both;
+}
+
+.animate-card-product {
+  animation: cardSlideIn 0.5s ease-out both;
+}
+
+/* ===== KEYFRAMES ===== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== RESPONSIVE ANIMACIONES ===== */
+
+@media (max-width: 768px) {
+  .animate-card-product {
+    animation: fadeIn 0.4s ease-out both;
+  }
+}
+
+/* ===== OPTIMIZACIONES DE RENDIMIENTO ===== */
+
+.animate-fade-in,
+.animate-fade-in-delay,
+.animate-fade-in-delay-2,
+.animate-card-product {
+  will-change: transform, opacity;
+}
+
+/* Reducir animaciones en dispositivos que prefieren menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-fade-in-delay,
+  .animate-fade-in-delay-2,
+  .animate-card-product {
+    animation: none;
+  }
+}

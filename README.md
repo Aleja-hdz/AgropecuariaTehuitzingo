@@ -1,70 +1,145 @@
-# Getting Started with Create React App
+# 🏥 Agropecuaria Tehuitzingo - Plataforma Web
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<div align="center">
+  <img src="src/assets/Logo2.png" alt="Agropecuaria Tehuitzingo Logo" width="200"/>
+  
+  [![React](https://img.shields.io/badge/React-19.1.0-blue.svg)](https://reactjs.org/)
+  [![Supabase](https://img.shields.io/badge/Supabase-2.52.0-green.svg)](https://supabase.com/)
+  [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+</div>
 
-## Available Scripts
+## 📋 Descripción del Proyecto
 
-In the project directory, you can run:
+**Agropecuaria Tehuitzingo** es una plataforma web moderna desarrollada en React que ofrece una solución integral para la gestión y comercialización de productos veterinarios y agropecuarios. Con más de 20 años de experiencia en el mercado, esta aplicación web permite a los clientes explorar, consultar y gestionar productos relacionados con el cuidado animal.
 
-### `npm start`
+### 🎯 Características Principales
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **🏪 Catálogo Digital**: Exploración completa de productos organizados por categorías
+- **🛒 Gestión de Productos**: Sistema de administración para inventario y ofertas
+- **👥 Autenticación de Usuarios**: Sistema de registro y login seguro
+- **📱 Diseño Responsivo**: Interfaz adaptada para dispositivos móviles y desktop
+- **🔍 Búsqueda Avanzada**: Filtros y búsqueda inteligente de productos
+- **📧 Contacto Integrado**: Formularios de contacto y comunicación directa
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 🏷️ Categorías de Productos
 
-### `npm test`
+- **Alimentos Balanceados**: Nutrición especializada para todas las especies
+- **Medicamentos Veterinarios**: Productos farmacéuticos de calidad
+- **Mascotas**: Alimentos y accesorios para mascotas
+- **Implementos**: Herramientas y equipamiento agropecuario
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🚀 Tecnologías Utilizadas
 
-### `npm run build`
+- **Frontend**: React 19.1.0, React Router DOM
+- **Backend**: Supabase (Base de datos y autenticación)
+- **UI/UX**: CSS3, React Icons, Lucide React
+- **Comunicación**: EmailJS para formularios de contacto
+- **Despliegue**: Optimizado para producción
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 📦 Instalación y Configuración
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Prerrequisitos
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Node.js (versión 16 o superior)
+- npm o yarn
 
-### `npm run eject`
+### Pasos de Instalación
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. **Clonar el repositorio**
+   ```bash
+   git clone https://github.com/tu-usuario/agropecuaria-tehuitzingo.git
+   cd agropecuaria-tehuitzingo
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. **Instalar dependencias**
+   ```bash
+   npm install
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+3. **Configurar variables de entorno**
+   ```bash
+   # Crear archivo .env en la raíz del proyecto
+   REACT_APP_SUPABASE_URL=tu_url_de_supabase
+   REACT_APP_SUPABASE_ANON_KEY=tu_clave_anonima_de_supabase
+   REACT_APP_EMAILJS_PUBLIC_KEY=tu_clave_publica_de_emailjs
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+4. **Ejecutar en modo desarrollo**
+   ```bash
+   npm start
+   ```
 
-## Learn More
+5. **Abrir en el navegador**
+   ```
+   http://localhost:3000
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🛠️ Scripts Disponibles
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+| Comando | Descripción |
+|---------|-------------|
+| `npm start` | Ejecuta la aplicación en modo desarrollo |
+| `npm run build` | Construye la aplicación para producción |
+| `npm test` | Ejecuta las pruebas unitarias |
+| `npm run eject` | Expone la configuración de webpack (irreversible) |
 
-### Code Splitting
+## �� Estructura del Proyecto
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```
+src/
+├── assets/           # Imágenes y recursos estáticos
+├── auth/            # Configuración de autenticación
+├── components/      # Componentes reutilizables
+├── lib/            # Configuración de Supabase
+├── pages/          # Páginas principales de la aplicación
+└── App.js          # Componente principal
+```
 
-### Analyzing the Bundle Size
+## 🎨 Características de la Interfaz
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- **Diseño Moderno**: Interfaz limpia y profesional
+- **Navegación Intuitiva**: Menús organizados por categorías
+- **Responsive Design**: Adaptable a todos los dispositivos
+- **Accesibilidad**: Cumple con estándares de accesibilidad web
 
-### Making a Progressive Web App
+## 🔐 Funcionalidades de Seguridad
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- Autenticación segura con Supabase
+- Rutas protegidas para usuarios autenticados
+- Panel de administración con permisos especiales
+- Recuperación de contraseñas por email
 
-### Advanced Configuration
+## 📞 Contacto y Soporte
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Para más información sobre Agropecuaria Tehuitzingo:
 
-### Deployment
+- **Ubicación**: Tehuitzingo, México
+- **Servicios**: Veterinaria, Alimentos Balanceados, Medicamentos
+- **Experiencia**: 20+ años en el mercado
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 🤝 Contribuciones
 
-### `npm run build` fails to minify
+Las contribuciones son bienvenidas. Para contribuir:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+
+## 🙏 Agradecimientos
+
+- **React Team** por el framework
+- **Supabase** por la infraestructura backend
+- **Comunidad Open Source** por las librerías utilizadas
+
+---
+
+<div align="center">
+  <p><strong>Agropecuaria Tehuitzingo</strong> - Tu confianza, nuestro compromiso</p>
+  <p>Desarrollado con ❤️ para el bienestar animal</p>
+</div>
