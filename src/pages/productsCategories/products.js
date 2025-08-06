@@ -301,7 +301,7 @@ export default function Products(){
                         <h2>Resultados de búsqueda</h2>
                         <p>Se encontraron {filteredProducts.length} producto{filteredProducts.length !== 1 ? 's' : ''}</p>
                     </div>
-                    <div className="container-card-products">
+                    <div className={`container-card-products ${filteredProducts.length === 0 ? 'no-products' : ''}`}>
                         {loading ? (
                             <div className="loading">Buscando productos...</div>
                         ) : filteredProducts.length > 0 ? (

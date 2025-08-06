@@ -368,50 +368,16 @@ export default function FormAlimentosBalanceados({ onClose, alimentosData, isEdi
                   <p className="error-message">{errors.contenidoDecimal || errors.contenidoMedida}</p>
               )}
               
-            <div className='new-product-box2'>
-                <div className='new-product-box1'>
-                      <label>Especie: *</label>
-                    <select 
-                          className={`new-product-opc-category ${showErrors && errors.especie ? 'error-input' : ''}`}
-                        value={especie}
-                          onChange={(e) => handleInputChange(setEspecie, 'especie', e.target.value)}
-                    >
-                        <option value="">-- Selecciona --</option>
-                        <option value='Bovinos'>Bovinos</option>
-                        <option value='Equinos'>Equinos</option>
-                        <option value='Porcinos'>Porcinos</option>
-                        <option value='Caprinos'>Caprinos</option>
-                        <option value='Ovinos'>Ovinos</option>
-                        <option value='Aves'>Aves</option>
-                        <option value='Aquacultura'>Aquacultura</option>
-                    </select>
-                      {showErrors && errors.especie && <p className="error-message">{errors.especie}</p>}
-                </div>
-                <div className='new-product-box1'>
-                      <label>Marca: *</label>
-                    <select 
-                          className={`new-product-opc-category ${showErrors && errors.marca ? 'error-input' : ''}`}
-                        value={marca}
-                          onChange={(e) => handleInputChange(setMarca, 'marca', e.target.value)}
-                    >
-                        <option value="">-- Selecciona --</option>
-                        <option value='Unión'>Unión</option>
-                        <option value='Apiaba'>Apiaba</option>
-                        <option value='Fasa'>Fasa</option>
-                        <option value='Nutre bien'>Nutre bien</option>
-                    </select>
-                      {showErrors && errors.marca && <p className="error-message">{errors.marca}</p>}
-                </div>
-            </div>
-              
-              <p className='new-product-text'>Materias primas (opcional):</p>
-              <input 
-                  type='text' 
-                  placeholder='Materias primas del producto ...' 
-                  className='new-product-input1' 
-                  value={materiasPrimas} 
-                  onChange={(e) => setMateriasPrimas(e.target.value)}
-              />
+              <div className='new-product-box'>
+                  <p className='new-product-text'>Materias primas (opcional):</p>
+                  <input 
+                      type='text' 
+                      placeholder='Materias primas del producto ...' 
+                      className='new-product-input1' 
+                      value={materiasPrimas} 
+                      onChange={(e) => setMateriasPrimas(e.target.value)}
+                  />
+              </div>
               
               <p className='new-product-text-box'>Detalles del producto (opcional):</p>
               <textarea 

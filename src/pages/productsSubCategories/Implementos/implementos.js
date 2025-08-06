@@ -148,7 +148,7 @@ export default function Implementos() {
                     onAnimalTypeFilter={handleAnimalTypeFilter}
                     onWhatIsFilter={handleWhatIsFilter}
                 />
-                <div className={`container-card-products ${isVisible.products ? 'animate-fade-in-delay-2' : ''}`}>
+                <div className={`container-card-products ${isVisible.products ? 'animate-fade-in-delay-2' : ''} ${filteredProducts.length === 0 ? 'no-products' : ''}`}>
                     {loading ? (
                         <div className="loading">Cargando productos...</div>
                     ) : filteredProducts.length > 0 ? (

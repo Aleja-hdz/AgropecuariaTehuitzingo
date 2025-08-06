@@ -29,12 +29,19 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     justify-content: center;
-    align-items: center;
+    align-items: start;
     width: 80%;
     overflow: hidden;
     gap: 35px;
     padding-bottom: 25px;
     flex: 1;
+}
+
+/* Cuando no hay productos, alinear arriba */
+.container-card-products.no-products {
+    align-items: start;
+    justify-content: start;
+    grid-template-columns: 1fr;
 }
 
 .footer {

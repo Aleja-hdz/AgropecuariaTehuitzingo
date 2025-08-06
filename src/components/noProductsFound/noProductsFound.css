@@ -4,14 +4,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 60px 20px;
   text-align: center;
   font-family: 'Inter', sans-serif;
   background-color: #f8f9fa;
   border-radius: 12px;
   margin: 20px 0;
-  min-height: 300px;
+  min-height: 200px;
+  padding: 20px 20px 40px 20px;
 }
 
 .no-products-icon {
@@ -44,8 +43,8 @@
 /* Responsive design */
 @media (max-width: 768px) {
   .no-products-found {
-    padding: 40px 15px;
-    min-height: 250px;
+    padding: 20px 10px 30px 10px;
+    min-height: 120px;
   }
   
   .no-products-icon {

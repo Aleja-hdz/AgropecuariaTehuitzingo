@@ -196,7 +196,7 @@ export default function Mascotas() {
                     onAccessoryTypeFilter={handleAccessoryTypeFilter}
                     onAnimalTypeFilter={handleAnimalTypeFilter}
                 />
-                <div className="container-card-products">
+                <div className={`container-card-products ${filteredProducts.length === 0 ? 'no-products' : ''}`}>
                     {loading ? (
                         <div className="loading">Cargando productos...</div>
                     ) : filteredProducts.length > 0 ? (
