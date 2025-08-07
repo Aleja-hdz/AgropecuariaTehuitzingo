@@ -20,6 +20,20 @@ export default function MedicamentosVeterinarios() {
     const [selectedVia, setSelectedVia] = useState('');
     const [selectedPresentacion, setSelectedPresentacion] = useState('');
 
+    // Función para formatear las medidas con abreviaciones
+    const formatMeasure = (medida) => {
+        const measureMap = {
+            'Miligramos': 'mg',
+            'Gramos': 'gr',
+            'Kilogramos': 'Kg',
+            'Mililitros': 'ml',
+            'Litros': 'L',
+            'Unidades': 'unid',
+            'Dosis': 'dosis'
+        };
+        return measureMap[medida] || medida;
+    };
+
     // Obtener productos de Supabase
     useEffect(() => {
         fetchProducts();
@@ -37,21 +51,32 @@ export default function MedicamentosVeterinarios() {
                 console.error('Error al obtener medicamentos veterinarios:', error);
             } else {
                 // Formatear los datos para que coincidan con la estructura esperada
-                const formattedProducts = data.map(item => ({
-                    id: item.id,
-                    name: item.nombre,
-                    weight: `${item.edad} - ${item.via_administracion}`,
-                    image: item.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
-                    // Datos adicionales para la vista detallada
-                    tipo: item.tipo,
-                    especie: item.especie,
-                    edad: item.edad,
-                    via_administracion: item.via_administracion,
-                    presentacion: item.presentacion,
-                    marca: item.marca,
-                    informacion_adicional: item.informacion_adicional,
-                    created_at: item.created_at
-                }));
+                const formattedProducts = data.map(item => {
+                    // Formatear el contenido con la medida abreviada
+                    let contenidoFormateado = '';
+                    if (item.contenido_decimal && item.contenido_medida) {
+                        const medidaAbreviada = formatMeasure(item.contenido_medida);
+                        contenidoFormateado = `${item.contenido_decimal} ${medidaAbreviada}`;
+                    }
+                    
+                    return {
+                        id: item.id,
+                        name: item.nombre,
+                        weight: contenidoFormateado || `${item.edad} - ${item.via_administracion}`,
+                        image: item.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
+                        // Datos adicionales para la vista detallada
+                        tipo: item.tipo,
+                        especie: item.especie,
+                        edad: item.edad,
+                        via_administracion: item.via_administracion,
+                        presentacion: item.presentacion,
+                        marca: item.marca,
+                        contenido_decimal: item.contenido_decimal,
+                        contenido_medida: item.contenido_medida,
+                        informacion_adicional: item.informacion_adicional,
+                        created_at: item.created_at
+                    };
+                });
                 setProducts(formattedProducts);
             }
         } catch (error) {

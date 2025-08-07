@@ -14,6 +14,8 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
   const [viaAdministracion, setViaAdministracion] = useState(medicamentosData?.via_administracion || '');
   const [presentacion, setPresentacion] = useState(medicamentosData?.presentacion || '');
   const [marca, setMarca] = useState(medicamentosData?.marca || '');
+  const [contenidoDecimal, setContenidoDecimal] = useState(medicamentosData?.contenido_decimal || '');
+  const [contenidoMedida, setContenidoMedida] = useState(medicamentosData?.contenido_medida || '');
   const [informacionAdicional, setInformacionAdicional] = useState(medicamentosData?.informacion_adicional || '');
   
   // Estados para validaciones
@@ -30,6 +32,8 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
     setViaAdministracion(medicamentosData?.via_administracion || '');
     setPresentacion(medicamentosData?.presentacion || '');
     setMarca(medicamentosData?.marca || '');
+    setContenidoDecimal(medicamentosData?.contenido_decimal || '');
+    setContenidoMedida(medicamentosData?.contenido_medida || '');
     setInformacionAdicional(medicamentosData?.informacion_adicional || '');
     setImagePreview(medicamentosData?.url || null);
   }, [medicamentosData]);
@@ -97,6 +101,16 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
     // Validar marca
     if (!marca.trim()) {
       newErrors.marca = 'La marca es obligatoria';
+    }
+    
+    // Validar contenido decimal
+    if (!contenidoDecimal || contenidoDecimal <= 0) {
+      newErrors.contenidoDecimal = 'El contenido es obligatorio y debe ser mayor a 0';
+    }
+    
+    // Validar medida del contenido
+    if (!contenidoMedida) {
+      newErrors.contenidoMedida = 'La medida del contenido es obligatoria';
     }
     
     // informacion_adicional es opcional, no necesita validación
@@ -224,6 +238,8 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
                   via_administracion: viaAdministracion,
                   presentacion: presentacion,
                   marca: marca,
+                  contenido_decimal: contenidoDecimal,
+                  contenido_medida: contenidoMedida,
                   informacion_adicional: informacionAdicional,
               }).eq('id', medicamentosData.id);
               if (error) {
@@ -252,6 +268,8 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
                   via_administracion: viaAdministracion,
                   presentacion: presentacion,
                   marca: marca,
+                  contenido_decimal: contenidoDecimal,
+                  contenido_medida: contenidoMedida,
                   informacion_adicional: informacionAdicional,
               });
               if (error) {
@@ -281,6 +299,8 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
       setViaAdministracion('');
       setPresentacion('');
       setMarca('');
+      setContenidoDecimal('');
+      setContenidoMedida('');
       setInformacionAdicional('');
       setErrors({});
       setShowErrors(false);
@@ -414,6 +434,33 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
                     onChange={(e) => handleInputChange(setMarca, 'marca', e.target.value)}
                 />
                 {showErrors && errors.marca && <p className="error-message">{errors.marca}</p>}
+                
+                <div className='new-product-box'>
+                    <label className='new-product-text-box'>Contenido: *</label>
+                    <input 
+                        className={`new-product-number-box ${showErrors && errors.contenidoDecimal ? 'error-input' : ''}`} 
+                        type='number' 
+                        placeholder='0' 
+                        value={contenidoDecimal} 
+                        onChange={(e) => handleInputChange(setContenidoDecimal, 'contenidoDecimal', e.target.value)}
+                    />
+                    <select 
+                        className={`new-product-opc-box ${showErrors && errors.contenidoMedida ? 'error-input' : ''}`} 
+                        value={contenidoMedida} 
+                        onChange={(e) => handleInputChange(setContenidoMedida, 'contenidoMedida', e.target.value)}
+                    >
+                        <option value="">-- Selecciona --</option>
+                        <option value='Miligramos'>Miligramos</option>
+                        <option value='Gramos'>Gramos</option>
+                        <option value='Kilogramos'>Kilogramos</option>
+                        <option value='Mililitros'>Mililitros</option>
+                        <option value='Litros'>Litros</option>
+                        <option value='Unidades'>Unidades</option>
+                        <option value='Dosis'>Dosis</option>
+                    </select>
+                </div>
+                {showErrors && errors.contenidoDecimal && <p className="error-message">{errors.contenidoDecimal}</p>}
+                {showErrors && errors.contenidoMedida && <p className="error-message">{errors.contenidoMedida}</p>}
                 
                 <p className='new-product-text'>Información adicional (opcional):</p>
                 <textarea 

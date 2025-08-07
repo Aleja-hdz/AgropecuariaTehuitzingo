@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import './adminPanel.css'
 import { supabase } from '../../lib/supabaseClient';
 import CurrentInformation from "../../components/currentInformation/currentInformation";
@@ -12,8 +12,10 @@ import FormImplementos from '../../components/formNewProduct/forms/implementos/f
 import FormAlimentosBalanceados from '../../components/formNewProduct/forms/alimentosBalanceados/formAlimentosBalanceados';
 import FormMedicamentosVeterinarios from '../../components/formNewProduct/forms/medicamentosVeterinarios/formMedicamentosVeterinarios';
 import FormMascotas from '../../components/formNewProduct/forms/mascotas/formMascotas';
-import FormEditMascotasAccesorios from '../../components/formNewProduct/forms/mascotas/formEditMascotasAccesorios';
+import FormEditMascotasAccesorios from '../../components/formNewProduct/forms/mascotas/formEditMascotasAlimentos';
 import FormEditMascotasAlimentos from '../../components/formNewProduct/forms/mascotas/formEditMascotasAlimentos';
+import Searcher from '../../components/searcher/searcher';
+import OptionsTable from '../../components/optionsTable/optionsTable';
 
 export default function AdminPanel() {
     const [showNewProductForm, setShowNewProductForm] = useState(false);
@@ -29,10 +31,18 @@ export default function AdminPanel() {
     const [mascotas, setMascotas] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
 
+    // Estados para búsqueda
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [showSearchResults, setShowSearchResults] = useState(false);
+    const [tablePosition, setTablePosition] = useState('normal'); // 'normal' o 'pushed-down'
+    const searchContainerRef = useRef(null);
+
     // Estados para animaciones
     const [isVisible, setIsVisible] = useState({
         header: false,
         info: false,
+        search: false,
         tables: false,
         buttons: false
     });
@@ -48,20 +58,43 @@ export default function AdminPanel() {
         }, 300);
 
         const timer3 = setTimeout(() => {
-            setIsVisible(prev => ({ ...prev, tables: true }));
-        }, 500);
+            setIsVisible(prev => ({ ...prev, search: true }));
+        }, 400);
 
         const timer4 = setTimeout(() => {
+            setIsVisible(prev => ({ ...prev, tables: true }));
+        }, 600);
+
+        const timer5 = setTimeout(() => {
             setIsVisible(prev => ({ ...prev, buttons: true }));
-        }, 700);
+        }, 800);
 
         return () => {
             clearTimeout(timer);
             clearTimeout(timer2);
             clearTimeout(timer3);
             clearTimeout(timer4);
+            clearTimeout(timer5);
         };
     }, []);
+
+    // Manejar clics fuera del contenedor de búsqueda
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
+                setShowSearchResults(false);
+                setTablePosition('normal');
+            }
+        };
+
+        if (showSearchResults) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showSearchResults]);
 
     const fetchOfertas = async () => {
         const { data, error } = await supabase
@@ -202,6 +235,135 @@ export default function AdminPanel() {
         fetchMedicamentos();
         fetchMascotas();
         fetchOfertas();
+    };
+
+    // Función para manejar la búsqueda
+    const handleSearch = (term) => {
+        setSearchTerm(term);
+        
+        if (term.trim() === '') {
+            setShowSearchResults(false);
+            setSearchResults([]);
+            setTablePosition('normal');
+            return;
+        }
+
+        // Buscar en todos los productos y ofertas
+        const searchLower = term.toLowerCase();
+        
+        // Buscar en productos
+        const foundProducts = allProducts.filter(product => 
+            product.nombre.toLowerCase().includes(searchLower)
+        );
+
+        // Buscar en ofertas
+        const foundOffers = ofertas.filter(offer => 
+            offer.nombre.toLowerCase().includes(searchLower)
+        );
+
+        // Combinar resultados
+        const combinedResults = [
+            ...foundProducts.map(product => ({
+                ...product,
+                tipo: 'Producto'
+            })),
+            ...foundOffers.map(offer => ({
+                ...offer,
+                tipo: 'Oferta'
+            }))
+        ];
+
+        setSearchResults(combinedResults);
+        setShowSearchResults(true);
+        setTablePosition('pushed-down');
+    };
+
+    // Función para cerrar los resultados de búsqueda
+    const handleCloseSearchResults = () => {
+        setShowSearchResults(false);
+        setTablePosition('normal');
+    };
+
+    // Funciones para manejar acciones desde los resultados de búsqueda
+    const handleEditFromSearch = async (item) => {
+        console.log('Editando desde búsqueda:', item);
+        
+        if (item.tipo === 'Producto') {
+            // Buscar el producto en allProducts por ID
+            const producto = allProducts.find(p => p.id === item.id);
+            if (producto) {
+                if (producto.categoria === 'Implementos') {
+                    setEditProductType('implementos');
+                    setEditProduct(producto);
+                } else if (producto.categoria === 'Alimentos balanceados') {
+                    setEditProductType('alimentos-balanceados');
+                    setEditProduct(producto);
+                } else if (producto.categoria === 'Medicamentos Veterinarios') {
+                    setEditProductType('medicamentos-veterinarios');
+                    setEditProduct(producto);
+                } else if (producto.categoria === 'Mascotas') {
+                    // Obtener datos completos de mascotas para determinar subcategoría
+                    const { data: mascotaData, error } = await supabase
+                        .from('mascotas')
+                        .select('*')
+                        .eq('id', producto.id)
+                        .single();
+                    
+                    if (mascotaData) {
+                        if (mascotaData.tipo === 'Accesorios') {
+                            setEditProductType('mascotas-accesorios');
+                        } else {
+                            setEditProductType('mascotas-alimentos');
+                        }
+                        setEditProduct(mascotaData);
+                    }
+                }
+                setShowNewProductForm(true);
+            }
+        } else if (item.tipo === 'Oferta') {
+            setEditOffer(item);
+            setShowNewOfferForm(true);
+        }
+        
+        // Cerrar resultados de búsqueda
+        setShowSearchResults(false);
+        setTablePosition('normal');
+    };
+
+    const handleDeleteFromSearch = async (item) => {
+        console.log('Eliminando desde búsqueda:', item);
+        
+        if (item.tipo === 'Producto') {
+            // Buscar el producto en allProducts por ID
+            const producto = allProducts.find(p => p.id === item.id);
+            if (producto) {
+                // Crear un objeto con la estructura que espera handleDeleteFromMain
+                const itemToDelete = {
+                    id: producto.id,
+                    categoria: 'Producto',
+                    nombre: producto.nombre
+                };
+                await handleDeleteFromMain(itemToDelete);
+            }
+        } else if (item.tipo === 'Oferta') {
+            // Crear un objeto con la estructura que espera handleDeleteFromMain
+            const itemToDelete = {
+                id: item.id,
+                categoria: 'Oferta',
+                nombre: item.nombre
+            };
+            await handleDeleteFromMain(itemToDelete);
+        }
+        
+        // Actualizar resultados de búsqueda
+        const updatedResults = searchResults.filter(result => result.id !== item.id);
+        setSearchResults(updatedResults);
+        
+        // Si no quedan resultados, cerrar la búsqueda
+        if (updatedResults.length === 0) {
+            setShowSearchResults(false);
+            setTablePosition('normal');
+        }
     };
 
     // Combinar productos y ofertas para "Últimas creaciones" ordenados por created_at
@@ -502,11 +664,64 @@ export default function AdminPanel() {
                             <h1 className='tittles-h1'>Panel de gestión</h1>
                             <hr className='admin-line animate-hr'></hr>
                         </div>
+                        <div className={`admin-box-head-search ${isVisible.search ? 'animate-search' : ''}`} ref={searchContainerRef}>
+                            <p style={{fontSize: '14px', fontWeight: '300', color: '#000'}}>¿Buscas algo?</p>
+                            <Searcher onSearch={handleSearch} placeholder="Buscar productos y ofertas..."></Searcher>
+                            
+                            {/* Tabla de resultados de búsqueda */}
+                            {showSearchResults && (
+                                <div className="search-results-container">
+                                    {searchResults.length > 0 ? (
+                                        <>
+                                            <div className="search-results-header">
+                                                Resultados de búsqueda para "{searchTerm}" ({searchResults.length} encontrado{searchResults.length !== 1 ? 's' : ''})
+                                            </div>
+                                            <table className="search-results-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nombre</th>
+                                                        <th>Categoría</th>
+                                                        <th>Tipo</th>
+                                                        <th>Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {searchResults.map((item, index) => (
+                                                        <tr key={`${item.tipo}-${item.id}`}>
+                                                            <td>{item.nombre}</td>
+                                                            <td>{item.categoria}</td>
+                                                            <td>
+                                                                <span className={`search-result-category ${item.tipo.toLowerCase()}`}>
+                                                                    {item.tipo}
+                                                                </span>
+                                                            </td>
+                                                            <td>
+                                                                <div className="search-actions">
+                                                                    <OptionsTable 
+                                                                        onEdit={() => handleEditFromSearch(item)}
+                                                                        onDelete={() => handleDeleteFromSearch(item)}
+                                                                        offerId={item.id}
+                                                                    />
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </>
+                                    ) : (
+                                        <div className="search-no-results">
+                                            No existen productos con ese nombre, pruebe con otro
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                         <div className={`admin-box2-head ${isVisible.info ? 'animate-fade-in-delay' : ''}`}>
                             <CurrentInformation products={totalProductos} offers={ofertas.length} />
                         </div>
                     </div>
-                    <div className={`admin-first-table ${isVisible.tables ? 'animate-fade-in-delay-2' : ''}`}>
+                    <div className={`admin-first-table ${isVisible.tables ? 'animate-fade-in-delay-2' : ''} ${tablePosition === 'pushed-down' ? 'pushed-down' : ''}`} style={{display: 'flex', alignItems: 'flex-start'}}>
                         <p className="animate-text">Últimas creaciones</p>
                         <TableMain 
                             data={ultimasCreacionesData} 
@@ -533,7 +748,7 @@ export default function AdminPanel() {
                 </div>
 
                 {/* Modal para Nuevo Producto */}
-                {showNewProductForm && (
+                {showNewProductForm && !editProduct && (
                     <FormNewProduct onClose={handleCloseNewProduct} onSave={handleRefreshProducts} />
                 )}
 
