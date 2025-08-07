@@ -7,14 +7,22 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [sessionChecked, setSessionChecked] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         // Obtener sesión inicial
         const getInitialSession = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            setUser(session?.user || null);
-            setLoading(false);
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                setUser(session?.user || null);
+                setSessionChecked(true);
+            } catch (error) {
+                console.error('Error al obtener sesión inicial:', error);
+                setSessionChecked(true);
+            } finally {
+                setLoading(false);
+            }
         };
 
         getInitialSession();
@@ -22,6 +30,7 @@ export function AuthProvider({ children }) {
         // Escuchar cambios en el estado de autenticación
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setUser(session?.user || null);
+            setSessionChecked(true);
             setLoading(false);
         });
 
@@ -46,7 +55,7 @@ export function AuthProvider({ children }) {
         user,
         setUser,
         logout,
-        loading
+        loading: loading || !sessionChecked
     };
 
     return (
