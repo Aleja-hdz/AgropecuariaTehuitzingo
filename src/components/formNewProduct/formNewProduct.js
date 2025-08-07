@@ -35,19 +35,19 @@ export default function FormNewProduct({ onClose, isEdit, onSave }) {
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         
-        // Ocultar el navbar cuando se abre el modal
+        // Desplazar el navbar cuando se abre el modal
         const navbar = document.querySelector('.navbar');
         if (navbar) {
-            navbar.classList.add('hidden');
+            navbar.classList.add('modal-open');
         }
         
         return () => {
             document.body.style.overflow = 'unset';
             
-            // Mostrar el navbar cuando se cierra el modal
+            // Restaurar el navbar cuando se cierra el modal
             const navbar = document.querySelector('.navbar');
             if (navbar) {
-                navbar.classList.remove('hidden');
+                navbar.classList.remove('modal-open');
             }
         };
     }, []);

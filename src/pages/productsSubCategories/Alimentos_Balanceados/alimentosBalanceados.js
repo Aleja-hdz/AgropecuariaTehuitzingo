@@ -19,6 +19,20 @@ export default function AlimentosBalanceados() {
     const [selectedBrand, setSelectedBrand] = useState('');
     const [selectedProduction, setSelectedProduction] = useState('');
 
+    // Función para formatear las medidas con abreviaciones
+    const formatMeasure = (medida) => {
+        const measureMap = {
+            'Miligramos': 'mg',
+            'Gramos': 'gr',
+            'Kilogramos': 'Kg',
+            'Mililitros': 'ml',
+            'Litros': 'L',
+            'Unidades': 'unid',
+            'Dosis': 'dosis'
+        };
+        return measureMap[medida] || medida;
+    };
+
     // Obtener productos de Supabase
     useEffect(() => {
         fetchProducts();
@@ -36,19 +50,30 @@ export default function AlimentosBalanceados() {
                 console.error('Error al obtener alimentos balanceados:', error);
             } else {
                 // Formatear los datos para que coincidan con la estructura esperada
-                const formattedProducts = data.map(product => ({
-                    id: product.id,
-                    name: product.nombre,
-                    weight: `${product.contenido_decimal} ${product.contenido_medida}`,
-                    image: product.url,
-                    // Datos adicionales para la vista detallada
-                    especie: product.especie,
-                    marca: product.marca,
-                    alimento_produccion: product.alimento_produccion,
-                    materias_primas: product.materias_primas,
-                    informacion_adicional: product.informacion_adicional,
-                    created_at: product.created_at
-                }));
+                const formattedProducts = data.map(product => {
+                    // Formatear el contenido con la medida abreviada
+                    let contenidoFormateado = '';
+                    if (product.contenido_decimal && product.contenido_medida) {
+                        const medidaAbreviada = formatMeasure(product.contenido_medida);
+                        contenidoFormateado = `${product.contenido_decimal} ${medidaAbreviada}`;
+                    }
+                    
+                    return {
+                        id: product.id,
+                        name: product.nombre,
+                        weight: contenidoFormateado,
+                        image: product.url,
+                        // Datos adicionales para la vista detallada
+                        especie: product.especie,
+                        marca: product.marca,
+                        alimento_produccion: product.alimento_produccion,
+                        materias_primas: product.materias_primas,
+                        contenido_decimal: product.contenido_decimal,
+                        contenido_medida: product.contenido_medida,
+                        informacion_adicional: product.informacion_adicional,
+                        created_at: product.created_at
+                    };
+                });
                 setProducts(formattedProducts);
             }
         } catch (error) {
