@@ -5,12 +5,17 @@ import { useAuth } from "./authContext";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function AdminRoute({ children }) {
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
     const [userProfile, setUserProfile] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const getUserProfile = async () => {
+            // Esperar a que el contexto de autenticación termine de cargar
+            if (loading) {
+                return;
+            }
+
             if (!user) {
                 setIsLoading(false);
                 return;
@@ -38,8 +43,14 @@ export default function AdminRoute({ children }) {
         };
 
         getUserProfile();
-    }, [user]);
+    }, [user, loading]);
 
+    // Mostrar loading mientras el contexto de autenticación está cargando
+    if (loading) {
+        return <LoadingSpinner message="Verificando autenticación..." />;
+    }
+
+    // Mostrar loading mientras se verifica el perfil de usuario
     if (isLoading) {
         return <LoadingSpinner message="Verificando permisos de administrador..." />;
     }

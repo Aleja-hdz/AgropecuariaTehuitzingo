@@ -7,10 +7,15 @@ import LoadingSpinner from "./LoadingSpinner";
 export default function ProtectedRoute({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [session, setSession] = useState(null);
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
     const checkSession = async () => {
+      // Esperar a que el contexto de autenticación termine de cargar
+      if (loading) {
+        return;
+      }
+
       try {
         const { data: { session } } = await supabase.auth.getSession();
         setSession(session);
@@ -22,7 +27,12 @@ export default function ProtectedRoute({ children }) {
     };
 
     checkSession();
-  }, []);
+  }, [loading]);
+
+  // Mostrar loading mientras el contexto de autenticación está cargando
+  if (loading) {
+    return <LoadingSpinner message="Verificando autenticación..." />;
+  }
 
   // Mostrar loading mientras se verifica la sesión
   if (isLoading) {
