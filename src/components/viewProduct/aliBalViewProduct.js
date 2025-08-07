@@ -2,18 +2,17 @@ import { useEffect } from 'react';
 import './viewProduct.css';
 
 const AliBalViewProduct = ({ product, onClose }) => {
-  // Función para formatear las medidas con abreviaciones
+  // Función para formatear medidas
   const formatMeasure = (medida) => {
-    const measureMap = {
-      'Miligramos': 'mg',
+    const medidas = {
+      'Kilogramos': 'kg',
       'Gramos': 'gr',
-      'Kilogramos': 'Kg',
-      'Mililitros': 'ml',
       'Litros': 'L',
+      'Mililitros': 'ml',
       'Unidades': 'unid',
-      'Dosis': 'dosis'
+      'Piezas': 'pzas'
     };
-    return measureMap[medida] || medida;
+    return medidas[medida] || medida;
   };
 
   useEffect(() => {

@@ -3,7 +3,7 @@ import { supabase } from '../../../lib/supabaseClient';
 import CardProduct from '../../../components/cardProduct/cardProduct';
 import Searcher from '../../../components/searcher/searcher';
 import MenuMedicamentosVeterinarios from '../../../components/menuSubCategories/Medicamentos_Veterinarios/menuMedicamentosVeterinarios';
-import MVViewProduct from '../../../components/viewProduct/mvViewProduct';
+import MvViewProduct from '../../../components/viewProduct/mvViewProduct';
 import NoProductsFound from '../../../components/noProductsFound/noProductsFound';
 import './medicamentosVeterinarios.css';
 
@@ -187,7 +187,7 @@ export default function MedicamentosVeterinarios() {
                 </div>
             </div>
             {showProductModal && (
-                <MVViewProduct product={selectedProduct} onClose={handleCloseProductModal} />
+                <MvViewProduct product={selectedProduct} onClose={handleCloseProductModal} />
             )}
             <footer className='footer'>
                 <p className="text-contact">&copy; 2025 Todos los derechos reservados || Agropecuaria Tehuitzingo</p>
