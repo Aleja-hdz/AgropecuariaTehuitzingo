@@ -121,7 +121,7 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
       if (error) {
         console.error('Error al eliminar imagen anterior:', error);
       } else {
-        console.log('Imagen anterior eliminada exitosamente');
+        // Imagen eliminada exitosamente
       }
     } catch (err) {
       console.error('Error al procesar eliminación de imagen anterior:', err);

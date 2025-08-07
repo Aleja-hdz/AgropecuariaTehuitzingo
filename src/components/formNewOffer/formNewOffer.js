@@ -129,7 +129,7 @@ export default function FormNewOffer({ onClose, offerData, isEdit, onSave }) {
             if (error) {
                 console.error('Error al eliminar imagen anterior:', error);
             } else {
-                console.log('Imagen anterior eliminada exitosamente');
+                // Imagen eliminada exitosamente
             }
         } catch (err) {
             console.error('Error al procesar eliminación de imagen anterior:', err);
@@ -140,7 +140,7 @@ export default function FormNewOffer({ onClose, offerData, isEdit, onSave }) {
         if (!imageFile) return;
 
         const fileName = `${Date.now()}_${imageFile.name}`;
-        const { data, error } = await supabase
+        const { error } = await supabase
             .storage
             .from('ofertas-img')
             .upload(fileName, imageFile);

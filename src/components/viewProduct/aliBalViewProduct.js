@@ -44,16 +44,6 @@ const AliBalViewProduct = ({ product, onClose }) => {
     }
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return 'No disponible';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
   return (
     <div className="view-producto-modal-overlay" onClick={handleOverlayClick}>
       <div className="view-producto-modal-content">

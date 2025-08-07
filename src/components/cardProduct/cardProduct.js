@@ -1,10 +1,7 @@
-import { useNavigate } from 'react-router-dom';
 import ButtonLong from '../buttonLong/buttonLong';
 import './cardProduct.css';
 
 export default function CardProduct({ product, onViewProduct }) {
-    const navigate = useNavigate();
-    
     // Datos por defecto si no se pasan props
     const defaultProduct = {
         id: 1,

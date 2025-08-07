@@ -178,7 +178,7 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
             if (error) {
                 console.error('Error al eliminar imagen anterior:', error);
             } else {
-                console.log('Imagen anterior eliminada exitosamente');
+                // Imagen eliminada exitosamente
             }
         } catch (err) {
             console.error('Error al procesar eliminación de imagen anterior:', err);
@@ -207,7 +207,6 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
 
     // Guardar producto
     const handleSubmit = async (e) => {
-      console.log('Enviando formulario...')
         e.preventDefault();
         setError('');
         setLoading(true);

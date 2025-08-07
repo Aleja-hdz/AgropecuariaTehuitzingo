@@ -163,7 +163,7 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
       if (error) {
         console.error('Error al eliminar imagen anterior:', error);
       } else {
-        console.log('Imagen anterior eliminada exitosamente');
+        // Imagen eliminada exitosamente
       }
     } catch (err) {
       console.error('Error al procesar eliminación de imagen anterior:', err);
@@ -174,7 +174,7 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
     if (!imageFile) return;
 
     const fileName = `${Date.now()}_${imageFile.name}`;
-    const { data, error } = await supabase
+    const { error } = await supabase
         .storage
         .from('medicamentos-veterinarios-img')
         .upload(fileName, imageFile);

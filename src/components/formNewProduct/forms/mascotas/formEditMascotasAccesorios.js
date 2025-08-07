@@ -25,18 +25,39 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
     // Cargar datos del producto al inicializar
     useEffect(() => {
         if (mascotasData) {
-            console.log('Datos de mascotas recibidos:', mascotasData);
-            
-            // Cargar datos de la tabla mascotas
             setNombre(mascotasData.nombre || '');
             setInformacionAdicional(mascotasData.informacion_adicional || '');
             setImageUrl(mascotasData.url || '');
-            setImagePreview(mascotasData.url || null);
-
-            // Cargar datos de la tabla accesorios_mascotas
-            loadAccesorioData(mascotasData.id);
+            setOpcProduct(mascotasData.sub_categoria || 'Accesorio');
         }
     }, [mascotasData]);
+
+    useEffect(() => {
+        if (isEdit && mascotasData) {
+            const fetchAccesorioData = async () => {
+                try {
+                    const { data, error } = await supabase
+                        .from('mascotas')
+                        .select('*')
+                        .eq('id', mascotasData.id)
+                        .single();
+
+                    if (error) {
+                        console.error('Error al obtener datos del accesorio:', error);
+                    } else {
+                        setNombre(data.nombre || '');
+                        setInformacionAdicional(data.informacion_adicional || '');
+                        setImageUrl(data.url || '');
+                        setOpcProduct(data.sub_categoria || 'Accesorio');
+                    }
+                } catch (error) {
+                    console.error('Error al cargar datos del accesorio:', error);
+                }
+            };
+
+            fetchAccesorioData();
+        }
+    }, [mascotasData, isEdit]);
 
     // Ocultar navbar cuando se abre el modal
     useEffect(() => {
@@ -74,7 +95,6 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
             }
 
             if (data) {
-                console.log('Datos de accesorio cargados:', data);
                 setQueEs(data.que_es || '');
                 setTipoAnimal(data.tipo_animal || '');
                 setRecomendacionesUso(data.recomendaciones_uso || '');
@@ -113,7 +133,6 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
     // Función para eliminar imagen anterior del bucket
     const deletePreviousImage = async (imageUrl) => {
         if (!imageUrl) {
-            console.log('No hay URL de imagen anterior para eliminar');
             return;
         }
         
@@ -121,8 +140,6 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
             // Extraer el nombre del archivo de la URL
             const parts = imageUrl.split('/');
             const fileName = parts[parts.length - 1].split('?')[0];
-            
-            console.log('Intentando eliminar archivo:', fileName);
             
             const { error } = await supabase
                 .storage
@@ -132,7 +149,7 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
             if (error) {
                 console.error('Error al eliminar imagen anterior:', error);
             } else {
-                console.log('Imagen anterior eliminada exitosamente:', fileName);
+                // Imagen anterior eliminada exitosamente
             }
         } catch (err) {
             console.error('Error al procesar eliminación de imagen anterior:', err);
@@ -206,7 +223,6 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
         // Si hay una nueva imagen, guardar la URL anterior
         if (imageFile && mascotasData.url) {
             previousImageUrl = mascotasData.url;
-            console.log('URL anterior guardada para eliminación:', previousImageUrl);
         }
 
         if (imageFile) {
@@ -255,7 +271,6 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
 
             // Eliminar imagen anterior si se subió una nueva
             if (previousImageUrl) {
-                console.log('Eliminando imagen anterior:', previousImageUrl);
                 await deletePreviousImage(previousImageUrl);
             }
 

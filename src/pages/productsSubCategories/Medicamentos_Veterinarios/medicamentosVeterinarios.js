@@ -1,11 +1,11 @@
-import { useState, useMemo, useEffect } from 'react';
-import './medicamentosVeterinarios.css';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { supabase } from '../../../lib/supabaseClient';
+import CardProduct from '../../../components/cardProduct/cardProduct';
 import Searcher from '../../../components/searcher/searcher';
 import MenuMedicamentosVeterinarios from '../../../components/menuSubCategories/Medicamentos_Veterinarios/menuMedicamentosVeterinarios';
-import CardProduct from '../../../components/cardProduct/cardProduct';
+import MVViewProduct from '../../../components/viewProduct/mvViewProduct';
 import NoProductsFound from '../../../components/noProductsFound/noProductsFound';
-import MvViewProduct from '../../../components/viewProduct/mvViewProduct';
-import { supabase } from '../../../lib/supabaseClient';
+import './medicamentosVeterinarios.css';
 
 export default function MedicamentosVeterinarios() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -20,26 +20,21 @@ export default function MedicamentosVeterinarios() {
     const [selectedVia, setSelectedVia] = useState('');
     const [selectedPresentacion, setSelectedPresentacion] = useState('');
 
-    // Función para formatear las medidas con abreviaciones
+    // Función para formatear medidas
     const formatMeasure = (medida) => {
-        const measureMap = {
-            'Miligramos': 'mg',
+        const medidas = {
+            'Kilogramos': 'kg',
             'Gramos': 'gr',
-            'Kilogramos': 'Kg',
-            'Mililitros': 'ml',
             'Litros': 'L',
+            'Mililitros': 'ml',
             'Unidades': 'unid',
-            'Dosis': 'dosis'
+            'Piezas': 'pzas'
         };
-        return measureMap[medida] || medida;
+        return medidas[medida] || medida;
     };
 
     // Obtener productos de Supabase
-    useEffect(() => {
-        fetchProducts();
-    }, []);
-
-    const fetchProducts = async () => {
+    const fetchProducts = useCallback(async () => {
         try {
             setLoading(true);
             const { data, error } = await supabase
@@ -84,7 +79,11 @@ export default function MedicamentosVeterinarios() {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
+
+    useEffect(() => {
+        fetchProducts();
+    }, [fetchProducts]);
 
     // Función para filtrar productos basada en el término de búsqueda y filtros
     const filteredProducts = useMemo(() => {
@@ -94,13 +93,13 @@ export default function MedicamentosVeterinarios() {
         if (searchTerm.trim()) {
             const searchLower = searchTerm.toLowerCase();
             filtered = filtered.filter(product => 
-                product.name && product.name.toLowerCase().includes(searchLower) ||
-                product.weight && product.weight.toLowerCase().includes(searchLower) ||
-                product.tipo && product.tipo.toLowerCase().includes(searchLower) ||
-                product.especie && product.especie.toLowerCase().includes(searchLower) ||
-                product.marca && product.marca.toLowerCase().includes(searchLower) ||
-                product.via_administracion && product.via_administracion.toLowerCase().includes(searchLower) ||
-                product.presentacion && product.presentacion.toLowerCase().includes(searchLower)
+                (product.name && product.name.toLowerCase().includes(searchLower)) ||
+                (product.weight && product.weight.toLowerCase().includes(searchLower)) ||
+                (product.tipo && product.tipo.toLowerCase().includes(searchLower)) ||
+                (product.especie && product.especie.toLowerCase().includes(searchLower)) ||
+                (product.marca && product.marca.toLowerCase().includes(searchLower)) ||
+                (product.via_administracion && product.via_administracion.toLowerCase().includes(searchLower)) ||
+                (product.presentacion && product.presentacion.toLowerCase().includes(searchLower))
             );
         }
 
@@ -188,7 +187,7 @@ export default function MedicamentosVeterinarios() {
                 </div>
             </div>
             {showProductModal && (
-                <MvViewProduct product={selectedProduct} onClose={handleCloseProductModal} />
+                <MVViewProduct product={selectedProduct} onClose={handleCloseProductModal} />
             )}
             <footer className='footer'>
                 <p className="text-contact">&copy; 2025 Todos los derechos reservados || Agropecuaria Tehuitzingo</p>

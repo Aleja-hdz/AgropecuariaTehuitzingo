@@ -216,7 +216,6 @@ export default function AdminPanel() {
             new Date(b.created_at) - new Date(a.created_at)
         );
         
-        console.log('Productos ordenados por fecha de creación real (más recientes primero):', sortedProducts);
         setAllProducts(sortedProducts);
     }, [implementos, alimentos, medicamentos, mascotas]);
 
@@ -278,15 +277,8 @@ export default function AdminPanel() {
         setTablePosition('pushed-down');
     };
 
-    // Función para cerrar los resultados de búsqueda
-    const handleCloseSearchResults = () => {
-        setShowSearchResults(false);
-        setTablePosition('normal');
-    };
-
     // Funciones para manejar acciones desde los resultados de búsqueda
     const handleEditFromSearch = async (item) => {
-        console.log('Editando desde búsqueda:', item);
         
         if (item.tipo === 'Producto') {
             // Buscar el producto en allProducts por ID
@@ -303,7 +295,7 @@ export default function AdminPanel() {
                     setEditProduct(producto);
                 } else if (producto.categoria === 'Mascotas') {
                     // Obtener datos completos de mascotas para determinar subcategoría
-                    const { data: mascotaData, error } = await supabase
+                    const { data: mascotaData } = await supabase
                         .from('mascotas')
                         .select('*')
                         .eq('id', producto.id)
@@ -331,7 +323,6 @@ export default function AdminPanel() {
     };
 
     const handleDeleteFromSearch = async (item) => {
-        console.log('Eliminando desde búsqueda:', item);
         
         if (item.tipo === 'Producto') {
             // Buscar el producto en allProducts por ID
@@ -384,14 +375,15 @@ export default function AdminPanel() {
             created_at: oferta.created_at
         }));
 
-        // Combinar y ordenar por created_at descendente
-        const todosCombinados = [...productosFormateados, ...ofertasFormateadas];
-        const ordenados = todosCombinados.sort((a, b) => 
-            new Date(b.created_at) - new Date(a.created_at)
-        );
+        // Combinar y ordenar por fecha de creación (más recientes primero)
+        const combinedData = [...productosFormateados, ...ofertasFormateadas];
+        const sortedProducts = combinedData.sort((a, b) => {
+            const dateA = new Date(a.created_at);
+            const dateB = new Date(b.created_at);
+            return dateB - dateA;
+        });
 
-        // Retornar todos los elementos ordenados (el scroll se encargará de mostrar más de 10)
-        return ordenados;
+        return sortedProducts.slice(0, 5); // Solo los 5 más recientes
     }, [allProducts, ofertas]);
 
     // Calcular conteos reales
@@ -416,7 +408,6 @@ export default function AdminPanel() {
 
     // Funciones para manejar edición y eliminación desde TableMain
     const handleEditFromMain = async (item) => {
-        console.log('Editando desde TableMain:', item);
         
         if (item.categoria === 'Producto') {
             // Buscar el producto en allProducts por ID
@@ -445,7 +436,6 @@ export default function AdminPanel() {
                     }
                     
                     if (mascotaData) {
-                        console.log('Datos de mascota obtenidos:', mascotaData);
                         
                         if (mascotaData.sub_categoria === 'Accesorio') {
                             setEditProductType('mascotas-accesorios');
@@ -470,7 +460,6 @@ export default function AdminPanel() {
     };
 
     const handleDeleteFromMain = async (item) => {
-        console.log('Eliminando desde TableMain:', item);
         
         const confirm = window.confirm(`¿Estás seguro de que quieres eliminar: ${item.nombre}?`);
         if (!confirm) return;

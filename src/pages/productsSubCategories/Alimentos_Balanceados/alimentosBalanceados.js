@@ -1,44 +1,37 @@
-import { useState, useMemo, useEffect } from 'react';
-import './alimentosBalanceados.css';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { supabase } from '../../../lib/supabaseClient';
+import CardProduct from '../../../components/cardProduct/cardProduct';
 import Searcher from '../../../components/searcher/searcher';
 import MenuAlimentosBalanceados from '../../../components/menuSubCategories/Alimentos_Balanceados/menuAlimentosBalanceados';
-import CardProduct from '../../../components/cardProduct/cardProduct';
-import NoProductsFound from '../../../components/noProductsFound/noProductsFound';
 import AliBalViewProduct from '../../../components/viewProduct/aliBalViewProduct';
-import { supabase } from '../../../lib/supabaseClient';
+import NoProductsFound from '../../../components/noProductsFound/noProductsFound';
+import './alimentosBalanceados.css';
 
 export default function AlimentosBalanceados() {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [showProductModal, setShowProductModal] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    
-    // Estados para filtros
+    const [searchTerm, setSearchTerm] = useState('');
     const [selectedSpecies, setSelectedSpecies] = useState('');
     const [selectedBrand, setSelectedBrand] = useState('');
     const [selectedProduction, setSelectedProduction] = useState('');
+    const [showProductModal, setShowProductModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
-    // Función para formatear las medidas con abreviaciones
+    // Función para formatear medidas
     const formatMeasure = (medida) => {
-        const measureMap = {
-            'Miligramos': 'mg',
+        const medidas = {
+            'Kilogramos': 'kg',
             'Gramos': 'gr',
-            'Kilogramos': 'Kg',
-            'Mililitros': 'ml',
             'Litros': 'L',
+            'Mililitros': 'ml',
             'Unidades': 'unid',
-            'Dosis': 'dosis'
+            'Piezas': 'pzas'
         };
-        return measureMap[medida] || medida;
+        return medidas[medida] || medida;
     };
 
     // Obtener productos de Supabase
-    useEffect(() => {
-        fetchProducts();
-    }, []);
-
-    const fetchProducts = async () => {
+    const fetchProducts = useCallback(async () => {
         try {
             setLoading(true);
             const { data, error } = await supabase
@@ -81,7 +74,11 @@ export default function AlimentosBalanceados() {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
+
+    useEffect(() => {
+        fetchProducts();
+    }, [fetchProducts]);
 
     // Función para filtrar productos basada en el término de búsqueda y filtros
     const filteredProducts = useMemo(() => {
