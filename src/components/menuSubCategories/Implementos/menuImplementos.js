@@ -6,11 +6,14 @@ import { Link } from 'react-router-dom';
 export default function MenuImplementos({
   selectedAnimalType,
   selectedWhatIs,
+  selectedSpecialAnimal,
   onAnimalTypeFilter,
-  onWhatIsFilter
+  onWhatIsFilter,
+  onSpecialAnimalFilter
 }) {
   const [showAnimalType, setShowAnimalType] = useState(false);
   const [showWhatIs, setShowWhatIs] = useState(false);
+  const [showSpecialAnimal, setShowSpecialAnimal] = useState(false);
 
   const animalTypes = [
     'Gallos',
@@ -21,12 +24,20 @@ export default function MenuImplementos({
     'Ovejas'
   ];
 
+  const specialAnimalTypes = [
+    'Aves de combate'
+  ];
+
   const whatIsOptions = [
     'Comedero',
     'Bebedero',
     'Montura',
     'Cuerda',
-    'Deslanador'
+    'Deslanador',
+    'Jaula',
+    'Nido',
+    'Corral',
+    'Báscula'
   ];
 
   return (
@@ -43,7 +54,7 @@ export default function MenuImplementos({
 
         <div className="filters">
           <div className="filter" onClick={() => setShowAnimalType(!showAnimalType)}>
-            <span>Para animales {selectedAnimalType && `(${selectedAnimalType})`}</span>
+            <span>Animales {selectedAnimalType && `(${selectedAnimalType})`}</span>
             <ChevronDown size={16} />
             {showAnimalType && (
               <ul className="dropdown">
@@ -62,7 +73,7 @@ export default function MenuImplementos({
           </div>
 
           <div className="filter" onClick={() => setShowWhatIs(!showWhatIs)}>
-            <span>Generales {selectedWhatIs && `(${selectedWhatIs})`}</span>
+            <span>Producto específico {selectedWhatIs && `(${selectedWhatIs})`}</span>
             <ChevronDown size={16} />
             {showWhatIs && (
               <ul className="dropdown">
@@ -74,6 +85,25 @@ export default function MenuImplementos({
                     className={selectedWhatIs === option ? 'selected' : ''}
                   >
                     {option}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <div className="filter" onClick={() => setShowSpecialAnimal(!showSpecialAnimal)}>
+            <span>Animales especiales {selectedSpecialAnimal && `(${selectedSpecialAnimal})`}</span>
+            <ChevronDown size={16} />
+            {showSpecialAnimal && (
+              <ul className="dropdown">
+                <li onClick={() => onSpecialAnimalFilter('')}>Todos</li>
+                {specialAnimalTypes.map((specialAnimal) => (
+                  <li 
+                    key={specialAnimal}
+                    onClick={() => onSpecialAnimalFilter(specialAnimal)}
+                    className={selectedSpecialAnimal === specialAnimal ? 'selected' : ''}
+                  >
+                    {specialAnimal}
                   </li>
                 ))}
               </ul>

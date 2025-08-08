@@ -12,6 +12,8 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
   const [is, setIs] = useState(implementsData?.que_es || '');
   const [recomendations, setRecomendations] = useState(implementsData?.recomendaciones_uso || '');
   const [additionalDetails, setAdditionalDetails] = useState(implementsData?.informacion_adicional || '');
+  const [presentaciones, setPresentaciones] = useState(implementsData?.presentaciones_disponibles || '');
+  const [marca, setMarca] = useState(implementsData?.marca_distribuidor || '');
   
   // Estados para validaciones
   const [errors, setErrors] = useState({});
@@ -25,6 +27,8 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
     setIs(implementsData?.que_es || '');
     setRecomendations(implementsData?.recomendaciones_uso || '');
     setAdditionalDetails(implementsData?.informacion_adicional || '');
+    setPresentaciones(implementsData?.presentaciones_disponibles || '');
+    setMarca(implementsData?.marca_distribuidor || '');
     setImagePreview(implementsData?.url || null);
   }, [implementsData]);
 
@@ -194,6 +198,8 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
                   que_es: is,
                   recomendaciones_uso: recomendations,
                   informacion_adicional: additionalDetails,
+                  presentaciones_disponibles: presentaciones,
+                  marca_distribuidor: marca,
               }).eq('id', implementsData.id);
               if (error) {
                   console.error(error);
@@ -218,6 +224,8 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
                   que_es: is,
                   recomendaciones_uso: recomendations,
                   informacion_adicional: additionalDetails,
+                  presentaciones_disponibles: presentaciones,
+                  marca_distribuidor: marca,
               });
               if (error) {
                   console.error(error);
@@ -244,6 +252,8 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
       setIs('');
       setRecomendations('');
       setAdditionalDetails('');
+      setPresentaciones('');
+      setMarca('');
       setErrors({});
       setShowErrors(false);
   };
@@ -335,6 +345,25 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
                     onChange={(e) => setRecomendations(e.target.value)}
                 />
                 <div style={styles.divUso}></div>
+                
+                <p className='new-product-text'>Presentaciones disponibles (opcional):</p>
+                <input 
+                    type='text' 
+                    placeholder='Presentaciones de 1k, 3k y 5k ...' 
+                    className='new-product-input1' 
+                    value={presentaciones} 
+                    onChange={(e) => setPresentaciones(e.target.value)}
+                />
+                
+                <p className='new-product-text'>Marca o distribuidor (opcional):</p>
+                <input 
+                    type='text' 
+                    placeholder='Marca o distribuidor ...' 
+                    className='new-product-input1' 
+                    value={marca} 
+                    onChange={(e) => setMarca(e.target.value)}
+                />
+                
                 <p className='new-product-text-box'>Detalles del producto (opcional):</p>
                 <textarea 
                     className='new-product-input' 

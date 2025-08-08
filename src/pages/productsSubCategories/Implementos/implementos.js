@@ -17,6 +17,7 @@ export default function Implementos() {
     // Estados para filtros
     const [selectedAnimalType, setSelectedAnimalType] = useState('');
     const [selectedWhatIs, setSelectedWhatIs] = useState('');
+    const [selectedSpecialAnimal, setSelectedSpecialAnimal] = useState('');
 
     // Estados para animaciones
     const [isVisible, setIsVisible] = useState({
@@ -109,8 +110,13 @@ export default function Implementos() {
             filtered = filtered.filter(product => product.que_es === selectedWhatIs);
         }
 
+        // Filtro por animal especial
+        if (selectedSpecialAnimal) {
+            filtered = filtered.filter(product => product.tipo_animal === selectedSpecialAnimal);
+        }
+
         return filtered;
-    }, [products, searchTerm, selectedAnimalType, selectedWhatIs]);
+    }, [products, searchTerm, selectedAnimalType, selectedWhatIs, selectedSpecialAnimal]);
 
     const handleSearch = (term) => {
         setSearchTerm(term);
@@ -135,6 +141,10 @@ export default function Implementos() {
         setSelectedWhatIs(selectedWhatIs === whatIs ? '' : whatIs);
     };
 
+    const handleSpecialAnimalFilter = (specialAnimal) => {
+        setSelectedSpecialAnimal(selectedSpecialAnimal === specialAnimal ? '' : specialAnimal);
+    };
+
     return(
         <div className="products-container">
             <div className={`categories-container-head ${isVisible.header ? 'animate-fade-in' : ''}`}>
@@ -145,8 +155,10 @@ export default function Implementos() {
                 <MenuImplementos 
                     selectedAnimalType={selectedAnimalType}
                     selectedWhatIs={selectedWhatIs}
+                    selectedSpecialAnimal={selectedSpecialAnimal}
                     onAnimalTypeFilter={handleAnimalTypeFilter}
                     onWhatIsFilter={handleWhatIsFilter}
+                    onSpecialAnimalFilter={handleSpecialAnimalFilter}
                 />
                 <div className={`container-card-products ${isVisible.products ? 'animate-fade-in-delay-2' : ''} ${filteredProducts.length === 0 ? 'no-products' : ''}`}>
                     {loading ? (

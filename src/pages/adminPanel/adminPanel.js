@@ -99,6 +99,8 @@ export default function AdminPanel() {
                 tipo_animal: item.tipo_animal || '',
                 recomendaciones_uso: item.recomendaciones_uso || '',
                 informacion_adicional: item.informacion_adicional || '',
+                presentaciones_disponibles: item.presentaciones_disponibles || '',
+                marca_distribuidor: item.marca_distribuidor || '',
                 created_at: item.created_at,
             })));
         }
