@@ -8,13 +8,15 @@
 }
 
 .searcher-input-wrapper {
-  width: 30%;
+  width: 400px;
   display: inline-flex;
   align-items: center;
   background-color: #d9d9d9;
   padding: 5px 10px;
   border-radius: 10px;
   position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
 }
 
 .searcher-input-wrapper button {
@@ -30,6 +32,15 @@
 
 .searcher-input-wrapper button:disabled {
   cursor: default;
+}
+
+.searcher-input-wrapper:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.searcher-input-wrapper:focus-within {
+  box-shadow: 0 4px 16px rgba(37, 58, 241, 0.2);
+  background-color: #e8e8e8;
 }
 
 .clear-search-btn {
@@ -54,13 +65,14 @@
   background: transparent;
   outline: none;
   font-size: 16px;
-  width: 200px;
+  width: 100%;
   color: black;
   font-family: 'Inter', sans-serif;
   font-weight: 300;
-  font-size: 14px;
+  font-size: 15px;
   flex: 1;
-  margin: 0 8px;
+  margin: 0 10px;
+  padding: 4px 0;
 }
 
 .searcher-input::placeholder {

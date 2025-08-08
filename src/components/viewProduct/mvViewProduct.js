@@ -2,22 +2,35 @@ import { useEffect } from 'react';
 import './viewProduct.css';
 
 const MvViewProduct = ({ product, onClose }) => {
+  // Función para formatear las medidas con abreviaciones
+  const formatMeasure = (medida) => {
+    const medidas = {
+      'Kilogramos': 'kg',
+      'Gramos': 'gr',
+      'Litros': 'L',
+      'Mililitros': 'ml',
+      'Unidades': 'unid',
+      'Piezas': 'pzas'
+    };
+    return medidas[medida] || medida;
+  };
+
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     
-    // Ocultar el navbar cuando se abre el modal
+    // Desplazar el navbar cuando se abre el modal
     const navbar = document.querySelector('.navbar');
     if (navbar) {
-      navbar.classList.add('hidden');
+      navbar.classList.add('modal-open');
     }
     
     return () => {
       document.body.style.overflow = 'unset';
       
-      // Mostrar el navbar cuando se cierra el modal
+      // Restaurar el navbar cuando se cierra el modal
       const navbar = document.querySelector('.navbar');
       if (navbar) {
-        navbar.classList.remove('hidden');
+        navbar.classList.remove('modal-open');
       }
     };
   }, []);
@@ -30,85 +43,149 @@ const MvViewProduct = ({ product, onClose }) => {
     }
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return 'No disponible';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
   return (
     <div className="view-producto-modal-overlay" onClick={handleOverlayClick}>
       <div className="view-producto-modal-content">
         <div className="view-producto-box">
-          <div className="producto-img-placeholder">
-            <img 
-              src={product.image} 
-              alt={product.name} 
-              style={{
-                width: '100%', 
-                height: '100%', 
-                objectFit: 'cover', 
-                borderRadius: '8px'
-              }} 
-            />
-          </div>
-          <div className="producto-info">
+          {/* Contenedor de imagen estática */}
+          <div className="producto-img-container">
             <h2 className="producto-titulo">{product.name}</h2>
-            
-            <div className="producto-details">
-              <div className="detail-row">
-                <strong>Tipo de medicamento:</strong>
-                <span>{product.tipo || 'No especificado'}</span>
-              </div>
-              
-              <div className="detail-row">
-                <strong>Especie:</strong>
-                <span>{product.especie || 'No especificada'}</span>
-              </div>
-              
-              <div className="detail-row">
-                <strong>Edad/Etapa de vida:</strong>
-                <span>{product.edad || 'No especificada'}</span>
-              </div>
-              
-              <div className="detail-row">
-                <strong>Vía de administración:</strong>
-                <span>{product.via_administracion || 'No especificada'}</span>
-              </div>
-              
-              <div className="detail-row">
-                <strong>Presentación:</strong>
-                <span>{product.presentacion || 'No especificada'}</span>
-              </div>
-              
-              <div className="detail-row">
-                <strong>Marca:</strong>
-                <span>{product.marca || 'No especificada'}</span>
-              </div>
-              
-              {product.informacion_adicional && (
-                <div className="detail-row">
-                  <strong>Información adicional:</strong>
-                  <span>{product.informacion_adicional}</span>
-                </div>
-              )}
-              
-              <div className="detail-row">
-                <strong>Fecha de registro:</strong>
-                <span>{formatDate(product.created_at)}</span>
-              </div>
+            <div className="producto-img-placeholder">
+              <img 
+                src={product.image} 
+                alt={product.name} 
+                style={{
+                  width: '100%', 
+                  height: '100%', 
+                  objectFit: 'contain', 
+                  borderRadius: '14px'
+                }} 
+              />
             </div>
-            
-            <button 
-              onClick={onClose}
-              className="modal-close-btn"
-            >
-              Cerrar
-            </button>
+          </div>
+          
+          {/* Contenedor de información deslizable */}
+          <div className="producto-info-container">
+            <div className="producto-info">
+              <h3 className="info-titulo">Información del producto</h3>
+              
+              <div className="producto-details">
+                {/* Contenido */}
+                {product.contenido_decimal && product.contenido_medida && (
+                  <div className="detail-section">
+                    <div className="detail-header">
+                      <span className="detail-icon">💊</span> {/* Pill icon */}
+                      <h3>Contenido</h3>
+                    </div>
+                    <div className="detail-content">
+                      <span className="detail-value highlight">
+                        {product.contenido_decimal} {formatMeasure(product.contenido_medida)}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Tipo de medicamento */}
+                <div className="detail-section">
+                  <div className="detail-header">
+                    <span className="detail-icon">🏥</span> {/* Hospital icon */}
+                    <h3>Tipo de medicamento</h3>
+                  </div>
+                  <div className="detail-content">
+                    <span className="detail-value">
+                      {product.tipo || '---'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Especie */}
+                <div className="detail-section">
+                  <div className="detail-header">
+                    <span className="detail-icon">🐾</span> {/* Paw icon */}
+                    <h3>Especie</h3>
+                  </div>
+                  <div className="detail-content">
+                    <span className="detail-value">
+                      {product.especie || '---'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Edad recomendada */}
+                <div className="detail-section">
+                  <div className="detail-header">
+                    <span className="detail-icon">📅</span> {/* Calendar icon */}
+                    <h3>Edad recomendada</h3>
+                  </div>
+                  <div className="detail-content">
+                    <span className="detail-value">
+                      {product.edad || '---'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Vía de administración */}
+                <div className="detail-section">
+                  <div className="detail-header">
+                    <span className="detail-icon">💉</span> {/* Syringe icon */}
+                    <h3>Vía de administración</h3>
+                  </div>
+                  <div className="detail-content">
+                    <span className="detail-value">
+                      {product.via_administracion || '---'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Presentación */}
+                <div className="detail-section">
+                  <div className="detail-header">
+                    <span className="detail-icon">📦</span> {/* Box icon */}
+                    <h3>Presentación</h3>
+                  </div>
+                  <div className="detail-content">
+                    <span className="detail-value">
+                      {product.presentacion || '---'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Marca */}
+                <div className="detail-section">
+                  <div className="detail-header">
+                    <span className="detail-icon">🏷️</span> {/* Tag icon */}
+                    <h3>Marca</h3>
+                  </div>
+                  <div className="detail-content">
+                    <span className="detail-value">
+                      {product.marca || '---'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Información adicional */}
+                {product.informacion_adicional && (
+                  <div className="detail-section">
+                    <div className="detail-header">
+                      <span className="detail-icon">ℹ️</span> {/* Info icon */}
+                      <h3>Información adicional</h3>
+                    </div>
+                    <div className="detail-content">
+                      <span className="detail-value">
+                        {product.informacion_adicional}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              <button 
+                onClick={onClose}
+                className="modal-close-btn"
+              >
+                Cerrar
+              </button>
+            </div>
           </div>
         </div>
       </div>

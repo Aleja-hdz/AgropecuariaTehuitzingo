@@ -1,10 +1,7 @@
-import { useNavigate } from 'react-router-dom';
 import ButtonLong from '../buttonLong/buttonLong';
 import './cardProduct.css';
 
 export default function CardProduct({ product, onViewProduct }) {
-    const navigate = useNavigate();
-    
     // Datos por defecto si no se pasan props
     const defaultProduct = {
         id: 1,
@@ -29,7 +26,7 @@ export default function CardProduct({ product, onViewProduct }) {
             </div>
             <div className="info-container">
                 <p className="name animate-text-fade-in">{productData.name}</p>
-                <p className="lot animate-text-fade-in-delay">Peso/Gramos: {productData.weight}</p>
+                <p style={{marginBlock: "-10px"}} className="lot animate-text-fade-in-delay">Peso/Gramos: {productData.weight}</p>
                 {productData.price && <p className="price animate-text-fade-in-delay-2">{productData.price}</p>}
                 <div className="animate-button-container">
                     <ButtonLong text={"Ver producto"} onClick={handleViewProduct}/>

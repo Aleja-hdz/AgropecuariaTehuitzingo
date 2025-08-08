@@ -34,7 +34,6 @@ export default function MenuAlimentosBalanceados({
 
   const productionOptions = [
     { value: 'true', label: 'Alimentos para producción' },
-    { value: 'false', label: 'Alimentos no para producción' }
   ];
 
   return (

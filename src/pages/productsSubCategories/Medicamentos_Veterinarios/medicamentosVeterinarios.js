@@ -1,11 +1,11 @@
-import { useState, useMemo, useEffect } from 'react';
-import './medicamentosVeterinarios.css';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { supabase } from '../../../lib/supabaseClient';
+import CardProduct from '../../../components/cardProduct/cardProduct';
 import Searcher from '../../../components/searcher/searcher';
 import MenuMedicamentosVeterinarios from '../../../components/menuSubCategories/Medicamentos_Veterinarios/menuMedicamentosVeterinarios';
-import CardProduct from '../../../components/cardProduct/cardProduct';
-import NoProductsFound from '../../../components/noProductsFound/noProductsFound';
 import MvViewProduct from '../../../components/viewProduct/mvViewProduct';
-import { supabase } from '../../../lib/supabaseClient';
+import NoProductsFound from '../../../components/noProductsFound/noProductsFound';
+import './medicamentosVeterinarios.css';
 
 export default function MedicamentosVeterinarios() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -20,12 +20,21 @@ export default function MedicamentosVeterinarios() {
     const [selectedVia, setSelectedVia] = useState('');
     const [selectedPresentacion, setSelectedPresentacion] = useState('');
 
-    // Obtener productos de Supabase
-    useEffect(() => {
-        fetchProducts();
-    }, []);
+    // Función para formatear medidas
+    const formatMeasure = (medida) => {
+        const medidas = {
+            'Kilogramos': 'kg',
+            'Gramos': 'gr',
+            'Litros': 'L',
+            'Mililitros': 'ml',
+            'Unidades': 'unid',
+            'Piezas': 'pzas'
+        };
+        return medidas[medida] || medida;
+    };
 
-    const fetchProducts = async () => {
+    // Obtener productos de Supabase
+    const fetchProducts = useCallback(async () => {
         try {
             setLoading(true);
             const { data, error } = await supabase
@@ -37,21 +46,32 @@ export default function MedicamentosVeterinarios() {
                 console.error('Error al obtener medicamentos veterinarios:', error);
             } else {
                 // Formatear los datos para que coincidan con la estructura esperada
-                const formattedProducts = data.map(item => ({
-                    id: item.id,
-                    name: item.nombre,
-                    weight: `${item.edad} - ${item.via_administracion}`,
-                    image: item.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
-                    // Datos adicionales para la vista detallada
-                    tipo: item.tipo,
-                    especie: item.especie,
-                    edad: item.edad,
-                    via_administracion: item.via_administracion,
-                    presentacion: item.presentacion,
-                    marca: item.marca,
-                    informacion_adicional: item.informacion_adicional,
-                    created_at: item.created_at
-                }));
+                const formattedProducts = data.map(item => {
+                    // Formatear el contenido con la medida abreviada
+                    let contenidoFormateado = '';
+                    if (item.contenido_decimal && item.contenido_medida) {
+                        const medidaAbreviada = formatMeasure(item.contenido_medida);
+                        contenidoFormateado = `${item.contenido_decimal} ${medidaAbreviada}`;
+                    }
+                    
+                    return {
+                        id: item.id,
+                        name: item.nombre,
+                        weight: contenidoFormateado || `${item.edad} - ${item.via_administracion}`,
+                        image: item.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
+                        // Datos adicionales para la vista detallada
+                        tipo: item.tipo,
+                        especie: item.especie,
+                        edad: item.edad,
+                        via_administracion: item.via_administracion,
+                        presentacion: item.presentacion,
+                        marca: item.marca,
+                        contenido_decimal: item.contenido_decimal,
+                        contenido_medida: item.contenido_medida,
+                        informacion_adicional: item.informacion_adicional,
+                        created_at: item.created_at
+                    };
+                });
                 setProducts(formattedProducts);
             }
         } catch (error) {
@@ -59,7 +79,11 @@ export default function MedicamentosVeterinarios() {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
+
+    useEffect(() => {
+        fetchProducts();
+    }, [fetchProducts]);
 
     // Función para filtrar productos basada en el término de búsqueda y filtros
     const filteredProducts = useMemo(() => {
@@ -69,13 +93,13 @@ export default function MedicamentosVeterinarios() {
         if (searchTerm.trim()) {
             const searchLower = searchTerm.toLowerCase();
             filtered = filtered.filter(product => 
-                product.name && product.name.toLowerCase().includes(searchLower) ||
-                product.weight && product.weight.toLowerCase().includes(searchLower) ||
-                product.tipo && product.tipo.toLowerCase().includes(searchLower) ||
-                product.especie && product.especie.toLowerCase().includes(searchLower) ||
-                product.marca && product.marca.toLowerCase().includes(searchLower) ||
-                product.via_administracion && product.via_administracion.toLowerCase().includes(searchLower) ||
-                product.presentacion && product.presentacion.toLowerCase().includes(searchLower)
+                (product.name && product.name.toLowerCase().includes(searchLower)) ||
+                (product.weight && product.weight.toLowerCase().includes(searchLower)) ||
+                (product.tipo && product.tipo.toLowerCase().includes(searchLower)) ||
+                (product.especie && product.especie.toLowerCase().includes(searchLower)) ||
+                (product.marca && product.marca.toLowerCase().includes(searchLower)) ||
+                (product.via_administracion && product.via_administracion.toLowerCase().includes(searchLower)) ||
+                (product.presentacion && product.presentacion.toLowerCase().includes(searchLower))
             );
         }
 

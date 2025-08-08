@@ -35,7 +35,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10000;
+  z-index: 99999;
   backdrop-filter: blur(5px);
   animation: fadeIn 0.3s ease-out;
 }
@@ -61,6 +61,8 @@ body {
   color: var(--text);
   scrollbar-width: none;
   animation: slideIn 0.3s ease-out;
+  z-index: 100000;
+  position: relative;
 }
 
 @keyframes slideIn {

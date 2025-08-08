@@ -1,30 +1,37 @@
-import { useState, useMemo, useEffect } from 'react';
-import './alimentosBalanceados.css';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { supabase } from '../../../lib/supabaseClient';
+import CardProduct from '../../../components/cardProduct/cardProduct';
 import Searcher from '../../../components/searcher/searcher';
 import MenuAlimentosBalanceados from '../../../components/menuSubCategories/Alimentos_Balanceados/menuAlimentosBalanceados';
-import CardProduct from '../../../components/cardProduct/cardProduct';
-import NoProductsFound from '../../../components/noProductsFound/noProductsFound';
 import AliBalViewProduct from '../../../components/viewProduct/aliBalViewProduct';
-import { supabase } from '../../../lib/supabaseClient';
+import NoProductsFound from '../../../components/noProductsFound/noProductsFound';
+import './alimentosBalanceados.css';
 
 export default function AlimentosBalanceados() {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [showProductModal, setShowProductModal] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    
-    // Estados para filtros
+    const [searchTerm, setSearchTerm] = useState('');
     const [selectedSpecies, setSelectedSpecies] = useState('');
     const [selectedBrand, setSelectedBrand] = useState('');
     const [selectedProduction, setSelectedProduction] = useState('');
+    const [showProductModal, setShowProductModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+
+    // Función para formatear medidas
+    const formatMeasure = (medida) => {
+        const medidas = {
+            'Kilogramos': 'kg',
+            'Gramos': 'gr',
+            'Litros': 'L',
+            'Mililitros': 'ml',
+            'Unidades': 'unid',
+            'Piezas': 'pzas'
+        };
+        return medidas[medida] || medida;
+    };
 
     // Obtener productos de Supabase
-    useEffect(() => {
-        fetchProducts();
-    }, []);
-
-    const fetchProducts = async () => {
+    const fetchProducts = useCallback(async () => {
         try {
             setLoading(true);
             const { data, error } = await supabase
@@ -36,19 +43,30 @@ export default function AlimentosBalanceados() {
                 console.error('Error al obtener alimentos balanceados:', error);
             } else {
                 // Formatear los datos para que coincidan con la estructura esperada
-                const formattedProducts = data.map(product => ({
-                    id: product.id,
-                    name: product.nombre,
-                    weight: `${product.contenido_decimal} ${product.contenido_medida}`,
-                    image: product.url,
-                    // Datos adicionales para la vista detallada
-                    especie: product.especie,
-                    marca: product.marca,
-                    alimento_produccion: product.alimento_produccion,
-                    materias_primas: product.materias_primas,
-                    informacion_adicional: product.informacion_adicional,
-                    created_at: product.created_at
-                }));
+                const formattedProducts = data.map(product => {
+                    // Formatear el contenido con la medida abreviada
+                    let contenidoFormateado = '';
+                    if (product.contenido_decimal && product.contenido_medida) {
+                        const medidaAbreviada = formatMeasure(product.contenido_medida);
+                        contenidoFormateado = `${product.contenido_decimal} ${medidaAbreviada}`;
+                    }
+                    
+                    return {
+                        id: product.id,
+                        name: product.nombre,
+                        weight: contenidoFormateado,
+                        image: product.url,
+                        // Datos adicionales para la vista detallada
+                        especie: product.especie,
+                        marca: product.marca,
+                        alimento_produccion: product.alimento_produccion,
+                        materias_primas: product.materias_primas,
+                        contenido_decimal: product.contenido_decimal,
+                        contenido_medida: product.contenido_medida,
+                        informacion_adicional: product.informacion_adicional,
+                        created_at: product.created_at
+                    };
+                });
                 setProducts(formattedProducts);
             }
         } catch (error) {
@@ -56,7 +74,11 @@ export default function AlimentosBalanceados() {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
+
+    useEffect(() => {
+        fetchProducts();
+    }, [fetchProducts]);
 
     // Función para filtrar productos basada en el término de búsqueda y filtros
     const filteredProducts = useMemo(() => {
