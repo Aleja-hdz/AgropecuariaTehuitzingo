@@ -35,7 +35,6 @@ const TableMain = ({ data = [], onEdit, onDelete }) => {
                   <OptionsTable 
                     onEdit={() => onEdit && onEdit(producto)}
                     onDelete={() => onDelete && onDelete(producto)}
-                    offerId={producto.id}
                   />
                 </div>
               </td>

@@ -67,6 +67,7 @@ export default function Implementos() {
                     id: item.id,
                     name: item.nombre,
                     image: item.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
+                    weight: item.tipo_animal || 'Implemento',
                     // Datos completos para el modal
                     url: item.url,
                     nombre: item.nombre,

@@ -114,12 +114,24 @@ const ImpViewProduct = ({ product, onClose }) => {
                 )}
               </div>
               
-              <button 
-                onClick={onClose}
-                className="modal-close-btn"
-              >
-                Cerrar
-              </button>
+              <div className="producto-actions">
+                <button 
+                  onClick={onClose}
+                  className="modal-close-btn"
+                >
+                  Cerrar
+                </button>
+                <div className="whatsapp-cta">
+                  <div className="whatsapp-hint">
+                    <span>Toma una captura de pantalla y consultanos</span>
+                    <br />
+                    <span>por WhatsApp acerca del producto.</span>
+                  </div>
+                  <a className="whatsapp-icon-link" href="https://wa.link/hcjs0r" target="_blank" rel="noopener noreferrer">
+                    <div className="whatsapp-icon" aria-label="WhatsApp" />
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>

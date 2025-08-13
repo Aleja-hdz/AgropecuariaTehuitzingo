@@ -28,36 +28,12 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
             setNombre(mascotasData.nombre || '');
             setInformacionAdicional(mascotasData.informacion_adicional || '');
             setImageUrl(mascotasData.url || '');
-            setOpcProduct(mascotasData.sub_categoria || 'Accesorio');
+            setImagePreview(mascotasData.url || null);
+
+            // Cargar datos de la tabla accesorios_mascotas
+            loadAccesorioData(mascotasData.id);
         }
     }, [mascotasData]);
-
-    useEffect(() => {
-        if (isEdit && mascotasData) {
-            const fetchAccesorioData = async () => {
-                try {
-                    const { data, error } = await supabase
-                        .from('mascotas')
-                        .select('*')
-                        .eq('id', mascotasData.id)
-                        .single();
-
-                    if (error) {
-                        console.error('Error al obtener datos del accesorio:', error);
-                    } else {
-                        setNombre(data.nombre || '');
-                        setInformacionAdicional(data.informacion_adicional || '');
-                        setImageUrl(data.url || '');
-                        setOpcProduct(data.sub_categoria || 'Accesorio');
-                    }
-                } catch (error) {
-                    console.error('Error al cargar datos del accesorio:', error);
-                }
-            };
-
-            fetchAccesorioData();
-        }
-    }, [mascotasData, isEdit]);
 
     // Ocultar navbar cuando se abre el modal
     useEffect(() => {
@@ -291,7 +267,8 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
                 <div className='new-product-exit'>
                     <button className='new-product-btn-exit' onClick={onClose}>X</button>
                 </div>
-                <h1>Editar producto</h1>                <form onSubmit={handleSubmit}>
+                <h1>Editar producto</h1>
+                <form onSubmit={handleSubmit}>
                     {/* Imagen */}
                     <div className='new-product-box1'>
                         <label>Imagen del producto *</label>
@@ -344,30 +321,38 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
                     </div>
 
                     {/* Campos específicos de accesorios */}
-                    <div className='new-product-box1'>
-                        <label>¿Qué es? *</label>
-                        <input 
-                            className={`new-product-input1 ${showErrors && errors.queEs ? 'error-input' : ''}`} 
-                            type='text' 
-                            placeholder='Collar, Juguete, etc.' 
-                            value={queEs} 
-                            onChange={(e) => handleInputChange(setQueEs, 'queEs', e.target.value)} 
-                        />
-                        {showErrors && errors.queEs && <p className="error-message">{errors.queEs}</p>}
+                    <div className='new-product-box2'>
+                        <div className='new-product-box1'>
+                            <label>¿Qué es? *</label>
+                            <select 
+                                className={`new-product-opc-category ${showErrors && errors.queEs ? 'error-input' : ''}`} 
+                                value={queEs} 
+                                onChange={(e) => handleInputChange(setQueEs, 'queEs', e.target.value)}
+                            >
+                                <option value="">-- Selecciona --</option>
+                                <option value='Collares'>Collares</option>
+                                <option value='Correas'>Correas</option>
+                                <option value='Juguetes'>Juguetes</option>
+                            </select>
+                            {showErrors && errors.queEs && <p className="error-message">{errors.queEs}</p>}
+                        </div>
+                        <div className='new-product-box1'>
+                            <label>¿Para qué animal? *</label>
+                            <select 
+                                className={`new-product-opc-category ${showErrors && errors.tipoAnimal ? 'error-input' : ''}`} 
+                                value={tipoAnimal} 
+                                onChange={(e) => handleInputChange(setTipoAnimal, 'tipoAnimal', e.target.value)}
+                            >
+                                <option value="">-- Selecciona --</option>
+                                <option value='Perro'>Perro</option>
+                                <option value='Gato'>Gato</option>
+                                <option value='Hamsters'>Hamsters</option>
+                                <option value='Peces'>Peces</option>
+                            </select>
+                            {showErrors && errors.tipoAnimal && <p className="error-message">{errors.tipoAnimal}</p>}
+                        </div>
                     </div>
-
-                    <div className='new-product-box1'>
-                        <label>Tipo de animal *</label>
-                        <input 
-                            className={`new-product-input1 ${showErrors && errors.tipoAnimal ? 'error-input' : ''}`} 
-                            type='text' 
-                            placeholder='Perro, Gato, etc.' 
-                            value={tipoAnimal} 
-                            onChange={(e) => handleInputChange(setTipoAnimal, 'tipoAnimal', e.target.value)} 
-                        />
-                        {showErrors && errors.tipoAnimal && <p className="error-message">{errors.tipoAnimal}</p>}
-                    </div>
-
+                
                     <div className='new-product-box1'>
                         <label>Recomendaciones de uso (opcional)</label>
                         <input 

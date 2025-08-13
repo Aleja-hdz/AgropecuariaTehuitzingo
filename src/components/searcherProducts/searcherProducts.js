@@ -7,7 +7,6 @@ export default function SearcherProducts({ onSearch, placeholder = "Buscar produ
 
   const handleInputChange = (e) => {
     const value = e.target.value;
-    console.log('SearcherProducts - Valor ingresado:', value);
     setSearchTerm(value);
     if (onSearch) {
       onSearch(value);

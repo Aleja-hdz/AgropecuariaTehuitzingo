@@ -70,7 +70,6 @@ const TableOffers = ({ ofertas = [], onRefresh }) => {
                   <OptionsTable 
                     // Modificado: pasar url a handleDelete
                     onDelete={() => handleDelete(oferta.id, oferta.nombre, oferta.url)} 
-                    offerId={oferta.id} 
                     onEdit={() => handleEdit(oferta)}
                   />
                 </div>

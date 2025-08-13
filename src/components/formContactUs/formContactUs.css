@@ -69,3 +69,34 @@ input {
     color: white;
     outline: none;
 }
+
+/* ===== ESTILOS DE ESTADO ===== */
+.success-message {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: #4CAF50;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    text-align: center;
+    border: 1px solid #4CAF50;
+}
+
+.error-message {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: #F44336;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    text-align: center;
+    border: 1px solid #F44336;
+}
+
+.btn-loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}

@@ -9,7 +9,7 @@ html {
 .navbar {
     width: 100%;
     height: 70px;
-    overflow: hidden;
+    overflow: visible;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -102,6 +102,10 @@ html {
     position: relative;
     overflow: hidden;
 }
+
+/* Iconos de menú solo en responsive */
+.mobile-icon { display: none; margin-right: 10px; line-height: 0; }
+.nav-text { display: inline; }
 
 .nav-link::before {
     content: '';
@@ -408,16 +412,55 @@ html {
 
 /* Responsive */
 @media (max-width: 1024px) {
+    /* Mostrar iconos en enlaces móviles y alinear contenido */
+    .nav-link { justify-content: flex-start; }
+    .mobile-icon { display: inline-flex; }
+    .nav-text { display: inline; }
     .navbar {
         padding: 0 20px;
+        height: 90px;
         justify-content: space-between;
     }
-    
-    .nav-links {
-        width: auto;
-        margin-right: 15px;
-        gap: 15px;
+    /* Mostrar el botón hamburguesa también en tablets */
+    .hamburger {
+        display: flex;
+        z-index: 1001;
     }
+    /* Reorganizar links para overlay lateral en tablets */
+    .nav-links {
+        position: fixed;
+        top: 70px;
+        left: -100%;
+        width: 80%;
+        max-width: 360px;
+        height: calc(100vh - 70px);
+        background-color: rgb(37, 58, 241);
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        gap: 0;
+        margin: 0;
+        padding: 10px 0;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1002;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .nav-links.active {
+        left: 0;
+    }
+    .nav-links li {
+        width: 100%;
+        text-align: left;
+        padding: 12px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .nav-links a {
+        font-size: 15px;
+        padding: 10px 0;
+        width: 100%;
+        display: block;
+    }
+    /* (El layout tipo panel ya gestiona tamaño y spacing) */
     
     .nav-links a {
         font-size: 13px;
@@ -434,52 +477,17 @@ html {
         padding: 0 15px;
         height: 60px;
     }
-    
+    /* Ajustar top/height para header más bajo en móviles */
     .nav-links {
-        position: fixed;
         top: 60px;
-        left: -100%;
-        width: 100%;
         height: calc(100vh - 60px);
-        background-color: rgb(37, 58, 241);
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        gap: 0;
-        margin: 0;
-        padding: 20px 0;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 998;
-        backdrop-filter: blur(10px);
     }
-    
-    .nav-links.active {
-        left: 0;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    }
-    
-    .nav-links li {
-        width: 100%;
-        text-align: center;
-        padding: 15px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        transition: all 0.3s ease;
-    }
-    
-    .nav-links li:hover {
-        background: rgba(255, 255, 255, 0.1);
-    }
-    
-    .nav-links a {
-        font-size: 16px;
-        padding: 10px 20px;
-        width: 100%;
-        display: block;
-    }
+    .nav-links li { transition: all 0.3s ease; }
+    .nav-links li:hover { background: rgba(255, 255, 255, 0.1); }
     
     .hamburger {
         display: flex;
-        z-index: 999;
+        z-index: 1001;
     }
     
     .hamburger.active span:nth-child(1) {
@@ -498,8 +506,8 @@ html {
     }
     
     .nav-logo img {
-        width: 40px;
-        height: 40px;
+        width: 80px;
+        height: 80px;
     }
     
     .user-button {
@@ -523,7 +531,7 @@ html {
 @media (max-width: 480px) {
     .navbar {
         padding: 0 10px;
-        height: 55px;
+        height: 60px;
     }
     
     .nav-links {
@@ -532,8 +540,8 @@ html {
     }
     
     .nav-logo img {
-        width: 35px;
-        height: 35px;
+        width: 45px;
+        height: 45px;
     }
     
     .nav-links a {
@@ -544,6 +552,20 @@ html {
         width: 28px;
         height: 28px;
     }
+}
+
+/* Overlay para menú móvil */
+.mobile-menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 1000;
+    animation: overlayFadeIn 0.2s ease;
+}
+
+@keyframes overlayFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 /* Optimizaciones de rendimiento */

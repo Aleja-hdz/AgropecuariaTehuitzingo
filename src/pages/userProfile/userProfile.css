@@ -477,6 +477,468 @@ h3 {
   }
 }
 
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Tablets (768px - 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .user-profile {
+        margin-top: -60px;
+        padding: 20px 15px;
+        font-size: 14px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 300;
+    }
+    
+    /* Aplicar estilos de texto normal a elementos específicos */
+    .user-profile p,
+    .user-profile .profile-body-box2-info p,
+    .user-profile .profile-body-box1 p,
+    .user-profile .profile-head-text,
+    .user-profile .success-message,
+    .user-profile .error-message,
+    .user-profile .delete-confirm-content p,
+    .user-profile .footer p {
+        font-size: 14px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 300;
+    }
+
+    .profile-head {
+        width: 80%;
+        margin-top: 80px;
+    }
+
+    .profile-head-box1 {
+        width: 80%;
+        margin-left: 0;
+        margin-top: 80px;
+        margin-bottom: -50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .profile-head-h1 {
+        font-size: 28px;
+    }
+
+    .profile-body {
+        width: 90%;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .profile-body-box1 {
+        width: 100%;
+        padding: 25px;
+    }
+
+    .profile-body-box2 {
+        width: 100%;
+        padding: 25px;
+    }
+
+    .profile-body-box2-info-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .profile-body-box2-info {
+        width: 100%;
+    }
+
+    .profile-footer {
+        width: 90%;
+    }
+
+    .profile-footer-buttons {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .profile-footer-btns,
+    .profile-footer-btns-red {
+        width: calc(50% - 5px);
+        height: 60px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .delete-confirm-content {
+        max-width: 350px;
+        padding: 25px;
+    }
+    
+    /* Estilos para inputs en tablets */
+    .profile-body-box2-input {
+        font-size: 14px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 300;
+        margin-top: 8px;
+    }
+    
+    /* Footer en tablets */
+    .footer p {
+        font-size: 12px;
+        text-align: center;
+        line-height: 1.6;
+    }
+}
+
+/* Celulares (hasta 768px) */
+@media (max-width: 768px) {
+    .user-profile {
+        margin-top: -100px;
+        font-size: 14px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 300;
+        padding: 0;
+    }
+    
+    /* Aplicar estilos de texto normal a elementos específicos */
+    .user-profile p,
+    .user-profile .profile-body-box2-info p,
+    .user-profile .profile-body-box1 p,
+    .user-profile .profile-head-text,
+    .user-profile .success-message,
+    .user-profile .error-message,
+    .user-profile .delete-confirm-content p,
+    .user-profile .footer p {
+        font-size: 14px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 300;
+    }
+
+    .profile-head {
+        width: 95%;
+        margin-top: 70px;
+    }
+
+    .profile-head-box1 {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 0;
+        margin-top: 60px;
+        margin-bottom: -50px;
+    }
+
+    .profile-head-h1 {
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .profile-head-text {
+        font-size: 14px;
+        text-align: center;
+        padding: 0 10px;
+        line-height: 1.6;
+    }
+
+    .profile-body {
+        width: 95%;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .profile-body-box1 {
+        width: 100%;
+        padding: 15px;
+        order: 2; /* Mover la información después del formulario en móviles */
+    }
+
+    .profile-body-box1 h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .profile-body-box1 p {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .profile-body-box2 {
+        width: 100%;
+        padding: 25px;
+        order: 1;
+    }
+
+    .profile-body-box2 h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .profile-body-box2-info-container {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .profile-body-box2-info {
+        width: 100%;
+    }
+
+    .profile-body-box2-info p {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .profile-body-box2-input {
+        height: 40px;
+        font-size: 14px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 300;
+        margin-bottom: 8px;
+        margin-top: 8px;
+    }
+
+    .success-message,
+    .error-message {
+        font-size: 14px;
+        padding: 8px;
+        margin: 8px 0;
+        line-height: 1.6;
+    }
+
+    .profile-footer {
+        width: 95%;
+        margin-top: 20px;
+    }
+
+    .profile-footer h3 {
+        font-size: 18px;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .profile-footer-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .profile-footer-btns,
+    .profile-footer-btns-red {
+        width: 100%;
+        height: 50px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    /* Modal responsivo */
+    .delete-confirm-modal {
+        padding: 15px;
+    }
+
+    .delete-confirm-content {
+        max-width: 300px;
+        padding: 20px;
+    }
+
+    .delete-confirm-content h3 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .delete-confirm-content p {
+        font-size: 14px;
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+
+    .delete-confirm-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .delete-confirm-btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    /* Footer responsivo */
+    .footer {
+        margin-top: 20px;
+        padding: 15px;
+    }
+
+    .footer p {
+        font-size: 12px;
+        text-align: center;
+        line-height: 1.6;
+    }
+}
+
+/* Celulares pequeños (hasta 480px) */
+@media (max-width: 480px) {
+    .user-profile {
+        padding: 10px 5px;
+        font-size: 14px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 300;
+    }
+    
+    /* Aplicar estilos de texto normal a elementos específicos */
+    .user-profile p,
+    .user-profile .profile-body-box2-info p,
+    .user-profile .profile-body-box1 p,
+    .user-profile .profile-head-text,
+    .user-profile .success-message,
+    .user-profile .error-message,
+    .user-profile .delete-confirm-content p,
+    .user-profile .footer p {
+        font-size: 14px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 300;
+    }
+
+    .profile-head {
+        width: 100%;
+        margin-top: 60px;
+    }
+
+    .profile-head-box1 {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 60px;
+        margin-bottom: -30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .profile-head-h1 {
+        font-size: 22px;
+    }
+
+    .profile-head-text {
+        font-size: 14px;
+        padding: 0 5px;
+        line-height: 1.6;
+    }
+
+    .profile-body {
+        width: 100%;
+        gap: 10px;
+    }
+
+    .profile-body-box1,
+    .profile-body-box2 {
+        padding: 17px;
+    }
+
+    .profile-body-box1 h2,
+    .profile-body-box2 h2 {
+        font-size: 16px;
+    }
+
+    .profile-body-box1 p {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .profile-body-box2-info p {
+        font-size: 14px;
+    }
+
+    .profile-body-box2-input {
+        height: 35px;
+        font-size: 14px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 300;
+        margin-top: 8px;
+    }
+
+    .success-message,
+    .error-message {
+        font-size: 14px;
+        padding: 6px;
+        line-height: 1.6;
+    }
+
+    .profile-footer h3 {
+        font-size: 16px;
+    }
+
+    .profile-footer-btns,
+    .profile-footer-btns-red {
+        height: 45px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .delete-confirm-content {
+        max-width: 280px;
+        padding: 15px;
+    }
+
+    .delete-confirm-content h3 {
+        font-size: 18px;
+    }
+
+    .delete-confirm-content p {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .delete-confirm-btn {
+        padding: 10px;
+        font-size: 13px;
+    }
+}
+
+/* Orientación landscape en móviles */
+@media (max-width: 768px) and (orientation: landscape) {
+    .user-profile {
+        margin-top: -60px;
+        padding: 10px;
+    }
+
+    .profile-head {
+        margin-top: 50px;
+    }
+
+    .profile-head-box1 {
+        margin-top: 50px;
+        margin-bottom: -20px;
+    }
+
+    .profile-body {
+        flex-direction: row;
+        gap: 15px;
+    }
+
+    .profile-body-box1 {
+        width: 35%;
+        order: 1;
+    }
+
+    .profile-body-box2 {
+        width: 65%;
+        order: 2;
+    }
+
+    .profile-body-box2-info-container {
+        flex-direction: row;
+    }
+
+    .profile-body-box2-info {
+        width: 50%;
+    }
+
+    .profile-footer-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .profile-footer-btns,
+    .profile-footer-btns-red {
+        width: calc(33.33% - 7px);
+        height: 45px;
+        font-size: 12px;
+    }
+}
+
 /* ===== RESPONSIVE ANIMACIONES ===== */
 
 @media (max-width: 768px) {

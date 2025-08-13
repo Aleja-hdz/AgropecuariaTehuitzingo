@@ -47,6 +47,21 @@
   z-index: 50;
 }
 
+/* Toggle de filtros (solo móvil) */
+.filters-toggle {
+  display: none;
+  margin-left: auto;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border: 1px solid #e9ecef;
+  color: #495057;
+  padding: 8px 12px;
+  border-radius: 8px;
+  z-index: 52;
+  font-size: 14px;
+}
+
 .filter {
   position: relative;
   cursor: pointer;
@@ -149,6 +164,226 @@
 
 .dropdown li.selected:hover {
   background-color: #bbdefb;
+}
+
+/* Responsive */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .container-menuSub {
+    width: 88%;
+  }
+  
+  .category-title {
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+  }
+  
+  .filter {
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+  }
+  
+  .filters-toggle {
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+  }
+  
+  .dropdown li {
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+  }
+}
+
+@media (max-width: 768px) {
+  .container-menuSub {
+    width: 92%;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .back-and-title {
+    margin-right: 0;
+  }
+
+  .category-title { 
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+  }
+
+  .filters-toggle {
+    display: inline-flex;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+  }
+
+  .filters {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 10px;
+    display: none;
+  }
+
+  .filters.open {
+    display: none;
+  }
+
+  .filter {
+    font-size: 14px;
+    padding: 6px 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+  }
+
+  .dropdown {
+    position: absolute;
+    left: 0;
+    right: auto;
+    min-width: 180px;
+    z-index: 100;
+  }
+  
+  .dropdown li {
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+  }
+}
+
+/* Chips de filtros activos */
+.active-filters {
+  display: none;
+  width: 100%;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+/* Panel en lista (móvil) */
+@media (max-width: 768px) {
+  .filters-panel {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+
+  .filters-section + .filters-section {
+    margin-top: 10px;
+  }
+
+  .filters-section h4 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    color: #495057;
+  }
+
+  .filters-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .filters-options .option {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    color: #495057;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 14px;
+  }
+
+  .filters-options .option.selected {
+    background: #e6f0ff;
+    color: #1f3bb3;
+    border-color: #cfe1ff;
+  }
+
+  .filters-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+  }
+
+  .apply-filters-btn {
+    background: #182bd1;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .active-filters {
+    display: flex;
+  }
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #e6f0ff;
+  color: #1f3bb3;
+  border: 1px solid #cfe1ff;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 14px;
+}
+
+.chip button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: #1f3bb3;
+  padding: 0;
+  cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .container-menuSub {
+    width: 95%;
+    gap: 8px;
+  }
+
+  .category-title {
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+  }
+
+  .filters {
+    gap: 8px;
+  }
+
+  .filter {
+    font-size: 14px;
+    padding: 6px 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+  }
+  
+  .filters-toggle {
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+  }
+  
+  .dropdown li {
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+  }
 }
 
 

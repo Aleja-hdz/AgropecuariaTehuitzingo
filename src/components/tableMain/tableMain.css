@@ -3,7 +3,7 @@
 
 /* Contenedor para la tabla con scroll */
 .table-container {
-  max-height: 500px; /* Altura optimizada para mostrar aproximadamente 10 registros */
+  max-height: 400px; /* Altura optimizada para mostrar exactamente 8 registros */
   overflow-y: auto;
   border-radius: 12px;
   box-shadow: 0 0 4px rgba(0,0,0,0.1);
@@ -31,16 +31,23 @@
 .product-table th:nth-child(1),
 .product-table td:nth-child(1) {
   width: 70%;
+  /* Estilos para manejar texto largo */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  max-width: 0; /* Permite que la celda se ajuste al contenido */
 }
 
 .product-table th:nth-child(2),
 .product-table td:nth-child(2) {
   width: 15%;
+  min-width: 80px; /* Ancho mínimo para evitar que se comprima demasiado */
 }
 
 .product-table th:nth-child(3),
 .product-table td:nth-child(3) {
   width: 15%;
+  min-width: 80px; /* Ancho mínimo para evitar que se comprima demasiado */
 }
 
 .product-table th {
@@ -121,7 +128,7 @@
 /* Tablets (768px - 1024px) */
 @media (max-width: 1024px) and (min-width: 769px) {
   .table-container {
-    max-height: 450px;
+    max-height: 360px; /* 8 registros en tablets */
   }
   
   .product-table {
@@ -130,7 +137,7 @@
   
   .product-table th,
   .product-table td {
-    padding: 10px 12px;
+    padding: 14px 12px;
   }
   
   .actions {
@@ -141,33 +148,36 @@
 /* Móviles (hasta 768px) */
 @media (max-width: 768px) {
   .table-container {
-    max-height: 400px;
+    max-height: 320px; /* 8 registros en móviles */
     border-radius: 8px;
   }
   
   .product-table {
     font-size: 12px;
-    table-layout: auto;
+    table-layout: fixed;
   }
   
   .product-table th,
   .product-table td {
-    padding: 8px 10px;
+    padding: 16px 10px;
   }
   
   .product-table th:nth-child(1),
   .product-table td:nth-child(1) {
     width: 60%;
+    min-width: 120px; /* Ancho mínimo en móviles */
   }
   
   .product-table th:nth-child(2),
   .product-table td:nth-child(2) {
     width: 20%;
+    min-width: 60px;
   }
   
   .product-table th:nth-child(3),
   .product-table td:nth-child(3) {
     width: 20%;
+    min-width: 60px;
   }
   
   .actions {
@@ -184,7 +194,7 @@
 /* Móviles pequeños (hasta 480px) */
 @media (max-width: 480px) {
   .table-container {
-    max-height: 350px;
+    max-height: 280px; /* 8 registros en móviles pequeños */
     border-radius: 6px;
   }
   
@@ -194,22 +204,25 @@
   
   .product-table th,
   .product-table td {
-    padding: 6px 8px;
+    padding: 14px 8px;
   }
   
   .product-table th:nth-child(1),
   .product-table td:nth-child(1) {
     width: 55%;
+    min-width: 100px;
   }
   
   .product-table th:nth-child(2),
   .product-table td:nth-child(2) {
     width: 22.5%;
+    min-width: 50px;
   }
   
   .product-table th:nth-child(3),
   .product-table td:nth-child(3) {
     width: 22.5%;
+    min-width: 50px;
   }
   
   .actions {

@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import './products.css';
-import Searcher from '../../components/searcher/searcher';
+import SearcherProducts from '../../components/searcherProducts/searcherProducts';
 import MenuCategories from '../../components/menuCategories/menuCategories';
 import CardProduct from '../../components/cardProduct/cardProduct';
 import NoProductsFound from '../../components/noProductsFound/noProductsFound';
@@ -23,6 +23,11 @@ export default function Products(){
         categories: false,
         searchResults: false
     });
+
+    // Estado para "Todos los productos" aleatorios + paginación
+    const [shuffledProducts, setShuffledProducts] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 12;
 
     // Animación de entrada inicial
     useEffect(() => {
@@ -57,6 +62,15 @@ export default function Products(){
         fetchAllProducts();
     }, []);
 
+    const shuffleArray = (array) => {
+        const copy = [...array];
+        for (let i = copy.length - 1; i > 0; i -= 1) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+    };
+
     const fetchAllProducts = async () => {
         try {
             setLoading(true);
@@ -81,6 +95,8 @@ export default function Products(){
                     alimento_produccion: item.alimento_produccion,
                     materias_primas: item.materias_primas,
                     informacion_adicional: item.informacion_adicional,
+                    contenido_decimal: item.contenido_decimal,
+                    contenido_medida: item.contenido_medida,
                     created_at: item.created_at,
                     // Identificador para el modal correcto
                     modalType: 'alimentos-balanceados'
@@ -98,7 +114,7 @@ export default function Products(){
                 const implementosFormatted = implementosData.map(item => ({
                     id: item.id,
                     name: item.nombre,
-                    weight: item.informacion_adicional || 'Implemento',
+                    weight: item.tipo_animal || 'Implemento',
                     image: item.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
                     category: 'Implementos',
                     // Datos adicionales para la vista detallada
@@ -147,6 +163,8 @@ export default function Products(){
                                     ingredientes_composicion_nutrimental: alimentoData.ingredientes_composicion_nutrimental,
                                     contenido_decimal: alimentoData.contenido_decimal,
                                     contenido_medida: alimentoData.contenido_medida,
+                                    // Incluir información adicional de la tabla principal
+                                    informacion_adicional: item.informacion_adicional,
                                 };
                                 modalType = 'mascotas-alimentos';
                             }
@@ -159,13 +177,15 @@ export default function Products(){
                                 .single();
                             
                             if (accesorioData) {
-                                weight = item.informacion_adicional || 'Accesorio';
+                                weight = accesorioData.tipo_animal || 'Accesorio';
                                 additionalData = {
                                     ...accesorioData,
                                     // Datos para el modal de accesorios
                                     que_es: accesorioData.que_es,
                                     tipo_animal: accesorioData.tipo_animal,
                                     recomendaciones_uso: accesorioData.recomendaciones_uso,
+                                    // Incluir información adicional de la tabla principal
+                                    informacion_adicional: item.informacion_adicional,
                                 };
                                 modalType = 'mascotas-accesorios';
                             }
@@ -200,7 +220,7 @@ export default function Products(){
                 const medicamentosFormatted = medicamentosData.map(item => ({
                     id: item.id,
                     name: item.nombre,
-                    weight: `${item.edad} - ${item.via_administracion}`,
+                    weight: `${item.contenido_decimal} ${item.contenido_medida}`,
                     image: item.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
                     category: 'Medicamentos Veterinarios',
                     // Datos adicionales para la vista detallada
@@ -210,6 +230,8 @@ export default function Products(){
                     via_administracion: item.via_administracion,
                     presentacion: item.presentacion,
                     marca: item.marca,
+                    contenido_decimal: item.contenido_decimal,
+                    contenido_medida: item.contenido_medida,
                     informacion_adicional: item.informacion_adicional,
                     created_at: item.created_at,
                     // Identificador para el modal correcto
@@ -219,6 +241,9 @@ export default function Products(){
             }
 
             setAllProducts(allProductsData);
+            // Barajar y preparar la sección "Todos los productos"
+            setShuffledProducts(shuffleArray(allProductsData));
+            setCurrentPage(1);
         } catch (error) {
             console.error('Error al obtener productos:', error);
         } finally {
@@ -226,26 +251,53 @@ export default function Products(){
         }
     };
 
+    const normalize = (text) => (text || '')
+        .toString()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+
     // Función para filtrar productos conforme a lo que se escriba en search
     const filteredProducts = useMemo(() => {
         if (!searchTerm.trim()) {
             return [];
         }
         
-        const searchLower = searchTerm.toLowerCase();
-        return allProducts.filter(product => 
-            product.name && product.name.toLowerCase().includes(searchLower) ||
-            product.weight && product.weight.toLowerCase().includes(searchLower) ||
-            product.category && product.category.toLowerCase().includes(searchLower) ||
-            product.especie && product.especie.toLowerCase().includes(searchLower) ||
-            product.marca && product.marca.toLowerCase().includes(searchLower) ||
-            product.tipo_animal && product.tipo_animal.toLowerCase().includes(searchLower) ||
-            product.que_es && product.que_es.toLowerCase().includes(searchLower) ||
-            product.especie_mascota && product.especie_mascota.toLowerCase().includes(searchLower) ||
-            product.tipo && product.tipo.toLowerCase().includes(searchLower) ||
-            product.especie && product.especie.toLowerCase().includes(searchLower)
-        );
+        const searchNormalized = normalize(searchTerm);
+        return allProducts.filter(product => {
+            const name = normalize(product.name);
+            const brand = normalize(product.marca);
+            return name.includes(searchNormalized) || brand.includes(searchNormalized);
+        });
     }, [allProducts, searchTerm]);
+
+    // Paginación para "Todos los productos"
+    const totalPages = useMemo(() => {
+        return Math.max(1, Math.ceil(shuffledProducts.length / pageSize));
+    }, [shuffledProducts.length]);
+
+    useEffect(() => {
+        // Ajustar página si cambia el total de páginas
+        if (currentPage > totalPages) {
+            setCurrentPage(1);
+        }
+    }, [totalPages, currentPage]);
+
+    const paginatedProducts = useMemo(() => {
+        const start = (currentPage - 1) * pageSize;
+        return shuffledProducts.slice(start, start + pageSize);
+    }, [shuffledProducts, currentPage]);
+
+    const getPageNumbers = () => {
+        const maxToShow = 5;
+        let start = Math.max(1, currentPage - Math.floor(maxToShow / 2));
+        let end = start + maxToShow - 1;
+        if (end > totalPages) {
+            end = totalPages;
+            start = Math.max(1, end - maxToShow + 1);
+        }
+        return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+    };
 
     const handleSearch = (term) => {
         setSearchTerm(term);
@@ -285,7 +337,7 @@ export default function Products(){
         <div className="products-container">
             <div className={`categories-container-head ${isVisible.header ? 'animate-fade-in' : ''}`}>
                 <h1 className='tittles-h1'>¿Qué producto deseas encontrar?</h1>
-                <Searcher onSearch={handleSearch} placeholder="Buscar en todos los productos..." />
+                <SearcherProducts onSearch={handleSearch} placeholder="Buscar en todos los productos..." />
             </div>
             
             {!searchTerm.trim() ? (
@@ -295,11 +347,10 @@ export default function Products(){
                     <MenuCategories />
                 </div>
             ) : (
-                // Mostrar resultados de búsqueda
-                <div className={`search-results-container ${isVisible.searchResults ? 'animate-fade-in' : ''}`}>
+                // Mostrar resultados: tarjetas en el mismo contenedor de categorías
+                <div className={`categories-container-menu ${isVisible.searchResults ? 'animate-fade-in-delay' : ''}`}>
                     <div className="search-results-header">
-                        <h2>Resultados de búsqueda</h2>
-                        <p>Se encontraron {filteredProducts.length} producto{filteredProducts.length !== 1 ? 's' : ''}</p>
+                        <p className='text'>Resultados de búsqueda para "{searchTerm}" ({filteredProducts.length} encontrado{filteredProducts.length !== 1 ? 's' : ''})</p>
                     </div>
                     <div className={`container-card-products ${filteredProducts.length === 0 ? 'no-products' : ''}`}>
                         {loading ? (
@@ -321,6 +372,36 @@ export default function Products(){
                 </div>
             )}
             {showProductModal && renderProductModal()}
+            <br></br>
+            <div className='all-products'>
+                <p>Todos los productos</p>
+                <div className={`container-card-products ${paginatedProducts.length === 0 ? 'no-products' : ''}`}>
+                    {paginatedProducts.map((product, index) => (
+                        <div 
+                            key={`all-${product.category}-${product.id}-${index}`} 
+                            className="animate-card-product"
+                            style={{ animationDelay: `${index * 0.03}s` }}
+                        >
+                            <CardProduct product={product} onViewProduct={handleViewProduct} />
+                        </div>
+                    ))}
+                </div>
+                {totalPages > 1 && (
+                    <div className="pagination">
+                        <button onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))} disabled={currentPage === 1}>Anterior</button>
+                        {getPageNumbers().map((page) => (
+                            <button
+                                key={`page-${page}`}
+                                className={page === currentPage ? 'active' : ''}
+                                onClick={() => setCurrentPage(page)}
+                            >
+                                {page}
+                            </button>
+                        ))}
+                        <button onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))} disabled={currentPage === totalPages}>Siguiente</button>
+                    </div>
+                )}
+            </div>
             <footer className='footer'>
                 <p className="text-contact">&copy; 2025 Todos los derechos reservados || Agropecuaria Tehuitzingo</p>
             </footer>

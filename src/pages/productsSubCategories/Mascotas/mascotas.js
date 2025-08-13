@@ -75,7 +75,7 @@ export default function Mascotas() {
                                 .single();
                             
                             if (accesorioData) {
-                                weight = item.informacion_adicional || 'Accesorio';
+                                weight = accesorioData.tipo_animal || 'Accesorio';
                                 additionalData = {
                                     ...accesorioData,
                                     // Datos para el modal de accesorios

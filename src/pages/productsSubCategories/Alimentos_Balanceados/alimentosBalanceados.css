@@ -99,9 +99,13 @@
     
     .container-card-products {
         width: 90%;
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
         gap: 20px;
         padding-bottom: 20px;
+        justify-items: center;
+    }
+    .categories-container {
+        font-size: 14px; /* texto normal legible */
     }
     
     .categories-container {
@@ -131,9 +135,13 @@
     
     .container-card-products {
         width: 95%;
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-        gap: 15px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
         padding-bottom: 15px;
+        justify-items: center;
+    }
+    .categories-container {
+        font-size: 14px;
     }
     
     .categories-container {

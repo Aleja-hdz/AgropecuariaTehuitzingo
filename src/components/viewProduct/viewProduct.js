@@ -1,7 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './viewProduct.css';
 
 const ViewProduct = ({ product, onClose }) => {
+  const [isClosing, setIsClosing] = useState(false);
+
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     
@@ -10,9 +12,19 @@ const ViewProduct = ({ product, onClose }) => {
     if (navbar) {
       navbar.classList.add('hidden');
     }
+
+    // Agregar listener para cerrar con Escape
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        handleClose();
+      }
+    };
+    
+    document.addEventListener('keydown', handleEscape);
     
     return () => {
       document.body.style.overflow = 'unset';
+      document.removeEventListener('keydown', handleEscape);
       
       // Mostrar el navbar cuando se cierra el modal
       const navbar = document.querySelector('.navbar');
@@ -24,15 +36,22 @@ const ViewProduct = ({ product, onClose }) => {
 
   if (!product) return null;
 
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose();
+    }, 300); // Tiempo de la animación de salida
+  };
+
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget && onClose) {
-      onClose();
+      handleClose();
     }
   };
 
   return (
-    <div className="view-producto-modal-overlay" onClick={handleOverlayClick}>
-      <div className="view-producto-modal-content">
+    <div className={`view-producto-modal-overlay ${isClosing ? 'closing' : ''}`} onClick={handleOverlayClick}>
+      <div className={`view-producto-modal-content ${isClosing ? 'closing' : ''}`}>
         <div className="view-producto-box">
           <div className="producto-img-placeholder">
             <img src={product.image} alt={product.name} style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px'}} />
@@ -44,7 +63,7 @@ const ViewProduct = ({ product, onClose }) => {
             <p><strong>Detalles del producto:</strong></p>
             <p className="descripcion">{product.description}</p>
             <button 
-              onClick={onClose}
+              onClick={handleClose}
               className="modal-close-btn"
             >
               Cerrar
