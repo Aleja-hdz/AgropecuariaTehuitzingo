@@ -327,7 +327,7 @@ export default function UserProfile() {
             )}
             
             <footer className='footer animate-footer'>
-                <p className="text-contact">&copy; 2025 Todos los derechos reservados || Agropecuaria Tehuitzingo</p>
+                <p style={{fontSize: '12px'}}>&copy; 2025 Todos los derechos reservados || Agropecuaria Tehuitzingo</p>
             </footer>
         </div>
     );

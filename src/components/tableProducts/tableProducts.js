@@ -140,7 +140,6 @@ const TableProducts = ({ productos = [], onRefresh }) => {
                   {(producto.categoria === 'Implementos' || producto.categoria === 'Mascotas' || producto.categoria === 'Alimentos balanceados' || producto.categoria === 'Medicamentos Veterinarios') ? (
                     <OptionsTable
                       onDelete={() => handleDelete(producto.id, producto.nombre, producto.categoria, producto.url)}
-                      offerId={producto.id}
                       onEdit={() => handleEdit(producto)}
                     />
                   ) : null}

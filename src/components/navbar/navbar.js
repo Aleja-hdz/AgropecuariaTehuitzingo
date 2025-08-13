@@ -1,5 +1,5 @@
 import './navbar.css';
-import { User, LogOut } from 'lucide-react';
+import { User, LogOut, Home, Info, Stethoscope, Mail, Package, Tag, LayoutDashboard } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/authContext';
 import { useState, useEffect, useRef } from 'react';
@@ -40,6 +40,24 @@ export default function Navbar() {
 
     getUserProfile();
   }, [user]);
+
+  // Bloquear scroll del body cuando el menú móvil está abierto y manejar resize
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
+
+    const handleResize = () => {
+      // Cerrar menú si se amplia a desktop/tablet grande
+      if (window.innerWidth > 1024 && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
 
   // Control de visibilidad del navbar al hacer scroll
   useEffect(() => {
@@ -176,37 +194,58 @@ export default function Navbar() {
       <button 
         className={`hamburger ${isMobileMenuOpen ? 'active' : ''} animate-hamburger`}
         onClick={toggleMobileMenu}
-        aria-label="Toggle menu"
+        aria-label="Abrir menú"
+        aria-expanded={isMobileMenuOpen}
+        aria-controls="primary-navigation"
       >
         <span></span>
         <span></span>
         <span></span>
       </button>
 
-      <ul className={`nav-links ${isMobileMenuOpen ? 'active' : ''}`}>
+      <ul id="primary-navigation" className={`nav-links ${isMobileMenuOpen ? 'active' : ''}`}>
         <li className="nav-item animate-nav-item">
-          <a href="/#inicio" onClick={handleMobileLinkClick} className="nav-link">Inicio</a>
+          <a href="/#inicio" onClick={handleMobileLinkClick} className="nav-link">
+            <span className="mobile-icon" aria-hidden="true"><Home size={18} /></span>
+            <span className="nav-text">Inicio</span>
+          </a>
         </li>
         <li className="nav-item animate-nav-item">
-          <a href="/#nosotros" onClick={handleMobileLinkClick} className="nav-link">Nosotros</a>
+          <a href="/#nosotros" onClick={handleMobileLinkClick} className="nav-link">
+            <span className="mobile-icon" aria-hidden="true"><Info size={18} /></span>
+            <span className="nav-text">Nosotros</span>
+          </a>
         </li>
         <li className="nav-item animate-nav-item">
-          <a href="/#servicios" onClick={handleMobileLinkClick} className="nav-link">Servicios</a>
+          <a href="/#servicios" onClick={handleMobileLinkClick} className="nav-link">
+            <span className="mobile-icon" aria-hidden="true"><Stethoscope size={18} /></span>
+            <span className="nav-text">Servicios</span>
+          </a>
         </li>
         <li className="nav-item animate-nav-item">
-          <a href="/#contactanos" onClick={handleMobileLinkClick} className="nav-link">Contáctanos</a>
+          <a href="/#contactanos" onClick={handleMobileLinkClick} className="nav-link">
+            <span className="mobile-icon" aria-hidden="true"><Mail size={18} /></span>
+            <span className="nav-text">Contáctanos</span>
+          </a>
         </li>
         <li className="nav-item animate-nav-item">
-          <a href="/productos" onClick={handleMobileLinkClick} className="nav-link">Productos</a>
+          <a href="/productos" onClick={handleMobileLinkClick} className="nav-link">
+            <span className="mobile-icon" aria-hidden="true"><Package size={18} /></span>
+            <span className="nav-text">Productos</span>
+          </a>
         </li>
         <li className="nav-item animate-nav-item">
           <a href="/ofertas" onClick={handleOfertasClick} className="nav-link">
-            Ofertas
+            <span className="mobile-icon" aria-hidden="true"><Tag size={18} /></span>
+            <span className="nav-text">Ofertas</span>
           </a>
         </li>
         {user && userProfile?.tipo_usuario === 'admin' && (
           <li className="nav-item animate-nav-item">
-            <Link to="/dashboard" onClick={handleMobileLinkClick} className="nav-link">Gestión</Link>
+            <Link to="/dashboard" onClick={handleMobileLinkClick} className="nav-link">
+              <span className="mobile-icon" aria-hidden="true"><LayoutDashboard size={18} /></span>
+              <span className="nav-text">Gestión</span>
+            </Link>
           </li>
         )}
       </ul>
@@ -237,6 +276,13 @@ export default function Navbar() {
           </Link>
         )}
       </div>
+      {isMobileMenuOpen && (
+        <div
+          className="mobile-menu-overlay"
+          onClick={() => setIsMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
     </nav>
   );
 }

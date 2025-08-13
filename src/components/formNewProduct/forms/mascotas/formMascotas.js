@@ -45,14 +45,65 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
         
         // Cargar datos específicos según subcategoría
         if (mascotasData.sub_categoria === 'Alimento') {
-          // Aquí necesitarías cargar los datos de la tabla alimentos_mascotas
-          // Por ahora se pueden dejar vacíos
+          loadAlimentoData(mascotasData.id);
         } else if (mascotasData.sub_categoria === 'Accesorio') {
-          // Aquí necesitarías cargar los datos de la tabla accesorios_mascotas
-          // Por ahora se pueden dejar vacíos
+          loadAccesorioData(mascotasData.id);
         }
       }
     }, [mascotasData, isEdit]);
+
+    // Función para cargar datos específicos del alimento
+    const loadAlimentoData = async (mascotaId) => {
+      try {
+        const { data, error } = await supabase
+          .from('alimentos_mascotas')
+          .select('*')
+          .eq('id', mascotaId)
+          .single();
+
+        if (error) {
+          console.error('Error al cargar datos del alimento:', error);
+          return;
+        }
+
+        if (data) {
+          setContenidoDecimal(data.contenido_decimal?.toString() || '');
+          setContenidoMedida(data.contenido_medida || '');
+          setEspecieMascota(data.especie_mascota || '');
+          setEtapaVida(data.etapa_vida || '');
+          setTamanoRaza(data.tamano_raza || '');
+          setPresentacion(data.presentacion || '');
+          setMarca(data.marca || '');
+          setIngredientesComposicion(data.ingredientes_composicion_nutrimental || '');
+        }
+      } catch (err) {
+        console.error('Error inesperado al cargar datos del alimento:', err);
+      }
+    };
+
+    // Función para cargar datos específicos del accesorio
+    const loadAccesorioData = async (mascotaId) => {
+      try {
+        const { data, error } = await supabase
+          .from('accesorios_mascotas')
+          .select('*')
+          .eq('id', mascotaId)
+          .single();
+
+        if (error) {
+          console.error('Error al cargar datos del accesorio:', error);
+          return;
+        }
+
+        if (data) {
+          setQueEs(data.que_es || '');
+          setTipoAnimal(data.tipo_animal || '');
+          setRecomendacionesUso(data.recomendaciones_uso || '');
+        }
+      } catch (err) {
+        console.error('Error inesperado al cargar datos del accesorio:', err);
+      }
+    };
 
     // Ocultar navbar cuando se abre el modal
     useEffect(() => {
@@ -257,6 +308,46 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
                 setLoading(false);
                 return;
             }
+
+            // Actualizar tabla hija según la subcategoría
+            if (mascotasData.sub_categoria === 'Alimento') {
+                const { error: alimentoError } = await supabase
+                    .from('alimentos_mascotas')
+                    .update({
+                        contenido_decimal: parseFloat(contenidoDecimal),
+                        contenido_medida: contenidoMedida,
+                        especie_mascota: especieMascota,
+                        etapa_vida: etapaVida,
+                        tamano_raza: tamanoRaza,
+                        presentacion,
+                        marca,
+                        ingredientes_composicion_nutrimental: ingredientesComposicion
+                    })
+                    .eq('id', mascotasData.id);
+
+                if (alimentoError) {
+                    console.error('Error al actualizar datos del alimento:', alimentoError);
+                    setError('Error al actualizar datos del alimento');
+                    setLoading(false);
+                    return;
+                }
+            } else if (mascotasData.sub_categoria === 'Accesorio') {
+                const { error: accesorioError } = await supabase
+                    .from('accesorios_mascotas')
+                    .update({
+                        que_es: queEs,
+                        tipo_animal: tipoAnimal,
+                        recomendaciones_uso: recomendacionesUso
+                    })
+                    .eq('id', mascotasData.id);
+
+                if (accesorioError) {
+                    console.error('Error al actualizar datos del accesorio:', accesorioError);
+                    setError('Error al actualizar datos del accesorio');
+                    setLoading(false);
+                    return;
+                }
+            }
             
             // Eliminar imagen anterior si se subió una nueva
             if (previousImageUrl && previousBucket) {
@@ -436,6 +527,34 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
                         <>
                             <div className='new-product-box2'>
                                 <div className='new-product-box1'>
+                                    <label>Contenido *</label>
+                                    <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
+                                        <input 
+                                            className={`new-product-number-box ${showErrors && errors.contenidoDecimal ? 'error-input' : ''}`} 
+                                            type='number' 
+                                            placeholder='0' 
+                                            value={contenidoDecimal}
+                                            onChange={(e) => handleInputChange(setContenidoDecimal, 'contenidoDecimal', e.target.value)}
+                                        />
+                                        <select 
+                                            className={`new-product-opc-box ${showErrors && errors.contenidoMedida ? 'error-input' : ''}`} 
+                                            value={contenidoMedida}
+                                            onChange={(e) => handleInputChange(setContenidoMedida, 'contenidoMedida', e.target.value)}
+                                        >
+                                            <option value="">-- Selecciona --</option>
+                                            <option value='mg'>Miligramos (mg)</option>
+                                            <option value='g'>Gramos (g)</option>
+                                            <option value='kg'>Kilogramos (kg)</option>
+                                            <option value='ml'>Mililitros (ml)</option>
+                                            <option value='L'>Litros (L)</option>
+                                        </select>
+                                    </div>
+                                    {(showErrors && errors.contenidoDecimal) && <p className="error-message">{errors.contenidoDecimal}</p>}
+                                    {(showErrors && errors.contenidoMedida) && <p className="error-message">{errors.contenidoMedida}</p>}
+                                </div>
+                            </div>
+                            <div className='new-product-box2'>
+                                <div className='new-product-box1'>
                                     <label>Especie *</label>
                                     <select 
                                         className={`new-product-opc-category ${showErrors && errors.especie ? 'error-input' : ''}`} 
@@ -494,34 +613,7 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
                                     {showErrors && errors.presentacion && <p className="error-message">{errors.presentacion}</p>}
                                 </div>
                             </div>
-                            <div className='new-product-box2'>
-                                <div className='new-product-box1'>
-                                    <label>Contenido *</label>
-                                    <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
-                                        <input 
-                                            className={`new-product-number-box ${showErrors && errors.contenidoDecimal ? 'error-input' : ''}`} 
-                                            type='number' 
-                                            placeholder='0' 
-                                            value={contenidoDecimal}
-                                            onChange={(e) => handleInputChange(setContenidoDecimal, 'contenidoDecimal', e.target.value)}
-                                        />
-                                        <select 
-                                            className={`new-product-opc-box ${showErrors && errors.contenidoMedida ? 'error-input' : ''}`} 
-                                            value={contenidoMedida}
-                                            onChange={(e) => handleInputChange(setContenidoMedida, 'contenidoMedida', e.target.value)}
-                                        >
-                                            <option value="">-- Selecciona --</option>
-                                            <option value='mg'>Miligramos (mg)</option>
-                                            <option value='g'>Gramos (g)</option>
-                                            <option value='kg'>Kilogramos (kg)</option>
-                                            <option value='ml'>Mililitros (ml)</option>
-                                            <option value='L'>Litros (L)</option>
-                                        </select>
-                                    </div>
-                                    {(showErrors && errors.contenidoDecimal) && <p className="error-message">{errors.contenidoDecimal}</p>}
-                                    {(showErrors && errors.contenidoMedida) && <p className="error-message">{errors.contenidoMedida}</p>}
-                                </div>
-                            </div>
+
                             <div className='new-product-box1'>
                                 <label>Marca o fabricante *</label>
                                 <input 
@@ -547,28 +639,40 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
                     )}
                     {opcProduct === 'Accesorio' && (
                         <>
-                            <div className='new-product-box1'>
-                                <label>¿Qué es? *</label>
-                                <input 
-                                    className={`new-product-input1 ${showErrors && errors.queEs ? 'error-input' : ''}`} 
-                                    type='text' 
-                                    placeholder='Collar, Juguete, etc.' 
-                                    value={queEs} 
-                                    onChange={(e) => handleInputChange(setQueEs, 'queEs', e.target.value)} 
-                                />
-                                {showErrors && errors.queEs && <p className="error-message">{errors.queEs}</p>}
+                            <div className='new-product-box2'>
+                                <div className='new-product-box1'>
+                                    <label>¿Qué es? *</label>
+                                    <select 
+                                        className={`new-product-input1 ${showErrors && errors.queEs ? 'error-input' : ''}`} 
+                                        name="Opciones" 
+                                        value={queEs} 
+                                        onChange={(e) => handleInputChange(setQueEs, 'queEs', e.target.value)} 
+                                    >
+                                        <option value="">-- Selecciona --</option>
+                                        <option value='Comedero'>Collares</option>
+                                        <option value='Bebedero'>Correas</option>
+                                        <option value='Montura'>Juguetes</option>
+                                    </select>
+                                    {showErrors && errors.queEs && <p className="error-message">{errors.queEs}</p>}
+                                </div>
+                                <div className='new-product-box1'>
+                                    <label>¿Para qué animal? *</label>
+                                    <select 
+                                        className={`new-product-input1 ${showErrors && errors.tipoAnimal ? 'error-input' : ''}`} 
+                                        name="Opciones" 
+                                        value={tipoAnimal} 
+                                        onChange={(e) => handleInputChange(setTipoAnimal, 'tipoAnimal', e.target.value)} 
+                                    >
+                                        <option value="">-- Selecciona --</option>
+                                        <option value='Perro'>Perro</option>
+                                        <option value='Gato'>Gato</option>
+                                        <option value='Hamsters'>Hamsters</option>
+                                        <option value='Peces'>Peces</option>
+                                    </select>
+                                    {showErrors && errors.tipoAnimal && <p className="error-message">{errors.tipoAnimal}</p>}
+                                </div>
                             </div>
-                            <div className='new-product-box1'>
-                                <label>Tipo de animal *</label>
-                                <input 
-                                    className={`new-product-input1 ${showErrors && errors.tipoAnimal ? 'error-input' : ''}`} 
-                                    type='text' 
-                                    placeholder='Perro, Gato, etc.' 
-                                    value={tipoAnimal} 
-                                    onChange={(e) => handleInputChange(setTipoAnimal, 'tipoAnimal', e.target.value)} 
-                                />
-                                {showErrors && errors.tipoAnimal && <p className="error-message">{errors.tipoAnimal}</p>}
-                            </div>
+                        
                             <div className='new-product-box1'>
                                 <label>Recomendaciones de uso (opcional)</label>
                                 <input 

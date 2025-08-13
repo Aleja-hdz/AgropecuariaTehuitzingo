@@ -224,3 +224,372 @@
     animation: none;
   }
 }
+
+/* ===== DISEÑO RESPONSIVO PARA TABLETS ===== */
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .offers-container {
+    padding-top: 35px;
+  }
+
+  .container-info {
+    width: 90%;
+  }
+
+  .container-info h1 {
+    font-size: 2.2rem;
+  }
+
+  .text-offers {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 5px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+  }
+
+  .container-card-offers {
+    width: 90%;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 25px;
+    padding-top: 20px;
+  }
+
+  .content-container {
+    padding-bottom: 40px;
+  }
+
+  .footer {
+    height: 55px;
+  }
+
+  .footer p {
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+  }
+  
+  .no-offers-text {
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+  }
+}
+
+/* ===== DISEÑO RESPONSIVO PARA CELULARES ===== */
+
+@media (max-width: 768px) {
+  .container-info {
+    width: 95%;
+    text-align: center;
+  }
+
+  .container-info h1 {
+    font-size: 35px;
+    margin-bottom: 10px;
+    margin-top: -10px;
+  }
+
+  .tittle-hr {
+    margin-top: -5px;
+    border: 6px solid #FACC15; 
+    width: 80px;
+    margin-bottom: 0;
+    padding: 0;
+  }
+
+  .text-offers {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+    padding: 0 5px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+  }
+
+  .content-container {
+    padding-bottom: 30px;
+    padding-top: 5px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .container-card-offers {
+    width: 92%;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding-top: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .separador {
+  }
+
+  .footer {
+    height: 50px;
+  }
+
+  .footer p {
+    font-size: 14px;
+    text-align: center;
+    padding: 0 10px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+  }
+}
+
+/* ===== DISEÑO RESPONSIVO PARA CELULARES PEQUEÑOS ===== */
+
+@media (max-width: 480px) {
+  .offers-container {
+    padding-top: 20px;
+  }
+
+  .container-info {
+    width: 100%;
+  }
+
+  .container-info h1 {
+    font-size: 25px;
+    margin-bottom: 8px;
+  }
+
+  .tittle-hr {
+    margin-top: -5px;
+    border: 2px solid #FACC15; 
+    width: 50px;
+    margin-bottom: 0;
+    padding: 0;
+  }
+
+  .text-offers {
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 6px;
+    padding: 0 3px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+  }
+
+  .content-container {
+    padding-bottom: 25px;
+    padding-top: 5px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .container-card-offers {
+    width: 92%;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding-top: 10px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .footer {
+    height: 45px;
+  }
+
+  .footer p {
+    font-size: 14px;
+    padding: 0 5px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+  }
+}
+
+/* ===== DISEÑO RESPONSIVO PARA CELULARES MUY PEQUEÑOS ===== */
+
+@media (max-width: 360px) {
+  .offers-container {
+    padding-top: 15px;
+  }
+
+  .container-info h1 {
+    font-size: 1.4rem;
+  }
+
+  .text-offers {
+    font-size: 14px;
+    line-height: 1.3;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+  }
+
+  .container-card-offers {
+    width: 92%;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .footer p {
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+  }
+
+  .tittle-hr {
+    margin-top: -5px;
+    border: 2px solid #FACC15; 
+    width: 50px;
+    margin-bottom: 0;
+    padding: 0;
+  }
+
+  .content-container {
+    padding-bottom: 20px;
+    padding-top: 5px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .separador {
+    margin: 3px 0;
+  }
+}
+
+/* ===== ORIENTACIÓN LANDSCAPE EN CELULARES ===== */
+
+@media (max-width: 768px) and (orientation: landscape) {
+  .offers-container {
+    padding-top: 15px;
+  }
+
+  .container-info {
+    margin-bottom: 10px;
+  }
+
+  .container-info h1 {
+    font-size: 1.6rem;
+    margin-bottom: 5px;
+  }
+
+  .text-offers {
+    font-size: 14px;
+    line-height: 1.3;
+    margin-bottom: 3px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+  }
+
+  .content-container {
+    padding-bottom: 20px;
+    padding-top: 5px;
+  }
+
+  .container-card-offers {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+    padding-top: 10px;
+  }
+}
+
+/* ===== ESTILOS PARA MENSAJE DE NO HAY OFERTAS ===== */
+
+.no-offers-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.no-offers-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  animation: bounce 2s infinite;
+}
+
+.no-offers-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 15px;
+  font-family: 'Inter', sans-serif;
+}
+
+.no-offers-text {
+  font-size: 1rem;
+  color: #6c757d;
+  line-height: 1.6;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+/* ===== RESPONSIVO PARA MENSAJE DE NO HAY OFERTAS ===== */
+
+@media (max-width: 768px) {
+  .no-offers-message {
+    padding: 40px 15px;
+    margin: 20px;
+    border-radius: 15px;
+  }
+
+  .no-offers-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+  }
+
+  .no-offers-title {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+
+  .no-offers-text {
+    font-size: 14px;
+    line-height: 1.5;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+  }
+}
+
+@media (max-width: 480px) {
+  .no-offers-message {
+    padding: 30px 10px;
+    margin: 15px;
+    border-radius: 12px;
+  }
+
+  .no-offers-icon {
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+  }
+
+  .no-offers-title {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+
+  .no-offers-text {
+    font-size: 14px;
+    line-height: 1.4;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+  }
+}

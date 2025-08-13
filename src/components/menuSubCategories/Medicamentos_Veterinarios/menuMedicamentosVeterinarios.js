@@ -1,5 +1,5 @@
-import { ChevronDown, ChevronLeft } from 'lucide-react';
-import { useState } from 'react';
+import { ChevronDown, ChevronLeft, Filter, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import "./menuMedicamentosVeterinarios.css";
 import { Link } from 'react-router-dom';
 
@@ -17,6 +17,30 @@ export default function MenuMedicamentosVeterinarios({
   const [showEspecie, setShowEspecie] = useState(false);
   const [showVia, setShowVia] = useState(false);
   const [showPresentacion, setShowPresentacion] = useState(false);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+
+  // Estados temporales para el panel móvil
+  const [tempTipo, setTempTipo] = useState(selectedTipo || '');
+  const [tempEspecie, setTempEspecie] = useState(selectedEspecie || '');
+  const [tempVia, setTempVia] = useState(selectedVia || '');
+  const [tempPresentacion, setTempPresentacion] = useState(selectedPresentacion || '');
+
+  useEffect(() => {
+    if (isFiltersOpen) {
+      setTempTipo(selectedTipo || '');
+      setTempEspecie(selectedEspecie || '');
+      setTempVia(selectedVia || '');
+      setTempPresentacion(selectedPresentacion || '');
+    }
+  }, [isFiltersOpen, selectedTipo, selectedEspecie, selectedVia, selectedPresentacion]);
+
+  const applyMobileFilters = () => {
+    onTipoFilter(tempTipo || '');
+    onEspecieFilter(tempEspecie || '');
+    onViaFilter(tempVia || '');
+    onPresentacionFilter(tempPresentacion || '');
+    setIsFiltersOpen(false);
+  };
 
   const tipos = [
     'Desparasitante',
@@ -78,7 +102,18 @@ export default function MenuMedicamentosVeterinarios({
           <span className="category-title">Medicamentos veterinarios</span>
         </div>
 
-        <div className="filters">
+        {/* Toggle solo visible en móvil */}
+        <button
+          type="button"
+          className="filters-toggle"
+          onClick={() => setIsFiltersOpen((v) => !v)}
+          aria-expanded={isFiltersOpen}
+        >
+          <span>Filtros</span>
+          <Filter size={16} />
+        </button>
+
+        <div className={`filters ${isFiltersOpen ? 'open' : ''}`}>
           {/* Filtro por Tipo de Medicamento */}
           <div className="filter" onClick={() => setShowTipo(!showTipo)}>
             <span>Tipo {selectedTipo && `(${selectedTipo})`}</span>
@@ -158,6 +193,87 @@ export default function MenuMedicamentosVeterinarios({
               </ul>
             )}
           </div>
+        </div>
+
+        {/* Panel móvil de filtros en lista */}
+        {isFiltersOpen && (
+          <div className="filters-panel">
+            <div className="filters-section">
+              <h4>Tipo</h4>
+              <div className="filters-options">
+                <button className={`option ${tempTipo === '' ? 'selected' : ''}`} onClick={() => setTempTipo('')}>Todos</button>
+                {tipos.map((t) => (
+                  <button key={t} className={`option ${tempTipo === t ? 'selected' : ''}`} onClick={() => setTempTipo(t)}>{t}</button>
+                ))}
+              </div>
+            </div>
+            <div className="filters-section">
+              <h4>Especies de animales</h4>
+              <div className="filters-options">
+                <button className={`option ${tempEspecie === '' ? 'selected' : ''}`} onClick={() => setTempEspecie('')}>Todas</button>
+                {especies.map((e) => (
+                  <button key={e} className={`option ${tempEspecie === e ? 'selected' : ''}`} onClick={() => setTempEspecie(e)}>{e}</button>
+                ))}
+              </div>
+            </div>
+            <div className="filters-section">
+              <h4>Vía de administración</h4>
+              <div className="filters-options">
+                <button className={`option ${tempVia === '' ? 'selected' : ''}`} onClick={() => setTempVia('')}>Todas</button>
+                {vias.map((v) => (
+                  <button key={v} className={`option ${tempVia === v ? 'selected' : ''}`} onClick={() => setTempVia(v)}>{v}</button>
+                ))}
+              </div>
+            </div>
+            <div className="filters-section">
+              <h4>Presentación</h4>
+              <div className="filters-options">
+                <button className={`option ${tempPresentacion === '' ? 'selected' : ''}`} onClick={() => setTempPresentacion('')}>Todas</button>
+                {presentaciones.map((p) => (
+                  <button key={p} className={`option ${tempPresentacion === p ? 'selected' : ''}`} onClick={() => setTempPresentacion(p)}>{p}</button>
+                ))}
+              </div>
+            </div>
+            <div className="filters-actions">
+              <button className="apply-filters-btn" onClick={applyMobileFilters}>Aplicar filtros</button>
+            </div>
+          </div>
+        )}
+
+        {/* Chips de filtros activos (visible en móvil) */}
+        <div className="active-filters">
+          {selectedTipo && (
+            <span className="chip">
+              {selectedTipo}
+              <button onClick={() => onTipoFilter('')} aria-label="Quitar filtro tipo">
+                <X size={14} />
+              </button>
+            </span>
+          )}
+          {selectedEspecie && (
+            <span className="chip">
+              {selectedEspecie}
+              <button onClick={() => onEspecieFilter('')} aria-label="Quitar filtro especie">
+                <X size={14} />
+              </button>
+            </span>
+          )}
+          {selectedVia && (
+            <span className="chip">
+              {selectedVia}
+              <button onClick={() => onViaFilter('')} aria-label="Quitar filtro vía">
+                <X size={14} />
+              </button>
+            </span>
+          )}
+          {selectedPresentacion && (
+            <span className="chip">
+              {selectedPresentacion}
+              <button onClick={() => onPresentacionFilter('')} aria-label="Quitar filtro presentación">
+                <X size={14} />
+              </button>
+            </span>
+          )}
         </div>
       </div>
     </div>

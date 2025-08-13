@@ -350,7 +350,37 @@ export default function FormEditMascotasAlimentos({ onClose, mascotasData, onSav
                         />
                     </div>
 
-                    {/* Campos específicos de alimentos */}
+                    {/* Contenido */}
+                    <div className='new-product-box2'>
+                        <div className='new-product-box1'>
+                            <label>Contenido *</label>
+                            <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
+                                <input 
+                                    className={`new-product-number-box ${showErrors && errors.contenidoDecimal ? 'error-input' : ''}`} 
+                                    type='number' 
+                                    placeholder='0' 
+                                    value={contenidoDecimal}
+                                    onChange={(e) => handleInputChange(setContenidoDecimal, 'contenidoDecimal', e.target.value)}
+                                />
+                                <select 
+                                    className={`new-product-opc-box ${showErrors && errors.contenidoMedida ? 'error-input' : ''}`} 
+                                    value={contenidoMedida}
+                                    onChange={(e) => handleInputChange(setContenidoMedida, 'contenidoMedida', e.target.value)}
+                                >
+                                    <option value="">-- Selecciona --</option>
+                                    <option value='mg'>Miligramos (mg)</option>
+                                    <option value='g'>Gramos (g)</option>
+                                    <option value='kg'>Kilogramos (kg)</option>
+                                    <option value='ml'>Mililitros (ml)</option>
+                                    <option value='L'>Litros (L)</option>
+                                </select>
+                            </div>
+                            {(showErrors && errors.contenidoDecimal) && <p className="error-message">{errors.contenidoDecimal}</p>}
+                            {(showErrors && errors.contenidoMedida) && <p className="error-message">{errors.contenidoMedida}</p>}
+                        </div>
+                    </div>
+
+                    {/* Especie y Edad */}
                     <div className='new-product-box2'>
                         <div className='new-product-box1'>
                             <label>Especie *</label>
@@ -380,6 +410,7 @@ export default function FormEditMascotasAlimentos({ onClose, mascotasData, onSav
                         </div>
                     </div>
 
+                    {/* Tamaño y Presentación */}
                     <div className='new-product-box2'>
                         <div className='new-product-box1'>
                             <label>Tamaño o raza *</label>
@@ -413,35 +444,7 @@ export default function FormEditMascotasAlimentos({ onClose, mascotasData, onSav
                         </div>
                     </div>
 
-                    <div className='new-product-box2'>
-                        <div className='new-product-box1'>
-                            <label>Contenido *</label>
-                            <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
-                                <input 
-                                    className={`new-product-number-box ${showErrors && errors.contenidoDecimal ? 'error-input' : ''}`} 
-                                    type='number' 
-                                    placeholder='0' 
-                                    value={contenidoDecimal}
-                                    onChange={(e) => handleInputChange(setContenidoDecimal, 'contenidoDecimal', e.target.value)}
-                                />
-                                <select 
-                                    className={`new-product-opc-box ${showErrors && errors.contenidoMedida ? 'error-input' : ''}`} 
-                                    value={contenidoMedida}
-                                    onChange={(e) => handleInputChange(setContenidoMedida, 'contenidoMedida', e.target.value)}
-                                >
-                                    <option value="">-- Selecciona --</option>
-                                    <option value='mg'>Miligramos (mg)</option>
-                                    <option value='g'>Gramos (g)</option>
-                                    <option value='kg'>Kilogramos (kg)</option>
-                                    <option value='ml'>Mililitros (ml)</option>
-                                    <option value='L'>Litros (L)</option>
-                                </select>
-                            </div>
-                            {(showErrors && errors.contenidoDecimal) && <p className="error-message">{errors.contenidoDecimal}</p>}
-                            {(showErrors && errors.contenidoMedida) && <p className="error-message">{errors.contenidoMedida}</p>}
-                        </div>
-                    </div>
-
+                    {/* Marca */}
                     <div className='new-product-box1'>
                         <label>Marca o fabricante *</label>
                         <input 
@@ -454,6 +457,7 @@ export default function FormEditMascotasAlimentos({ onClose, mascotasData, onSav
                         {showErrors && errors.marca && <p className="error-message">{errors.marca}</p>}
                     </div>
 
+                    {/* Composición nutrimental */}
                     <div className='new-product-box1'>
                         <label>Composición nutrimental / ingredientes principales (opcional)</label>
                         <textarea

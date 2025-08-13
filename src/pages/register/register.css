@@ -132,6 +132,7 @@ input::-ms-input-placeholder {
         padding: 20px;
         height: auto;
         min-height: 100vh;
+        margin-top: -60px;
     }
     
     .register-container {
@@ -165,6 +166,7 @@ input::-ms-input-placeholder {
 @media (max-width: 480px) {
     .register-body {
         padding: 15px;
+        margin-top: -60px;
     }
     
     .register-container {

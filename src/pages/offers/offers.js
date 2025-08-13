@@ -64,15 +64,23 @@ export default function Offers() {
             <hr className='separador animate-separator'></hr>
             <div className={`content-container ${isVisible.offers ? 'animate-fade-in-delay' : ''}`}>
                  <div className="container-card-offers">
-                    {ofertas.map((oferta, index) => (
-                        <div 
-                            key={oferta.id} 
-                            className="animate-card-offer"
-                            style={{ animationDelay: `${index * 0.1}s` }}
-                        >
-                            <CardProductOffer offer={oferta} onView={() => handleViewOffer(oferta)}></CardProductOffer>
+                    {ofertas.length > 0 ? (
+                        ofertas.map((oferta, index) => (
+                            <div 
+                                key={oferta.id} 
+                                className="animate-card-offer"
+                                style={{ animationDelay: `${index * 0.1}s` }}
+                            >
+                                <CardProductOffer offer={oferta} onView={() => handleViewOffer(oferta)}></CardProductOffer>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="no-offers-message">
+                            <div className="no-offers-icon">🏷️</div>
+                            <h3 className="no-offers-title">No hay ofertas disponibles</h3>
+                            <p className="no-offers-text">En este momento no tenemos ofertas activas. ¡Vuelve pronto para descubrir nuestras mejores promociones!</p>
                         </div>
-                    ))}
+                    )}
                 </div>
             </div>
             <footer className='footer animate-footer'>

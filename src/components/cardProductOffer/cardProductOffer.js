@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ButtonLong from '../buttonLong/buttonLong';
 import './cardProductOffer.css';
+import { formatOfferContent } from '../../utils/formatUtils';
 
 export default function CardProductOffer({ offer, onView }) {
     return(
@@ -14,7 +15,7 @@ export default function CardProductOffer({ offer, onView }) {
                 </div>
                 <div className="info-container animate-info-container">
                     <p className="name animate-text-fade-in">{offer.nombre}</p>
-                    <p className="lot animate-text-fade-in-delay">Peso/Gramos: {offer.contenido_decimal}{offer.contenido_medida}</p>
+                    <p className="lot animate-text-fade-in-delay">Peso/Gramos: {formatOfferContent(offer)}</p>
                     <div className="price-container animate-price-container">
                         <p className="price-previous animate-price-previous">${offer.precio_anterior}</p>
                         <p className="price-offer animate-price-offer">${offer.precio_actual}</p>

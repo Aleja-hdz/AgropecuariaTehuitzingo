@@ -250,7 +250,7 @@ textarea::placeholder {
   margin-bottom: -12px;
 }
 
-/* Responsive design */
+/* ===== DISEÑO RESPONSIVO ===== */
 @media (max-width: 768px) {
   .new-offer-container {
     max-width: 90vw;
@@ -263,7 +263,7 @@ textarea::placeholder {
   }
 }
 
-/* Estilos para validaciones y errores */
+/* ===== ESTILOS DE VALIDACIÓN ===== */
 .error-message {
   color: #dc2626;
   font-size: 12px;
@@ -281,16 +281,4 @@ textarea::placeholder {
   outline: none;
   border-color: #dc2626 !important;
   box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
-}
-
-/* Animación para los mensajes de error */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

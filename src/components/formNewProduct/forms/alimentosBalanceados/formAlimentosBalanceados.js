@@ -316,7 +316,7 @@ export default function FormAlimentosBalanceados({ onClose, alimentosData, isEdi
               />
               {showErrors && errors.nombre && <p className="error-message">{errors.nombre}</p>}
               
-            <div className='new-product-box1'>
+            <div className='new-product-box1' style={{marginBottom: '-15px'}}> 
                   <label>¿Es alimento para producción?</label>
                 <div className='new-product-box2'>
                     <div className='new-product-box3'>
@@ -369,7 +369,48 @@ export default function FormAlimentosBalanceados({ onClose, alimentosData, isEdi
               )}
               
               <div className='new-product-box'>
-                  <p className='new-product-text'>Materias primas (opcional):</p>
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end', marginTop: '5px'}}>
+                      <div style={{ flex: 1 }}>
+                          <label className='new-product-text-box'>Especie: *</label>
+                          <select 
+                              style={{marginTop: '10px'}}   
+                              className={`new-product-opc-box ${showErrors && errors.especie ? 'error-input' : ''}`}
+                              value={especie}
+                              onChange={(e) => handleInputChange(setEspecie, 'especie', e.target.value)}
+                          >
+                              <option value="">-- Selecciona --</option>
+                              <option value='Bovinos'>Bovinos</option>
+                              <option value='Equinos'>Equinos</option>
+                              <option value='Porcinos'>Porcinos</option>
+                              <option value='Caprinos'>Caprinos</option>
+                              <option value='Ovinos'>Ovinos</option>
+                              <option value='Aves'>Aves</option>
+                              <option value='Aquacultura'>Aquacultura</option>
+                          </select>
+                          {showErrors && errors.especie && <p className="error-message">{errors.especie}</p>}
+                      </div>
+                      
+                      <div style={{ flex: 1 }}>
+                          <label className='new-product-text-box'>Marca: *</label>
+                          <select 
+                              style={{marginTop: '10px'}}   
+                              className={`new-product-opc-box ${showErrors && errors.marca ? 'error-input' : ''}`}
+                              value={marca}
+                              onChange={(e) => handleInputChange(setMarca, 'marca', e.target.value)}
+                          >
+                              <option value="">-- Selecciona --</option>
+                              <option value='Unión'>Unión</option>
+                              <option value='Apiaba'>Apiaba</option>
+                              <option value='Fasa'>Fasa</option>
+                              <option value='Nutre bien'>Nutre bien</option>
+                          </select>
+                          {showErrors && errors.marca && <p className="error-message">{errors.marca}</p>}
+                      </div>
+                  </div>
+              </div>
+              
+              <div className='new-product-box' style={{marginBottom: '-10px'}}>
+                  <p className='new-product-text' style={{marginBottom: '-5px', marginTop: '5px'}}>Materias primas (opcional):</p>
                   <input 
                       type='text' 
                       placeholder='Materias primas del producto ...' 

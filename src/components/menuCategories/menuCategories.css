@@ -128,7 +128,7 @@
 
 .btn-mascotas {
   position: relative;
-  background-image: url('../../assets/Mascotas.png');
+  background-image: url('../../assets/Mascotas.jpeg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -171,7 +171,7 @@
 
 .btn-implementos {
   position: relative;
-  background-image: url('../../assets/Implementos.jpg');
+  background-image: url('../../assets/Implementos.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

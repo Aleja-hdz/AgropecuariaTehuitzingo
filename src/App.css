@@ -1,4 +1,3 @@
-/* Reset y configuración global */
 * {
   box-sizing: border-box;
 }
@@ -39,7 +38,6 @@ body {
   flex-direction: column;
 }
 
-/* Estilos para el logo de React (mantener para compatibilidad) */
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -75,7 +73,7 @@ body {
   }
 }
 
-/* Media Queries para Responsividad */
+/* ===== DISEÑO RESPONSIVO ===== */
 
 /* Tablets (768px - 1024px) */
 @media (max-width: 1024px) and (min-width: 769px) {
@@ -90,12 +88,10 @@ body {
     padding-top: 70px;
   }
   
-  /* Ajustes generales para móviles */
   body {
     font-size: 14px;
   }
   
-  /* Mejorar la legibilidad en pantallas pequeñas */
   * {
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;

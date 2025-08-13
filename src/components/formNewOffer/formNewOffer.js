@@ -288,9 +288,9 @@ export default function FormNewOffer({ onClose, offerData, isEdit, onSave }) {
         <div className='container-general' onClick={handleOverlayClick}>
             <div className='new-offer-container'>
                 <div className='new-offer-exit'>
-                    <button className='new-offer-btn-exit' onClick={handleClose}>X</button>
+                    <button style={{marginTop: '30px', marginRight: '30px', fontWeight: '100'}} className='new-offer-btn-exit' onClick={handleClose}>X</button>
                 </div>
-                <h1>{isEdit ? 'Editar oferta' : 'Nueva oferta'}</h1>
+                <h1 style={{marginTop: '30px'}}>{isEdit ? 'Editar oferta' : 'Nueva oferta'}</h1>
 
                 <p className='new-offer-text'>Imagen para el producto *</p>
                 {!imagePreview ? (

@@ -12,6 +12,8 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
   const [is, setIs] = useState(implementsData?.que_es || '');
   const [recomendations, setRecomendations] = useState(implementsData?.recomendaciones_uso || '');
   const [additionalDetails, setAdditionalDetails] = useState(implementsData?.informacion_adicional || '');
+  const [presentacionesDisponibles, setPresentacionesDisponibles] = useState(implementsData?.presentaciones_disponibles || '');
+  const [marcaDistribuidor, setMarcaDistribuidor] = useState(implementsData?.marca_distribuidor || '');
   
   // Estados para validaciones
   const [errors, setErrors] = useState({});
@@ -25,6 +27,8 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
     setIs(implementsData?.que_es || '');
     setRecomendations(implementsData?.recomendaciones_uso || '');
     setAdditionalDetails(implementsData?.informacion_adicional || '');
+    setPresentacionesDisponibles(implementsData?.presentaciones_disponibles || '');
+    setMarcaDistribuidor(implementsData?.marca_distribuidor || '');
     setImagePreview(implementsData?.url || null);
   }, [implementsData]);
 
@@ -71,6 +75,16 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
     // Validar ¿Para qué animal?
     if (!typeAnimal) {
       newErrors.animalType = 'Debe seleccionar para qué animal es el implemento';
+    }
+    
+    // Validar presentaciones disponibles
+    if (!presentacionesDisponibles.trim()) {
+      newErrors.presentacionesDisponibles = 'Las presentaciones disponibles son obligatorias';
+    }
+    
+    // Validar marca distribuidor
+    if (!marcaDistribuidor) {
+      newErrors.marcaDistribuidor = 'Debe seleccionar la marca o distribuidor';
     }
     
     setErrors(newErrors);
@@ -194,6 +208,8 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
                   que_es: is,
                   recomendaciones_uso: recomendations,
                   informacion_adicional: additionalDetails,
+                  presentaciones_disponibles: presentacionesDisponibles,
+                  marca_distribuidor: marcaDistribuidor,
               }).eq('id', implementsData.id);
               if (error) {
                   console.error(error);
@@ -218,6 +234,8 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
                   que_es: is,
                   recomendaciones_uso: recomendations,
                   informacion_adicional: additionalDetails,
+                  presentaciones_disponibles: presentacionesDisponibles,
+                  marca_distribuidor: marcaDistribuidor,
               });
               if (error) {
                   console.error(error);
@@ -244,6 +262,8 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
       setIs('');
       setRecomendations('');
       setAdditionalDetails('');
+      setPresentacionesDisponibles('');
+      setMarcaDistribuidor('');
       setErrors({});
       setShowErrors(false);
   };
@@ -325,16 +345,41 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
                     </select>
                     {showErrors && errors.animalType && <p className="error-message">{errors.animalType}</p>}
                   </div>
-                </div>
-                <p style={styles.p}>Recomendaciones de uso (opcional): </p>
-                <input 
-                    type='text' 
-                    placeholder='Recomendado para  ...' 
-                    className='new-product-input1' 
-                    value={recomendations} 
-                    onChange={(e) => setRecomendations(e.target.value)}
-                />
-                <div style={styles.divUso}></div>
+                                 </div>
+                 
+                 <div className='new-product-box'>
+                     <label className='new-product-text-box'>Marca o distribuidor: *</label>
+                     <select 
+                         className={`new-product-opc-box ${showErrors && errors.marcaDistribuidor ? 'error-input' : ''}`}
+                         value={marcaDistribuidor}
+                         onChange={(e) => handleInputChange(setMarcaDistribuidor, 'marcaDistribuidor', e.target.value)}
+                     >
+                         <option value="">-- Selecciona --</option>
+                         <option value='Implementos Lopez'>Implementos Lopez</option>
+                         <option value='Comprovet'>Comprovet</option>
+                     </select>
+                 </div>
+                 {showErrors && errors.marcaDistribuidor && <p className="error-message">{errors.marcaDistribuidor}</p>}
+                 
+                 <p className='new-product-text'>Presentaciones disponibles *</p>
+                 <input 
+                     className={`new-product-input1 ${showErrors && errors.presentacionesDisponibles ? 'error-input' : ''}`} 
+                     type='text' 
+                     placeholder='Ej: 1kg, 5kg, 10kg...' 
+                     value={presentacionesDisponibles} 
+                     onChange={(e) => handleInputChange(setPresentacionesDisponibles, 'presentacionesDisponibles', e.target.value)}
+                 />
+                 {showErrors && errors.presentacionesDisponibles && <p className="error-message">{errors.presentacionesDisponibles}</p>}
+                 
+                 <p style={styles.p}>Recomendaciones de uso (opcional): </p>
+                 <input 
+                     type='text' 
+                     placeholder='Recomendado para  ...' 
+                     className='new-product-input1' 
+                     value={recomendations} 
+                     onChange={(e) => setRecomendations(e.target.value)}
+                 />
+                 <div style={styles.divUso}></div>
                 <p className='new-product-text-box'>Detalles del producto (opcional):</p>
                 <textarea 
                     className='new-product-input' 

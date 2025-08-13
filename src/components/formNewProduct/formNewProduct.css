@@ -300,6 +300,35 @@ textarea::placeholder {
     max-width: 90vw;
     padding: 20px;
   }
+  
+  .new-product-box2 {
+    gap: 15px;
+  }
+  
+  .new-product-box1 {
+    gap: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .new-product-container {
+    max-width: 95vw;
+    padding: 15px;
+  }
+  
+  .new-product-box2 {
+    gap: 10px;
+    flex-direction: column;
+  }
+  
+  .new-product-box1 {
+    gap: 3px;
+    width: 100%;
+  }
+  
+  .new-product-opc-category {
+    width: 100%;
+  }
 }
 
 /* Estilos para validaciones y errores */

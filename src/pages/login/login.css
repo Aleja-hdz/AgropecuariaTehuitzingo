@@ -102,6 +102,10 @@
         width: 350px;
         height: 450px;
     }
+
+    .login-body {
+        margin-top: -60px;
+    }
     
     .inputs-login {
         height: 30px;
@@ -117,6 +121,7 @@
 @media (max-width: 768px) {
     .login-body {
         padding: 20px;
+        margin-top: -60px;
     }
     
     .login-container {
@@ -154,6 +159,7 @@
 @media (max-width: 480px) {
     .login-body {
         padding: 15px;
+        margin-top: -60px;
     }
     
     .login-container {

@@ -60,7 +60,7 @@
     text-align: center;
 }
 
-/* Media Queries para Responsividad */
+/* ===== DISEÑO RESPONSIVO ===== */
 
 /* Tablets (768px - 1024px) */
 @media (max-width: 1024px) and (min-width: 769px) {
@@ -85,21 +85,21 @@
 /* Móviles (hasta 768px) */
 @media (max-width: 768px) {
     .card-product {
-        width: 160px;
-        height: 280px;
+        width: 170px;
+        height: 300px;
     }
     
     .name {
-        font-size: 12px;
+        font-size: 14px;
         line-height: 1.1;
     }
     
     .lot {
-        font-size: 10px;
+        font-size: 12px;
     }
     
     .price {
-        font-size: 14px;
+        font-size: 16px;
     }
     
     .info-container {
@@ -110,21 +110,21 @@
 /* Móviles pequeños (hasta 480px) */
 @media (max-width: 480px) {
     .card-product {
-        width: 140px;
-        height: 250px;
+        width: 150px;
+        height: 270px;
     }
     
     .name {
-        font-size: 11px;
+        font-size: 13px;
         line-height: 1.1;
     }
     
     .lot {
-        font-size: 9px;
+        font-size: 12px;
     }
     
     .price {
-        font-size: 13px;
+        font-size: 15px;
     }
     
     .info-container {
@@ -132,9 +132,8 @@
     }
 }
 
-/* ===== ANIMACIONES PARA CARD PRODUCT ===== */
+/* ===== ANIMACIONES ===== */
 
-/* Animaciones de hover para la tarjeta */
 .animate-card-hover {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -144,7 +143,6 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Animaciones para la imagen */
 .animate-image-hover {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -153,7 +151,6 @@
   transform: scale(1.05);
 }
 
-/* Animaciones para el texto */
 .animate-text-fade-in {
   animation: textFadeIn 0.6s ease-out;
 }
@@ -166,7 +163,6 @@
   animation: textFadeIn 0.6s ease-out 0.2s both;
 }
 
-/* Animación para el contenedor del botón */
 .animate-button-container {
   animation: buttonSlideIn 0.6s ease-out 0.3s both;
   transition: all 0.3s ease;
@@ -201,7 +197,7 @@
   }
 }
 
-/* ===== RESPONSIVE ANIMACIONES ===== */
+/* ===== DISEÑO RESPONSIVO ANIMACIONES ===== */
 
 @media (max-width: 768px) {
   .animate-card-hover:hover {
@@ -213,8 +209,6 @@
   }
 }
 
-/* ===== OPTIMIZACIONES DE RENDIMIENTO ===== */
-
 .animate-card-hover,
 .animate-image-hover,
 .animate-text-fade-in,
@@ -224,7 +218,6 @@
   will-change: transform, opacity;
 }
 
-/* Reducir animaciones en dispositivos que prefieren menos movimiento */
 @media (prefers-reduced-motion: reduce) {
   .animate-card-hover,
   .animate-image-hover,

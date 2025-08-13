@@ -1,5 +1,5 @@
-import { ChevronDown, ChevronLeft } from 'lucide-react';
-import { useState } from 'react';
+import { ChevronDown, ChevronLeft, Filter, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import "./menuAlimentosBalanceados.css";
 import { Link } from 'react-router-dom';
 
@@ -14,6 +14,27 @@ export default function MenuAlimentosBalanceados({
   const [showSpecies, setShowSpecies] = useState(false);
   const [showBrands, setShowBrands] = useState(false);
   const [showOthers, setShowOthers] = useState(false);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+
+  // Estados temporales para panel móvil
+  const [tempSpecies, setTempSpecies] = useState(selectedSpecies || '');
+  const [tempBrand, setTempBrand] = useState(selectedBrand || '');
+  const [tempProduction, setTempProduction] = useState(selectedProduction || '');
+
+  useEffect(() => {
+    if (isFiltersOpen) {
+      setTempSpecies(selectedSpecies || '');
+      setTempBrand(selectedBrand || '');
+      setTempProduction(selectedProduction || '');
+    }
+  }, [isFiltersOpen, selectedSpecies, selectedBrand, selectedProduction]);
+
+  const applyMobileFilters = () => {
+    onSpeciesFilter(tempSpecies || '');
+    onBrandFilter(tempBrand || '');
+    onProductionFilter(tempProduction || '');
+    setIsFiltersOpen(false);
+  };
 
   const species = [
     'Bovinos',
@@ -48,7 +69,17 @@ export default function MenuAlimentosBalanceados({
           <span className="category-title">Alimentos balanceados</span>
         </div>
 
-        <div className="filters">
+        <button
+          type="button"
+          className="filters-toggle"
+          onClick={() => setIsFiltersOpen((v) => !v)}
+          aria-expanded={isFiltersOpen}
+        >
+          <span>Filtros</span>
+          <Filter size={16} />
+        </button>
+
+        <div className={`filters ${isFiltersOpen ? 'open' : ''}`}>
           <div className="filter" onClick={() => setShowSpecies(!showSpecies)}>
             <span>Por especie {selectedSpecies && `(${selectedSpecies})`}</span>
             <ChevronDown size={16} />
@@ -105,6 +136,68 @@ export default function MenuAlimentosBalanceados({
               </ul>
             )}
           </div>
+        </div>
+
+        {isFiltersOpen && (
+          <div className="filters-panel">
+            <div className="filters-section">
+              <h4>Especie</h4>
+              <div className="filters-options">
+                <button className={`option ${tempSpecies === '' ? 'selected' : ''}`} onClick={() => setTempSpecies('')}>Todos</button>
+                {species.map((s) => (
+                  <button key={s} className={`option ${tempSpecies === s ? 'selected' : ''}`} onClick={() => setTempSpecies(s)}>{s}</button>
+                ))}
+              </div>
+            </div>
+            <div className="filters-section">
+              <h4>Marca</h4>
+              <div className="filters-options">
+                <button className={`option ${tempBrand === '' ? 'selected' : ''}`} onClick={() => setTempBrand('')}>Todas</button>
+                {brands.map((b) => (
+                  <button key={b} className={`option ${tempBrand === b ? 'selected' : ''}`} onClick={() => setTempBrand(b)}>{b}</button>
+                ))}
+              </div>
+            </div>
+            <div className="filters-section">
+              <h4>Otros</h4>
+              <div className="filters-options">
+                <button className={`option ${tempProduction === '' ? 'selected' : ''}`} onClick={() => setTempProduction('')}>Todos</button>
+                {productionOptions.map((o) => (
+                  <button key={o.value} className={`option ${tempProduction === o.value ? 'selected' : ''}`} onClick={() => setTempProduction(o.value)}>{o.label}</button>
+                ))}
+              </div>
+            </div>
+            <div className="filters-actions">
+              <button className="apply-filters-btn" onClick={applyMobileFilters}>Aplicar filtros</button>
+            </div>
+          </div>
+        )}
+
+        <div className="active-filters">
+          {selectedSpecies && (
+            <span className="chip">
+              {selectedSpecies}
+              <button onClick={() => onSpeciesFilter('')} aria-label="Quitar filtro especie">
+                <X size={14} />
+              </button>
+            </span>
+          )}
+          {selectedBrand && (
+            <span className="chip">
+              {selectedBrand}
+              <button onClick={() => onBrandFilter('')} aria-label="Quitar filtro marca">
+                <X size={14} />
+              </button>
+            </span>
+          )}
+          {selectedProduction !== '' && (
+            <span className="chip">
+              {selectedProduction === 'true' ? 'Producción' : 'No producción'}
+              <button onClick={() => onProductionFilter('')} aria-label="Quitar filtro producción">
+                <X size={14} />
+              </button>
+            </span>
+          )}
         </div>
       </div>
     </div>

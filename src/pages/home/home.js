@@ -2,10 +2,14 @@ import './home.css';
 import ButtonSmall from "../../components/buttonSmall/buttonSmall";
 import FormContactUs from '../../components/formContactUs/formContactUs'
 import ImagenPortada from '../../assets/ImagenPortada.png';
-import Negocio from '../../assets/Negocio.jpg';
+import AgropecuariaTehuitzingo from '../../assets/Agropecuaria_Tehuitzingo.png';
 import imgS1 from '../../assets/imgS1.jpg';
-import imgS2 from '../../assets/imgS2.png';
+import imgS2 from '../../assets/imgS2.jpg';
 import imgS3 from '../../assets/imgS3.jpg';
+import LogoUnion from '../../assets/Logo_Union.png';
+import LogoComprovet from '../../assets/Logo_Comprovet.png';
+import LogoFasa from '../../assets/Logo_Fasa.png';
+import LogoNutrebien from '../../assets/Logo_Nutrebien.png';
 import { MapPin } from 'lucide-react';
 import { Mail } from 'lucide-react';
 import { Smartphone } from 'lucide-react';
@@ -108,7 +112,7 @@ export default function Home() {
                   </a>
                 </>
               ) : (
-                <div style={{ textAlign: 'center' }}>
+                <div style={{ textAlign: 'center'}}>
                   <Link to="/productos" className="btn-animate">
                     <ButtonSmall text="Ver catálogo ->" />
                   </Link>
@@ -150,26 +154,38 @@ export default function Home() {
             </div>
             <div className={`divs-about ${isVisible.about ? 'animate-zoom-in' : ''}`}>
               <div className="image-about">
-                <img className="img-portada" alt='Negocio' src={Negocio} />
+                <img 
+                  className={`img-portada ${isVisible.about ? 'animate-breathe animate-hover-scale' : ''}`}
+                  alt='Agropecuaria Tehuitzingo' 
+                  src={AgropecuariaTehuitzingo} 
+                />
               </div>
             </div>
             <div className={`divs-about ${isVisible.about ? 'animate-slide-in-right' : ''}`}>
               <p className="tittles">Visión</p>
               <p className="text-about">
-                Ser una veterinaria-agropecuaria reconocida en la región por su excelencia profesional, 
+                Ser un negocio reconocido en la región por su excelencia profesional, 
                 confianza y compromiso con la salud animal, ampliando constantemente nuestros servicios 
                 y manteniéndonos a la vanguardia en atención, confianza y formación.
               </p>
             </div>
           </div>
-          <p className={`tittles-services ${isVisible.about ? 'animate-fade-in-up-delay-4' : ''}`}>
+          <p className={`tittles ${isVisible.about ? 'animate-fade-in-up-delay-4' : ''}`}>
             Nuestros distribuidores
           </p>
           <div className={`distributors ${isVisible.about ? 'animate-fade-in-up-delay-5' : ''}`}>
-            <div className="box-distributors animate-pulse"></div>
-            <div className="box-distributors animate-pulse-delay-1"></div>
-            <div className="box-distributors animate-pulse-delay-2"></div>
-            <div className="box-distributors animate-pulse-delay-3"></div>
+            <div className="box-distributors animate-pulse">
+              <img src={LogoUnion} alt="Logo Union" className="distributor-logo" />
+            </div>
+            <div className="box-distributors animate-pulse-delay-1">
+              <img src={LogoComprovet} alt="Logo Comprovet" className="distributor-logo" />
+            </div>
+            <div className="box-distributors animate-pulse-delay-2">
+              <img src={LogoFasa} alt="Logo Fasa" className="distributor-logo" />
+            </div>
+            <div className="box-distributors animate-pulse-delay-3">
+              <img src={LogoNutrebien} alt="Logo Nutrebien" className="distributor-logo" />
+            </div>
           </div>
         </div>
       </div>
@@ -184,7 +200,7 @@ export default function Home() {
             Combinamos experiencia, compromiso y atención personalizada para garantizar resultados confiables y duraderos.
           </p>
           
-          <div className={`box-services ${isVisible.services ? 'animate-fade-in-up-delay-2' : ''}`}>
+            <div className={`box-services ${isVisible.services ? 'animate-fade-in-up-delay-2' : ''}`}>
             <div className="box-container-services">
               <p className="tittles-services">Venta de alimentos balanceados</p>
               <p className="text-service">
@@ -194,24 +210,24 @@ export default function Home() {
               </p>
             </div>
             <div className="box-container-services">
-              <div className="images-service">
-                <img className="img-portada animate-hover-scale" alt='Servicio 1' src={imgS1} />
+                <div className="images-service animate-breathe">
+                  <img className="img-portada animate-hover-scale" alt='Servicio 1' src={imgS1} />
               </div>
             </div>
           </div>
           
           <div className={`box-services ${isVisible.services ? 'animate-fade-in-up-delay-3' : ''}`}>
             <div className="box-container-services">
-              <div className="images-service">
+              <div className="images-service animate-breathe">
                 <img className="img-portada animate-hover-scale" alt='Servicio 2' src={imgS2} />
               </div>
             </div>
             <div className="box-container-services">
-              <p className="tittles-services">Venta y distribución de alimentos balanceados</p>
+              <p className="tittles-services">Venta y distribución de medicamento veterinario</p>
               <p className="text-service">
-                Contamos con una amplia variedad de alimentos balanceados para mascotas y animales de granja, 
-                seleccionados para garantizar nutrición, salud y bienestar. Ofrecemos asesoramiento personalizado 
-                para elegir el alimento ideal según cada especie y etapa.
+                Ofrecemos venta y distribución de medicamentos veterinarios para mascotas y animales de 
+                producción, garantizando calidad, trazabilidad y conservación adecuada. Brindamos asesoría profesional 
+                para el uso responsable y la elección del tratamiento indicado según especie, etapa y necesidad clínica.
               </p>
             </div>
           </div>
@@ -221,12 +237,12 @@ export default function Home() {
               <p className="tittles-services">Consultas médico veterinarias</p>
               <p className="text-service">
                 Ofrecemos atención veterinaria profesional para perros, gatos y animales de granja. 
-                Realizamos controles generales, diagnóstico de enfermedades, tratamientos y seguimiento clínico. 
-                Tu mascota estará en manos de expertos comprometidos con su salud y bienestar.
+                Realizamos controles generales, diagnóstico de enfermedades, tratamientos además de campañas de vacunación y esterilización. 
+                Tu mascota estará en manos de expertos comprometidos con su salud y bienestar animal.
               </p>
             </div>
             <div className="box-container-services">
-              <div className="images-service">
+              <div className="images-service animate-breathe">
                 <img className="img-portada animate-hover-scale" alt='Servicio 3' src={imgS3} />
               </div>
             </div>
@@ -237,8 +253,10 @@ export default function Home() {
       {/* Sección Contáctanos */}
       <div className="container-contact" id='contactanos'>
         <div className={`section-contact ${isVisible.contact ? 'animate-fade-in' : ''}`}>
+          {/* Título móvil-only */}
+          <h1 className={`tittles-h1 mobile-contact-title ${isVisible.contact ? 'animate-fade-in-up' : ''}`}>Contáctanos</h1>
           <div className={`box-contact ${isVisible.contact ? 'animate-slide-in-left' : ''}`}>
-            <h1 className={`tittles-h1 ${isVisible.contact ? 'animate-fade-in-up' : ''}`}>Contáctanos</h1>
+            <h1 className={`tittles-h1 desktop-contact-title ${isVisible.contact ? 'animate-fade-in-up' : ''}`}>Contáctanos</h1>
             <div className={`container-info-contact ${isVisible.contact ? 'animate-fade-in-up-delay' : ''}`}>
               <div className="box-contact-info animate-hover-bounce">
                 <MapPin size={45}/>
@@ -268,10 +286,10 @@ export default function Home() {
               <li><Link to="/ofertas" className="animate-hover-glow">Ofertas</Link></li>
             </ul>
             <div className={`box-icons ${isVisible.contact ? 'animate-fade-in-up-delay-3' : ''}`}>
-              <a href="https://wa.me/" className="animate-hover-pulse">
+              <a href="https://wa.link/rki83l" className="animate-hover-pulse" target="_blank">
                 <IoLogoWhatsapp size={27}/>
               </a>
-              <a href="https://facebook.com" className="animate-hover-pulse">
+              <a href="https://www.facebook.com/share/1Bx485VGTZ/" className="animate-hover-pulse" target="_blank">
                 <FaFacebook size={25}/>
               </a>
             </div>

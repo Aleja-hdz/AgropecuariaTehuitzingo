@@ -45,6 +45,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+    z-index: 100;
 }
 
 .admin-box1-head h1 {
@@ -72,17 +74,14 @@
     align-items: center;
     margin-top: -20px;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.admin-first-table.pushed-down {
-    margin-top: 450px;
-    opacity: 0.3;
-    transform: scale(0.95);
+    width: 100%;
+    overflow-x: auto;
 }
 
 .admin-others-tables {
     display: flex;
     width: 100%;
+    gap: 24px;
 }
 
 .admin-table-products {
@@ -91,6 +90,7 @@
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
+    overflow-x: auto;
 }
 
 .admin-table-products p {
@@ -104,6 +104,7 @@
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
+    overflow-x: auto;
 }
 
 .admin-table-offers p {
@@ -261,6 +262,35 @@
   }
 }
 
+/* ===== RESPONSIVE LAYOUT (Tablets y Móviles) ===== */
+@media (max-width: 1024px) {
+  .admin-content { width: 90%; }
+  .admin-head { flex-direction: column; gap: 16px; }
+  .admin-box1-head, .admin-box-head-search, .admin-box2-head { width: 100%; }
+  .admin-box1-head { align-items: center; }
+  .admin-box2-head { justify-content: center; }
+  .admin-line { margin-left: 0; }
+  .admin-others-tables { flex-direction: column; gap: 20px; }
+}
+
+@media (max-width: 768px) {
+  .admin-container { margin-top: -70px; }
+  .admin-content { width: 95%; }
+  .admin-box1-head {display: flex; flex-direction: column; align-items: center; }
+  .admin-box1-head h1 { font-size: 28px; text-align: center; }
+  .admin-line { width: 70px; margin: 0 auto; margin-top: -7px; margin-bottom: -25px;}
+  .admin-box-head-search { gap: 8px; margin: 10px 0 16px; }
+  .admin-first-table { margin-top: -10px; }
+  .admin-others-tables { gap: 16px; }
+}
+
+@media (max-width: 480px) {
+  .admin-container { margin-top: -70px; }
+  .admin-box1-head h1 { font-size: 26px; }
+  .admin-line { margin: 0 auto; }
+  .admin-content { width: 96%; }
+}
+
 /* ===== OPTIMIZACIONES DE RENDIMIENTO ===== */
 
 .animate-fade-in,
@@ -317,30 +347,26 @@
 }
 
 .search-results-container {
-    position: fixed;
-    top: 75px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
+    position: relative;
+    width: 100%;
     max-width: 800px;
     background: white;
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     z-index: 99999;
-    max-height: 300px;
-    overflow-y: auto;
-    margin-bottom: 50px;
+    margin: 10px auto 20px auto;
     animation: slideDown 0.3s ease-out;
+    overflow: hidden;
 }
 
 @keyframes slideDown {
     from {
         opacity: 0;
-        transform: translateX(-50%) translateY(-10px);
+        transform: translateY(-10px);
     }
     to {
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
+        transform: translateY(0);
     }
 }
 
@@ -355,6 +381,9 @@
 .search-results-table {
     width: 100%;
     border-collapse: collapse;
+    max-height: 200px;
+    overflow-y: auto;
+    table-layout: fixed;
 }
 
 .search-results-table th,
@@ -363,6 +392,38 @@
     text-align: left;
     border-bottom: 1px solid #f0f0f0;
     font-size: 14px;
+    vertical-align: middle;
+}
+
+/* Configuración de anchos de columna */
+.search-results-table th:nth-child(1),
+.search-results-table td:nth-child(1) {
+    width: 40%; /* Nombre */
+    /* Estilos para manejar texto largo */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-width: 0; /* Permite que la celda se ajuste al contenido */
+}
+
+.search-results-table th:nth-child(2),
+.search-results-table td:nth-child(2) {
+    width: 25%; /* Categoría */
+    min-width: 80px;
+}
+
+.search-results-table th:nth-child(3),
+.search-results-table td:nth-child(3) {
+    width: 20%; /* Tipo */
+    min-width: 70px;
+    text-align: center;
+}
+
+.search-results-table th:nth-child(4),
+.search-results-table td:nth-child(4) {
+    width: 15%; /* Acciones */
+    min-width: 60px;
+    text-align: center;
 }
 
 .search-results-table th {
@@ -451,18 +512,42 @@
 @media (max-width: 768px) {
     .search-results-container {
         width: 95%;
-        max-height: 250px;
-        top: 85px;
+        margin: 8px auto 15px auto;
     }
 
-    .admin-first-table.pushed-down {
-        margin-top: 350px;
+    .search-results-table {
+        max-height: 180px;
     }
 
     .search-results-table th,
     .search-results-table td {
         padding: 8px 12px;
         font-size: 13px;
+    }
+
+    /* Ajustar anchos de columna para tablets */
+    .search-results-table th:nth-child(1),
+    .search-results-table td:nth-child(1) {
+        width: 35%;
+        min-width: 100px;
+    }
+
+    .search-results-table th:nth-child(2),
+    .search-results-table td:nth-child(2) {
+        width: 25%;
+        min-width: 70px;
+    }
+
+    .search-results-table th:nth-child(3),
+    .search-results-table td:nth-child(3) {
+        width: 25%;
+        min-width: 60px;
+    }
+
+    .search-results-table th:nth-child(4),
+    .search-results-table td:nth-child(4) {
+        width: 15%;
+        min-width: 50px;
     }
 
     .search-results-header {
@@ -487,18 +572,42 @@
 @media (max-width: 480px) {
     .search-results-container {
         width: 98%;
-        max-height: 200px;
-        top: 70px;
+        margin: 6px auto 12px auto;
     }
 
-    .admin-first-table.pushed-down {
-        margin-top: 300px;
+    .search-results-table {
+        max-height: 150px;
     }
 
     .search-results-table th,
     .search-results-table td {
         padding: 6px 8px;
         font-size: 12px;
+    }
+
+    /* Ajustar anchos de columna para móviles pequeños */
+    .search-results-table th:nth-child(1),
+    .search-results-table td:nth-child(1) {
+        width: 30%;
+        min-width: 80px;
+    }
+
+    .search-results-table th:nth-child(2),
+    .search-results-table td:nth-child(2) {
+        width: 25%;
+        min-width: 60px;
+    }
+
+    .search-results-table th:nth-child(3),
+    .search-results-table td:nth-child(3) {
+        width: 30%;
+        min-width: 50px;
+    }
+
+    .search-results-table th:nth-child(4),
+    .search-results-table td:nth-child(4) {
+        width: 15%;
+        min-width: 40px;
     }
 
     .search-result-category {

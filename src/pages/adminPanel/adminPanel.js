@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import './adminPanel.css'
 import { supabase } from '../../lib/supabaseClient';
 import CurrentInformation from "../../components/currentInformation/currentInformation";
@@ -12,7 +12,7 @@ import FormImplementos from '../../components/formNewProduct/forms/implementos/f
 import FormAlimentosBalanceados from '../../components/formNewProduct/forms/alimentosBalanceados/formAlimentosBalanceados';
 import FormMedicamentosVeterinarios from '../../components/formNewProduct/forms/medicamentosVeterinarios/formMedicamentosVeterinarios';
 import FormMascotas from '../../components/formNewProduct/forms/mascotas/formMascotas';
-import FormEditMascotasAccesorios from '../../components/formNewProduct/forms/mascotas/formEditMascotasAlimentos';
+import FormEditMascotasAccesorios from '../../components/formNewProduct/forms/mascotas/formEditMascotasAccesorios';
 import FormEditMascotasAlimentos from '../../components/formNewProduct/forms/mascotas/formEditMascotasAlimentos';
 import Searcher from '../../components/searcher/searcher';
 import OptionsTable from '../../components/optionsTable/optionsTable';
@@ -35,7 +35,6 @@ export default function AdminPanel() {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [showSearchResults, setShowSearchResults] = useState(false);
-    const [tablePosition, setTablePosition] = useState('normal'); // 'normal' o 'pushed-down'
     const searchContainerRef = useRef(null);
 
     // Estados para animaciones
@@ -81,9 +80,20 @@ export default function AdminPanel() {
     // Manejar clics fuera del contenedor de búsqueda
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
+            // Verificar si el clic fue en un botón de acción dentro de los resultados de búsqueda
+            const isActionButton = event.target.closest('.search-actions') || 
+                                  event.target.closest('.options-table') ||
+                                  event.target.closest('button[name="edit"]') ||
+                                  event.target.closest('button[name="delete"]') ||
+                                  event.target.closest('svg') ||
+                                  event.target.closest('path');
+            
+            // Verificar si el clic fue en el contenedor de búsqueda o en los resultados
+            const isInSearchContainer = searchContainerRef.current && searchContainerRef.current.contains(event.target);
+            const isInSearchResults = event.target.closest('.search-results-container');
+            
+            if (!isInSearchContainer && !isInSearchResults && !isActionButton) {
                 setShowSearchResults(false);
-                setTablePosition('normal');
             }
         };
 
@@ -243,7 +253,6 @@ export default function AdminPanel() {
         if (term.trim() === '') {
             setShowSearchResults(false);
             setSearchResults([]);
-            setTablePosition('normal');
             return;
         }
 
@@ -274,11 +283,10 @@ export default function AdminPanel() {
 
         setSearchResults(combinedResults);
         setShowSearchResults(true);
-        setTablePosition('pushed-down');
     };
 
     // Funciones para manejar acciones desde los resultados de búsqueda
-    const handleEditFromSearch = async (item) => {
+    const handleEditFromSearch = useCallback(async (item) => {
         
         if (item.tipo === 'Producto') {
             // Buscar el producto en allProducts por ID
@@ -295,55 +303,224 @@ export default function AdminPanel() {
                     setEditProduct(producto);
                 } else if (producto.categoria === 'Mascotas') {
                     // Obtener datos completos de mascotas para determinar subcategoría
-                    const { data: mascotaData } = await supabase
+                    const { data: mascotaData, error } = await supabase
                         .from('mascotas')
                         .select('*')
                         .eq('id', producto.id)
                         .single();
                     
+                    if (error) {
+                        console.error('Error al obtener datos de mascota:', error);
+                        return;
+                    }
+                    
                     if (mascotaData) {
-                        if (mascotaData.tipo === 'Accesorios') {
+                        if (mascotaData.sub_categoria === 'Accesorio') {
                             setEditProductType('mascotas-accesorios');
-                        } else {
+                        } else if (mascotaData.sub_categoria === 'Alimento') {
                             setEditProductType('mascotas-alimentos');
+                        } else {
+                            // Si no hay sub_categoria definida, intentar determinar por otros campos
+                            if (mascotaData.tipo === 'Accesorios' || mascotaData.categoria === 'Accesorios') {
+                                setEditProductType('mascotas-accesorios');
+                            } else {
+                                setEditProductType('mascotas-alimentos');
+                            }
                         }
                         setEditProduct(mascotaData);
                     }
                 }
-                setShowNewProductForm(true);
             }
         } else if (item.tipo === 'Oferta') {
             setEditOffer(item);
-            setShowNewOfferForm(true);
         }
         
         // Cerrar resultados de búsqueda
         setShowSearchResults(false);
-        setTablePosition('normal');
-    };
+    }, [allProducts]);
 
-    const handleDeleteFromSearch = async (item) => {
+    const handleDeleteFromSearch = useCallback(async (item) => {
+        const confirm = window.confirm(`¿Estás seguro de que quieres eliminar: ${item.nombre}?`);
+        if (!confirm) return;
         
         if (item.tipo === 'Producto') {
             // Buscar el producto en allProducts por ID
             const producto = allProducts.find(p => p.id === item.id);
             if (producto) {
-                // Crear un objeto con la estructura que espera handleDeleteFromMain
-                const itemToDelete = {
-                    id: producto.id,
-                    categoria: 'Producto',
-                    nombre: producto.nombre
-                };
-                await handleDeleteFromMain(itemToDelete);
+                if (producto.categoria === 'Implementos') {
+                    // Eliminar imagen del bucket si existe
+                    if (producto.url) {
+                        try {
+                            const parts = producto.url.split('/');
+                            const fileName = parts[parts.length - 1].split('?')[0];
+                            const { error: storageError } = await supabase
+                                .storage
+                                .from('implementos-img')
+                                .remove([fileName]);
+                            if (storageError) {
+                                console.error('Error al eliminar la imagen del bucket:', storageError);
+                            }
+                        } catch (err) {
+                            console.error('Error al procesar la eliminación de la imagen:', err);
+                        }
+                    }
+                    
+                    // Eliminar implemento
+                    const { error } = await supabase
+                        .from('implementos')
+                        .delete()
+                        .eq('id', producto.id);
+                    if (error) {
+                        console.error('Error al eliminar implemento:', error);
+                        alert('Error al eliminar el producto');
+                    } else {
+                        alert('Producto eliminado con éxito');
+                        handleRefreshProducts();
+                    }
+                } else if (producto.categoria === 'Alimentos balanceados') {
+                    // Eliminar imagen del bucket si existe
+                    if (producto.url) {
+                        try {
+                            const parts = producto.url.split('/');
+                            const fileName = parts[parts.length - 1].split('?')[0];
+                            const { error: storageError } = await supabase
+                                .storage
+                                .from('alimentos-balanceados-img')
+                                .remove([fileName]);
+                            if (storageError) {
+                                console.error('Error al eliminar la imagen del bucket:', storageError);
+                            }
+                        } catch (err) {
+                            console.error('Error al procesar la eliminación de la imagen:', err);
+                        }
+                    }
+                    
+                    // Eliminar alimento balanceado
+                    const { error } = await supabase
+                        .from('alimentos_balanceados')
+                        .delete()
+                        .eq('id', producto.id);
+                    if (error) {
+                        console.error('Error al eliminar alimento balanceado:', error);
+                        alert('Error al eliminar el producto');
+                    } else {
+                        alert('Producto eliminado con éxito');
+                        handleRefreshProducts();
+                    }
+                } else if (producto.categoria === 'Medicamentos Veterinarios') {
+                    // Eliminar imagen del bucket si existe
+                    if (producto.url) {
+                        try {
+                            const parts = producto.url.split('/');
+                            const fileName = parts[parts.length - 1].split('?')[0];
+                            const { error: storageError } = await supabase
+                                .storage
+                                .from('medicamentos-veterinarios-img')
+                                .remove([fileName]);
+                            if (storageError) {
+                                console.error('Error al eliminar la imagen del bucket:', storageError);
+                            }
+                        } catch (err) {
+                            console.error('Error al procesar la eliminación de la imagen:', err);
+                        }
+                    }
+                    
+                    // Eliminar medicamento veterinario
+                    const { error } = await supabase
+                        .from('medicamentos_veterinarios')
+                        .delete()
+                        .eq('id', producto.id);
+                    if (error) {
+                        console.error('Error al eliminar medicamento veterinario:', error);
+                        alert('Error al eliminar el producto');
+                    } else {
+                        alert('Producto eliminado con éxito');
+                        handleRefreshProducts();
+                    }
+                } else if (producto.categoria === 'Mascotas') {
+                    // Para mascotas, necesitamos obtener la subcategoría para determinar el bucket correcto
+                    const { data: mascotaData } = await supabase
+                        .from('mascotas')
+                        .select('sub_categoria')
+                        .eq('id', producto.id)
+                        .single();
+                    
+                    // Determinar el bucket según la subcategoría
+                    let bucket = '';
+                    if (mascotaData?.sub_categoria === 'Alimento') {
+                        bucket = 'mascotas-alimentos-img';
+                    } else if (mascotaData?.sub_categoria === 'Accesorio') {
+                        bucket = 'mascotas-accesorios-img';
+                    } else {
+                        // Si no hay sub_categoria definida, intentar determinar por otros campos
+                        if (mascotaData?.tipo === 'Accesorios' || mascotaData?.categoria === 'Accesorios') {
+                            bucket = 'mascotas-accesorios-img';
+                        } else {
+                            bucket = 'mascotas-alimentos-img'; // Por defecto
+                        }
+                    }
+                    
+                    // Eliminar imagen del bucket si existe
+                    if (producto.url && bucket) {
+                        try {
+                            const parts = producto.url.split('/');
+                            const fileName = parts[parts.length - 1].split('?')[0];
+                            const { error: storageError } = await supabase
+                                .storage
+                                .from(bucket)
+                                .remove([fileName]);
+                            if (storageError) {
+                                console.error('Error al eliminar la imagen del bucket:', storageError);
+                            }
+                        } catch (err) {
+                            console.error('Error al procesar la eliminación de la imagen:', err);
+                        }
+                    }
+                    
+                    // Eliminar mascota
+                    const { error } = await supabase
+                        .from('mascotas')
+                        .delete()
+                        .eq('id', producto.id);
+                    if (error) {
+                        console.error('Error al eliminar mascota:', error);
+                        alert('Error al eliminar el producto');
+                    } else {
+                        alert('Producto eliminado con éxito');
+                        handleRefreshProducts();
+                    }
+                }
             }
         } else if (item.tipo === 'Oferta') {
-            // Crear un objeto con la estructura que espera handleDeleteFromMain
-            const itemToDelete = {
-                id: item.id,
-                categoria: 'Oferta',
-                nombre: item.nombre
-            };
-            await handleDeleteFromMain(itemToDelete);
+            // Eliminar imagen del bucket si existe
+            if (item.url) {
+                try {
+                    const parts = item.url.split('/');
+                    const fileName = parts[parts.length - 1].split('?')[0];
+                    const { error: storageError } = await supabase
+                        .storage
+                        .from('ofertas-img')
+                        .remove([fileName]);
+                    if (storageError) {
+                        console.error('Error al eliminar la imagen del bucket:', storageError);
+                    }
+                } catch (err) {
+                    console.error('Error al procesar la eliminación de la imagen:', err);
+                }
+            }
+            
+            // Eliminar oferta
+            const { error } = await supabase
+                .from('ofertas')
+                .delete()
+                .eq('id', item.id);
+            if (error) {
+                console.error('Error al eliminar oferta:', error);
+                alert('Error al eliminar la oferta');
+            } else {
+                alert('Oferta eliminada con éxito');
+                handleRefreshProducts();
+            }
         }
         
         // Actualizar resultados de búsqueda
@@ -353,9 +530,8 @@ export default function AdminPanel() {
         // Si no quedan resultados, cerrar la búsqueda
         if (updatedResults.length === 0) {
             setShowSearchResults(false);
-            setTablePosition('normal');
         }
-    };
+    }, [searchResults, handleRefreshProducts]);
 
     // Combinar productos y ofertas para "Últimas creaciones" ordenados por created_at
     const ultimasCreacionesData = useMemo(() => {
@@ -444,7 +620,12 @@ export default function AdminPanel() {
                             setEditProductType('mascotas-alimentos');
                             setEditProduct(mascotaData);
                         } else {
-                            setEditProductType('mascotas-general');
+                            // Si no hay sub_categoria definida, intentar determinar por otros campos
+                            if (mascotaData.tipo === 'Accesorios' || mascotaData.categoria === 'Accesorios') {
+                                setEditProductType('mascotas-accesorios');
+                            } else {
+                                setEditProductType('mascotas-alimentos');
+                            }
                             setEditProduct(mascotaData);
                         }
                     }
@@ -573,7 +754,12 @@ export default function AdminPanel() {
                     } else if (mascotaData?.sub_categoria === 'Accesorio') {
                         bucket = 'mascotas-accesorios-img';
                     } else {
-                        bucket = 'mascotas-alimentos-img'; // Por defecto
+                        // Si no hay sub_categoria definida, intentar determinar por otros campos
+                        if (mascotaData?.tipo === 'Accesorios' || mascotaData?.categoria === 'Accesorios') {
+                            bucket = 'mascotas-accesorios-img';
+                        } else {
+                            bucket = 'mascotas-alimentos-img'; // Por defecto
+                        }
                     }
                     
                     // Eliminar imagen del bucket si existe
@@ -653,64 +839,62 @@ export default function AdminPanel() {
                             <h1 className='tittles-h1'>Panel de gestión</h1>
                             <hr className='admin-line animate-hr'></hr>
                         </div>
-                        <div className={`admin-box-head-search ${isVisible.search ? 'animate-search' : ''}`} ref={searchContainerRef}>
+                        <div style={{marginTop: '5px', marginBottom: '-10px'}} className={`admin-box-head-search ${isVisible.search ? 'animate-search' : ''}`} ref={searchContainerRef}>
                             <p style={{fontSize: '14px', fontWeight: '300', color: '#000'}}>¿Buscas algo?</p>
                             <Searcher onSearch={handleSearch} placeholder="Buscar productos y ofertas..."></Searcher>
-                            
-                            {/* Tabla de resultados de búsqueda */}
-                            {showSearchResults && (
-                                <div className="search-results-container">
-                                    {searchResults.length > 0 ? (
-                                        <>
-                                            <div className="search-results-header">
-                                                Resultados de búsqueda para "{searchTerm}" ({searchResults.length} encontrado{searchResults.length !== 1 ? 's' : ''})
-                                            </div>
-                                            <table className="search-results-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Nombre</th>
-                                                        <th>Categoría</th>
-                                                        <th>Tipo</th>
-                                                        <th>Acciones</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {searchResults.map((item, index) => (
-                                                        <tr key={`${item.tipo}-${item.id}`}>
-                                                            <td>{item.nombre}</td>
-                                                            <td>{item.categoria}</td>
-                                                            <td>
-                                                                <span className={`search-result-category ${item.tipo.toLowerCase()}`}>
-                                                                    {item.tipo}
-                                                                </span>
-                                                            </td>
-                                                            <td>
-                                                                <div className="search-actions">
-                                                                    <OptionsTable 
-                                                                        onEdit={() => handleEditFromSearch(item)}
-                                                                        onDelete={() => handleDeleteFromSearch(item)}
-                                                                        offerId={item.id}
-                                                                    />
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        </>
-                                    ) : (
-                                        <div className="search-no-results">
-                                            No existen productos con ese nombre, pruebe con otro
-                                        </div>
-                                    )}
-                                </div>
-                            )}
                         </div>
                         <div className={`admin-box2-head ${isVisible.info ? 'animate-fade-in-delay' : ''}`}>
                             <CurrentInformation products={totalProductos} offers={ofertas.length} />
                         </div>
                     </div>
-                    <div className={`admin-first-table ${isVisible.tables ? 'animate-fade-in-delay-2' : ''} ${tablePosition === 'pushed-down' ? 'pushed-down' : ''}`} style={{display: 'flex', alignItems: 'flex-start'}}>
+                    
+                    {showSearchResults && (
+                        <div className="search-results-container">
+                            {searchResults.length > 0 ? (
+                                <>
+                                    <div className="search-results-header">
+                                        Resultados de búsqueda para "{searchTerm}" ({searchResults.length} encontrado{searchResults.length !== 1 ? 's' : ''})
+                                    </div>
+                                    <table className="search-results-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Categoría</th>
+                                                <th>Tipo</th>
+                                                <th>Acción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {searchResults.map((item, index) => (
+                                                <tr key={`${item.tipo}-${item.id}`}>
+                                                    <td>{item.nombre}</td>
+                                                    <td>{item.categoria}</td>
+                                                    <td>
+                                                        <span className={`search-result-category ${item.tipo.toLowerCase()}`}>
+                                                            {item.tipo}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <div className="search-actions">
+                                                            <OptionsTable 
+                                                                onEdit={() => handleEditFromSearch(item)}
+                                                                onDelete={() => handleDeleteFromSearch(item)}
+                                                            />
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </>
+                            ) : (
+                                <div className="search-no-results">
+                                    No existen productos con ese nombre, pruebe con otro
+                                </div>
+                            )}
+                        </div>
+                    )}
+                    <div className={`admin-first-table ${isVisible.tables ? 'animate-fade-in-delay-2' : ''}`} style={{display: 'flex', alignItems: 'flex-start', marginTop: '0px'}}>
                         <p className="animate-text">Últimas creaciones</p>
                         <TableMain 
                             data={ultimasCreacionesData} 
@@ -737,12 +921,12 @@ export default function AdminPanel() {
                 </div>
 
                 {/* Modal para Nuevo Producto */}
-                {showNewProductForm && !editProduct && (
+                {showNewProductForm && !editProduct && !editProductType && (
                     <FormNewProduct onClose={handleCloseNewProduct} onSave={handleRefreshProducts} />
                 )}
 
-                {/* Modales para Editar Productos desde TableMain */}
-                {editProduct && editProduct.categoria === 'Implementos' && (
+                {/* Modales para Editar Productos */}
+                {editProduct && (editProduct.categoria === 'Implementos' || editProductType === 'implementos') && (
                     <FormImplementos
                         onClose={() => { setEditProduct(null); setEditProductType(null); }}
                         implementsData={editProduct}
@@ -751,7 +935,7 @@ export default function AdminPanel() {
                     />
                 )}
 
-                {editProduct && editProduct.categoria === 'Alimentos balanceados' && (
+                {editProduct && (editProduct.categoria === 'Alimentos balanceados' || editProductType === 'alimentos-balanceados') && (
                     <FormAlimentosBalanceados
                         onClose={() => { setEditProduct(null); setEditProductType(null); }}
                         alimentosData={editProduct}
@@ -760,7 +944,7 @@ export default function AdminPanel() {
                     />
                 )}
 
-                {editProduct && editProduct.categoria === 'Medicamentos Veterinarios' && (
+                {editProduct && (editProduct.categoria === 'Medicamentos Veterinarios' || editProductType === 'medicamentos-veterinarios') && (
                     <FormMedicamentosVeterinarios
                         onClose={() => { setEditProduct(null); setEditProductType(null); }}
                         medicamentosData={editProduct}
@@ -769,24 +953,8 @@ export default function AdminPanel() {
                     />
                 )}
 
-                {editProduct && editProduct.categoria === 'Mascotas' && editProductType === 'mascotas-accesorios' && (
+                {editProduct && editProductType === 'mascotas-accesorios' && (
                     <FormEditMascotasAccesorios
-                        onClose={() => { setEditProduct(null); setEditProductType(null); }}
-                        mascotasData={editProduct}
-                        onSave={() => { setEditProduct(null); setEditProductType(null); handleRefreshProducts(); }}
-                    />
-                )}
-
-                {editProduct && editProduct.categoria === 'Mascotas' && editProductType === 'mascotas-alimentos' && (
-                    <FormEditMascotasAlimentos
-                        onClose={() => { setEditProduct(null); setEditProductType(null); }}
-                        mascotasData={editProduct}
-                        onSave={() => { setEditProduct(null); setEditProductType(null); handleRefreshProducts(); }}
-                    />
-                )}
-
-                {editProduct && editProduct.categoria === 'Mascotas' && editProductType === 'mascotas-general' && (
-                    <FormMascotas
                         onClose={() => { setEditProduct(null); setEditProductType(null); }}
                         mascotasData={editProduct}
                         isEdit={true}
@@ -794,12 +962,23 @@ export default function AdminPanel() {
                     />
                 )}
 
+                {editProduct && editProductType === 'mascotas-alimentos' && (
+                    <FormEditMascotasAlimentos
+                        onClose={() => { setEditProduct(null); setEditProductType(null); }}
+                        mascotasData={editProduct}
+                        isEdit={true}
+                        onSave={() => { setEditProduct(null); setEditProductType(null); handleRefreshProducts(); }}
+                    />
+                )}
+
+
+
                 {/* Modal para Nueva Oferta */}
-                {showNewOfferForm && (
+                {showNewOfferForm && !editOffer && (
                     <FormNewOffer onClose={handleCloseNewOffer} onSave={handleRefreshProducts} />
                 )}
 
-                {/* Modal para Editar Oferta desde TableMain */}
+                {/* Modal para Editar Oferta */}
                 {editOffer && (
                     <FormNewOffer 
                         onClose={() => setEditOffer(null)} 

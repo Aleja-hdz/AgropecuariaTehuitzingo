@@ -2,7 +2,7 @@
 
 /* Contenedor para la tabla con scroll */
 .table-container {
-  max-height: 500px; /* Altura optimizada para mostrar aproximadamente 10 registros */
+  max-height: 400px; /* Altura optimizada para mostrar exactamente 8 registros */
   overflow-y: auto;
   border-radius: 12px;
   box-shadow: 0 0 4px rgba(0,0,0,0.1);
@@ -31,6 +31,11 @@
 .table-products td:nth-child(1) {
   width: 85%;
   text-align: left;
+  /* Estilos para manejar texto largo */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  max-width: 0; /* Permite que la celda se ajuste al contenido */
 }
 
 .table-products th:nth-child(2),
@@ -38,6 +43,7 @@
   width: 20%;
   text-align: center;
   padding: 14px 0px;
+  min-width: 80px; /* Ancho mínimo para evitar que se comprima demasiado */
 }
 
 .table-products th {
@@ -87,4 +93,58 @@
 
 .table-container::-webkit-scrollbar-thumb:hover {
   background: rgb(37, 58, 241);
+}
+
+/* Media Queries para Responsividad */
+
+/* Tablets (768px - 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .table-container {
+    max-height: 360px; /* 8 registros en tablets */
+  }
+  
+  .table-products th:nth-child(2),
+  .table-products td:nth-child(2) {
+    padding: 14px 8px 14px 0px;
+  }
+}
+
+/* Móviles (hasta 768px) */
+@media (max-width: 768px) {
+  .table-container {
+    max-height: 320px; /* 8 registros en móviles */
+  }
+  
+  .table-products th:nth-child(1),
+  .table-products td:nth-child(1) {
+    width: 75%;
+    min-width: 150px;
+  }
+  
+  .table-products th:nth-child(2),
+  .table-products td:nth-child(2) {
+    width: 25%;
+    padding: 14px 12px 14px 0px;
+    min-width: 70px;
+  }
+}
+
+/* Móviles pequeños (hasta 480px) */
+@media (max-width: 480px) {
+  .table-container {
+    max-height: 280px; /* 8 registros en móviles pequeños */
+  }
+  
+  .table-products th:nth-child(1),
+  .table-products td:nth-child(1) {
+    width: 70%;
+    min-width: 120px;
+  }
+  
+  .table-products th:nth-child(2),
+  .table-products td:nth-child(2) {
+    width: 30%;
+    padding: 14px 16px 14px 0px;
+    min-width: 60px;
+  }
 }
