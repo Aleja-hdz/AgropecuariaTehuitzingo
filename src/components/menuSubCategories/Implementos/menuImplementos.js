@@ -37,19 +37,26 @@ export default function MenuImplementos({
   };
 
   const animalTypes = [
+    'Universal',
     'Gallos y pollos',
     'Caballos',
     'Vacas',
     'Cerdos',
-    'Ovejas'
+    'Ovejas',
+    'Conejos'
   ];
 
   const whatIsOptions = [
-    'Comedero',
-    'Bebedero',
-    'Montura',
-    'Cuerda',
-    'Deslanador'
+    'Comederos',
+    'Bebederos',
+    'Monturas',
+    'Cuerdas',
+    'Deslanadores',
+    'Rascaderos',
+    'Voladeros',
+    'Jaulas',
+    'Biberones',
+    'Mamilas'
   ];
 
   const marcaOptions = [
@@ -81,7 +88,7 @@ export default function MenuImplementos({
 
         <div className={`filters ${isFiltersOpen ? 'open' : ''}`}>
           <div className="filter" onClick={() => setShowAnimalType(!showAnimalType)}>
-            <span>Para animales {selectedAnimalType && `(${selectedAnimalType})`}</span>
+            <span>Animales {selectedAnimalType && `(${selectedAnimalType})`}</span>
             <ChevronDown size={16} />
             {showAnimalType && (
               <ul className="dropdown">
@@ -100,7 +107,7 @@ export default function MenuImplementos({
           </div>
 
           <div className="filter" onClick={() => setShowWhatIs(!showWhatIs)}>
-            <span>Generales {selectedWhatIs && `(${selectedWhatIs})`}</span>
+            <span>Productos {selectedWhatIs && `(${selectedWhatIs})`}</span>
             <ChevronDown size={16} />
             {showWhatIs && (
               <ul className="dropdown">
@@ -141,7 +148,7 @@ export default function MenuImplementos({
         {isFiltersOpen && (
           <div className="filters-panel">
             <div className="filters-section">
-              <h4>Para animales</h4>
+              <h4>Animales</h4>
               <div className="filters-options">
                 <button className={`option ${tempAnimalType === '' ? 'selected' : ''}`} onClick={() => setTempAnimalType('')}>Todos</button>
                 {animalTypes.map((a) => (
@@ -150,7 +157,7 @@ export default function MenuImplementos({
               </div>
             </div>
             <div className="filters-section">
-              <h4>Generales</h4>
+              <h4>Productos</h4>
               <div className="filters-options">
                 <button className={`option ${tempWhatIs === '' ? 'selected' : ''}`} onClick={() => setTempWhatIs('')}>Todos</button>
                 {whatIsOptions.map((o) => (
@@ -185,7 +192,7 @@ export default function MenuImplementos({
           {selectedWhatIs && (
             <span className="chip">
               {selectedWhatIs}
-              <button onClick={() => onWhatIsFilter('')} aria-label="Quitar filtro generales">
+              <button onClick={() => onWhatIsFilter('')} aria-label="Quitar filtro productos">
                 <X size={14} />
               </button>
             </span>
