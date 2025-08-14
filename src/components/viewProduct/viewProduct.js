@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import './viewProduct.css';
+import ImageViewer from './ImageViewer';
 
 const ViewProduct = ({ product, onClose }) => {
   const [isClosing, setIsClosing] = useState(false);
+  const [showImageViewer, setShowImageViewer] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -49,11 +51,15 @@ const ViewProduct = ({ product, onClose }) => {
     }
   };
 
+  const handleImageClick = () => {
+    setShowImageViewer(true);
+  };
+
   return (
     <div className={`view-producto-modal-overlay ${isClosing ? 'closing' : ''}`} onClick={handleOverlayClick}>
       <div className={`view-producto-modal-content ${isClosing ? 'closing' : ''}`}>
         <div className="view-producto-box">
-          <div className="producto-img-placeholder">
+          <div className="producto-img-placeholder" onClick={handleImageClick} style={{cursor: 'pointer'}}>
             <img src={product.image} alt={product.name} style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px'}} />
           </div>
           <div className="producto-info">
@@ -71,6 +77,13 @@ const ViewProduct = ({ product, onClose }) => {
           </div>
         </div>
       </div>
+      {showImageViewer && (
+        <ImageViewer 
+          imageUrl={product.image} 
+          imageAlt={product.name} 
+          onClose={() => setShowImageViewer(false)} 
+        />
+      )}
     </div>
   );
 };

@@ -1,7 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './viewProduct.css';
+import ImageViewer from './ImageViewer';
 
 const MvViewProduct = ({ product, onClose }) => {
+  const [showImageViewer, setShowImageViewer] = useState(false);
+  
   // Función para formatear las medidas con abreviaciones
   const formatMeasure = (medida) => {
     const medidas = {
@@ -43,6 +46,10 @@ const MvViewProduct = ({ product, onClose }) => {
     }
   };
 
+  const handleImageClick = () => {
+    setShowImageViewer(true);
+  };
+
   return (
     <div className="view-producto-modal-overlay" onClick={handleOverlayClick}>
       <div className="view-producto-modal-content">
@@ -50,7 +57,7 @@ const MvViewProduct = ({ product, onClose }) => {
           {/* Contenedor de imagen estática */}
           <div className="producto-img-container">
             <h2 className="producto-titulo">{product.name}</h2>
-            <div className="producto-img-placeholder">
+            <div className="producto-img-placeholder" onClick={handleImageClick} style={{cursor: 'pointer'}}>
               <img 
                 src={product.image} 
                 alt={product.name} 
@@ -201,6 +208,13 @@ const MvViewProduct = ({ product, onClose }) => {
           </div>
         </div>
       </div>
+      {showImageViewer && (
+        <ImageViewer 
+          imageUrl={product.image} 
+          imageAlt={product.name} 
+          onClose={() => setShowImageViewer(false)} 
+        />
+      )}
     </div>
   );
 };

@@ -3,10 +3,14 @@
 
 /* Contenedor para la tabla con scroll */
 .table-container {
-  max-height: 400px; /* Altura optimizada para mostrar exactamente 8 registros */
+  max-height: 480px; /* Altura optimizada para mostrar exactamente 8 registros (8 * 60px por fila) */
+  min-height: 200px; /* Altura mínima para asegurar que siempre haya espacio para el scroll */
   overflow-y: auto;
+  overflow-x: hidden; /* Evitar scroll horizontal */
   border-radius: 12px;
   box-shadow: 0 0 4px rgba(0,0,0,0.1);
+  position: relative;
+  display: block; /* Asegurar que el contenedor se comporte como bloque */
 }
 
 .product-table {
@@ -20,6 +24,7 @@
   overflow: hidden;
   color: white;
   margin: 0;
+  background: transparent;
 }
 
 .product-table th,
@@ -106,21 +111,50 @@
 
 /* Estilos para el scroll */
 .table-container::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 .table-container::-webkit-scrollbar-track {
   background: #f1f1f1;
-  border-radius: 4px;
+  border-radius: 5px;
+  margin: 2px;
 }
 
 .table-container::-webkit-scrollbar-thumb {
   background: rgb(22, 40, 196);
-  border-radius: 4px;
+  border-radius: 5px;
+  border: 1px solid #e0e0e0;
 }
 
 .table-container::-webkit-scrollbar-thumb:hover {
   background: rgb(37, 58, 241);
+}
+
+/* Estilos para Firefox */
+.table-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(22, 40, 196) #f1f1f1;
+}
+
+/* Indicador de scroll */
+.scroll-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(22, 40, 196, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  z-index: 20;
+  pointer-events: none;
+  animation: fadeInOut 3s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
 }
 
 /* Media Queries para Responsividad */
@@ -128,7 +162,7 @@
 /* Tablets (768px - 1024px) */
 @media (max-width: 1024px) and (min-width: 769px) {
   .table-container {
-    max-height: 360px; /* 8 registros en tablets */
+    max-height: 440px; /* 8 registros en tablets */
   }
   
   .product-table {
@@ -148,7 +182,7 @@
 /* Móviles (hasta 768px) */
 @media (max-width: 768px) {
   .table-container {
-    max-height: 320px; /* 8 registros en móviles */
+    max-height: 400px; /* 8 registros en móviles */
     border-radius: 8px;
   }
   
@@ -194,7 +228,7 @@
 /* Móviles pequeños (hasta 480px) */
 @media (max-width: 480px) {
   .table-container {
-    max-height: 280px; /* 8 registros en móviles pequeños */
+    max-height: 360px; /* 8 registros en móviles pequeños */
     border-radius: 6px;
   }
   

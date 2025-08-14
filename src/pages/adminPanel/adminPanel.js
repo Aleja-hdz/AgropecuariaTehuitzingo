@@ -535,8 +535,8 @@ export default function AdminPanel() {
         }
     }, [searchResults, handleRefreshProducts]);
 
-    // Combinar productos y ofertas para "Últimas creaciones" ordenados por created_at
-    const ultimasCreacionesData = useMemo(() => {
+    // Combinar productos y ofertas para "Todos los productos" ordenados por created_at
+    const todosLosProductosData = useMemo(() => {
         // Preparar productos con formato para la tabla
         const productosFormateados = allProducts.map(producto => ({
             id: producto.id,
@@ -561,7 +561,7 @@ export default function AdminPanel() {
             return dateB - dateA;
         });
 
-        return sortedProducts.slice(0, 5); // Solo los 5 más recientes
+        return sortedProducts; // Mostrar todos los productos
     }, [allProducts, ofertas]);
 
     // Calcular conteos reales
@@ -897,9 +897,9 @@ export default function AdminPanel() {
                         </div>
                     )}
                     <div className={`admin-first-table ${isVisible.tables ? 'animate-fade-in-delay-2' : ''}`} style={{display: 'flex', alignItems: 'flex-start', marginTop: '0px'}}>
-                        <p className="animate-text">Últimas creaciones</p>
+                        <p className="animate-text">Todos los productos</p>
                         <TableMain 
-                            data={ultimasCreacionesData} 
+                            data={todosLosProductosData} 
                             onEdit={handleEditFromMain}
                             onDelete={handleDeleteFromMain}
                         />
