@@ -1,6 +1,7 @@
 import ButtonSmall from "../../../buttonSmall/buttonSmall";
 import { useState, useEffect } from "react";
 import { supabase } from "../../../../lib/supabaseClient";
+import { runSupabaseDiagnostics, testImageUpload } from "../../../../utils/supabaseDiagnostics";
 
 export default function FormImplementos({ onClose, implementsData, isEdit, onSave }) {
 
@@ -18,6 +19,8 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
   // Estados para validaciones
   const [errors, setErrors] = useState({});
   const [showErrors, setShowErrors] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [diagnosticResult, setDiagnosticResult] = useState(null);
 
   // Agregado: Sincronizar los campos con implementsData al cambiar
   useEffect(() => {
@@ -93,10 +96,34 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (!file?.type.startsWith("image/")) {
-      alert("Solo se permiten imágenes");
+    
+    // Validar que se seleccionó un archivo
+    if (!file) {
+      alert("Por favor selecciona una imagen");
       return;
     }
+    
+    // Validar tipo de archivo
+    if (!file.type.startsWith("image/")) {
+      alert("Solo se permiten archivos de imagen (JPG, PNG, GIF, etc.)");
+      return;
+    }
+    
+    // Validar tamaño del archivo (máximo 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB en bytes
+    if (file.size > maxSize) {
+      alert("La imagen es demasiado grande. El tamaño máximo permitido es 5MB");
+      return;
+    }
+    
+    // Validar extensiones específicas
+    const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+    if (!allowedExtensions.includes(fileExtension)) {
+      alert("Formato de imagen no soportado. Usa JPG, PNG, GIF o WebP");
+      return;
+    }
+    
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => setImagePreview(reader.result);
@@ -115,6 +142,73 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
     // Agregar error si no hay imagen
     if (!imageUrl) {
       setErrors(prev => ({ ...prev, image: 'La imagen del producto es obligatoria' }));
+    }
+  };
+
+  // Función para verificar la configuración de Supabase
+  const checkSupabaseConfig = async () => {
+    try {
+      // Verificar autenticación
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError) {
+        console.error("Error de autenticación:", authError);
+        return { success: false, message: "Error de autenticación" };
+      }
+      
+      if (!user) {
+        return { success: false, message: "Usuario no autenticado" };
+      }
+      
+      // Verificar que el bucket existe (intentando listar archivos)
+      const { data: bucketData, error: bucketError } = await supabase
+        .storage
+        .from('implementos-img')
+        .list('', { limit: 1 });
+      
+      if (bucketError) {
+        console.error("Error al verificar bucket:", bucketError);
+        return { success: false, message: "Bucket no configurado correctamente" };
+      }
+      
+      return { success: true, message: "Configuración correcta" };
+    } catch (err) {
+      console.error("Error al verificar configuración:", err);
+      return { success: false, message: "Error de conexión" };
+    }
+  };
+
+  // Función para ejecutar diagnóstico completo
+  const runDiagnostics = async () => {
+    console.log("🔧 Iniciando diagnóstico de Supabase...");
+    setDiagnosticResult("Ejecutando diagnóstico...");
+    
+    try {
+      const diagnostics = await runSupabaseDiagnostics();
+      setDiagnosticResult(diagnostics);
+      
+      if (diagnostics.errors.length > 0) {
+        console.error("❌ Errores encontrados:", diagnostics.errors);
+        alert(`Se encontraron ${diagnostics.errors.length} errores. Revisa la consola para más detalles.`);
+      } else {
+        console.log("✅ Diagnóstico completado sin errores");
+        alert("Diagnóstico completado. No se encontraron errores.");
+      }
+      
+      // Probar subida de imagen si todo está bien
+      if (diagnostics.auth?.success && diagnostics.storage?.['implementos-img']?.success) {
+        console.log("🧪 Probando subida de imagen...");
+        const uploadTest = await testImageUpload();
+        if (uploadTest.success) {
+          console.log("✅ Prueba de subida exitosa");
+        } else {
+          console.error("❌ Prueba de subida falló:", uploadTest.error);
+        }
+      }
+      
+    } catch (err) {
+      console.error("❌ Error en diagnóstico:", err);
+      setDiagnosticResult({ error: err.message });
+      alert(`Error en diagnóstico: ${err.message}`);
     }
   };
 
@@ -143,26 +237,70 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
   };
 
   const uploadImageToSupabase = async () => {
-    if (!imageFile) return;
-
-    const fileName = `${Date.now()}_${imageFile.name}`;
-    const { data, error } = await supabase
-        .storage
-        .from('implementos-img')
-        .upload(fileName, imageFile);
-
-    if (error) {
-        console.error("Error al subir imagen:", error);
-        return null;
+    if (!imageFile) {
+      console.error("No hay archivo de imagen para subir");
+      return null;
     }
 
-    const { data: publicUrl } = supabase
-        .storage
-        .from('implementos-img')
-        .getPublicUrl(fileName);
+    setIsUploading(true);
+    
+    try {
+      // Verificar configuración antes de subir
+      const configCheck = await checkSupabaseConfig();
+      if (!configCheck.success) {
+        alert(`Error de configuración: ${configCheck.message}`);
+        return null;
+      }
 
-    setImageUrl(publicUrl.publicUrl);
-    return publicUrl.publicUrl;
+      // Crear nombre único para el archivo
+      const fileExtension = imageFile.name.split('.').pop().toLowerCase();
+      const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExtension}`;
+      
+      console.log("Intentando subir imagen:", fileName);
+      
+      const { data, error } = await supabase
+          .storage
+          .from('implementos-img')
+          .upload(fileName, imageFile, {
+            cacheControl: '3600',
+            upsert: false
+          });
+
+      if (error) {
+          console.error("Error al subir imagen:", error);
+          
+          // Manejar errores específicos
+          if (error.message.includes('bucket')) {
+            alert("Error: El bucket de almacenamiento no está configurado correctamente");
+          } else if (error.message.includes('size')) {
+            alert("Error: El archivo es demasiado grande");
+          } else if (error.message.includes('type')) {
+            alert("Error: Tipo de archivo no permitido");
+          } else if (error.message.includes('unauthorized')) {
+            alert("Error: No tienes permisos para subir archivos");
+          } else {
+            alert(`Error al subir imagen: ${error.message}`);
+          }
+          return null;
+      }
+
+      console.log("Imagen subida exitosamente:", data);
+
+      const { data: publicUrl } = supabase
+          .storage
+          .from('implementos-img')
+          .getPublicUrl(fileName);
+
+      setImageUrl(publicUrl.publicUrl);
+      return publicUrl.publicUrl;
+      
+    } catch (err) {
+      console.error("Error inesperado al subir imagen:", err);
+      alert("Error inesperado al subir la imagen. Intenta de nuevo.");
+      return null;
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   // Función para limpiar errores cuando el usuario empiece a escribir
@@ -192,12 +330,14 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
           }
           
           if (imageFile) {
+              console.log("Iniciando subida de imagen...");
               const uploadedUrl = await uploadImageToSupabase();
               if (!uploadedUrl) {
-                  alert('No se pudo subir la imagen.');
+                  alert('No se pudo subir la imagen. Verifica que el archivo sea válido y que tengas permisos.');
                   return;
               }
               url = uploadedUrl;
+              console.log("Imagen subida exitosamente:", url);
           }
           
           if (isEdit && implementsData) {
@@ -212,8 +352,8 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
                   marca_distribuidor: marcaDistribuidor,
               }).eq('id', implementsData.id);
               if (error) {
-                  console.error(error);
-                  alert('Error al actualizar producto en Supabase');
+                  console.error('Error al actualizar producto:', error);
+                  alert(`Error al actualizar producto: ${error.message}`);
                   return;
               }
               
@@ -238,8 +378,8 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
                   marca_distribuidor: marcaDistribuidor,
               });
               if (error) {
-                  console.error(error);
-                  alert('Error al guardar el producto en Supabase');
+                  console.error('Error al guardar producto:', error);
+                  alert(`Error al guardar el producto: ${error.message}`);
                   return;
               }
               alert('¡Producto guardado con éxito!');
