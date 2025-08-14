@@ -34,6 +34,38 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+}
+
+.vpo-img-box[onclick]:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
+
+.vpo-img-box[onclick]:hover::after {
+  content: '🔍';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  animation: zoomIn 0.3s ease forwards;
+  z-index: 5;
+}
+
+@keyframes zoomIn {
+  to {
+    opacity: 1;
+  }
 }
 
 .vpo-header {

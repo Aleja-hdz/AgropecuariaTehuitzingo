@@ -1,7 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './viewProduct.css';
+import ImageViewer from './ImageViewer';
 
 const MascAliViewProduct = ({ product, onClose }) => {
+  const [showImageViewer, setShowImageViewer] = useState(false);
+  
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     
@@ -30,6 +33,10 @@ const MascAliViewProduct = ({ product, onClose }) => {
     }
   };
 
+  const handleImageClick = () => {
+    setShowImageViewer(true);
+  };
+
   return (
     <div className="view-producto-modal-overlay" onClick={handleOverlayClick}>
       <div className="view-producto-modal-content">
@@ -37,7 +44,7 @@ const MascAliViewProduct = ({ product, onClose }) => {
           {/* Contenedor de imagen estática */}
           <div className="producto-img-container">
             <h2 className="producto-titulo">{product.nombre || product.name}</h2>
-            <div className="producto-img-placeholder">
+            <div className="producto-img-placeholder" onClick={handleImageClick} style={{cursor: 'pointer'}}>
               <img 
                 src={product.url || product.image || 'https://via.placeholder.com/200x200?text=Sin+Imagen'} 
                 alt={product.nombre || product.name} 
@@ -191,6 +198,13 @@ const MascAliViewProduct = ({ product, onClose }) => {
           </div>
         </div>
       </div>
+      {showImageViewer && (
+        <ImageViewer 
+          imageUrl={product.url || product.image || 'https://via.placeholder.com/200x200?text=Sin+Imagen'} 
+          imageAlt={product.nombre || product.name} 
+          onClose={() => setShowImageViewer(false)} 
+        />
+      )}
     </div>
   );
 };

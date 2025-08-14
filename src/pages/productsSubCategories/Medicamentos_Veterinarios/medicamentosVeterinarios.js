@@ -20,6 +20,10 @@ export default function MedicamentosVeterinarios() {
     const [selectedVia, setSelectedVia] = useState('');
     const [selectedPresentacion, setSelectedPresentacion] = useState('');
 
+    // Estados para paginación
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 24;
+
     // Función para formatear medidas
     const formatMeasure = (medida) => {
         const medidas = {
@@ -126,6 +130,34 @@ export default function MedicamentosVeterinarios() {
         return filtered;
     }, [products, searchTerm, selectedTipo, selectedEspecie, selectedVia, selectedPresentacion]);
 
+    // Paginación
+    const totalPages = useMemo(() => {
+        return Math.max(1, Math.ceil(filteredProducts.length / pageSize));
+    }, [filteredProducts.length]);
+
+    useEffect(() => {
+        // Ajustar página si cambia el total de páginas
+        if (currentPage > totalPages) {
+            setCurrentPage(1);
+        }
+    }, [totalPages, currentPage]);
+
+    const paginatedProducts = useMemo(() => {
+        const start = (currentPage - 1) * pageSize;
+        return filteredProducts.slice(start, start + pageSize);
+    }, [filteredProducts, currentPage]);
+
+    const getPageNumbers = () => {
+        const maxToShow = 5;
+        let start = Math.max(1, currentPage - Math.floor(maxToShow / 2));
+        let end = start + maxToShow - 1;
+        if (end > totalPages) {
+            end = totalPages;
+            start = Math.max(1, end - maxToShow + 1);
+        }
+        return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+    };
+
     const handleSearch = (term) => {
         setSearchTerm(term);
     };
@@ -174,17 +206,32 @@ export default function MedicamentosVeterinarios() {
                     onViaFilter={handleViaFilter}
                     onPresentacionFilter={handlePresentacionFilter}
                 />
-                <div className={`container-card-products ${filteredProducts.length === 0 ? 'no-products' : ''}`}>
+                <div className={`container-card-products ${paginatedProducts.length === 0 ? 'no-products' : ''}`}>
                     {loading ? (
                         <div className="loading">Cargando productos...</div>
-                    ) : filteredProducts.length > 0 ? (
-                        filteredProducts.map((product) => (
+                    ) : paginatedProducts.length > 0 ? (
+                        paginatedProducts.map((product) => (
                             <CardProduct key={product.id} product={product} onViewProduct={handleViewProduct} />
                         ))
                     ) : (
                         <NoProductsFound searchTerm={searchTerm} />
                     )}
                 </div>
+                {totalPages > 1 && (
+                    <div className="pagination">
+                        <button onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))} disabled={currentPage === 1}>Anterior</button>
+                        {getPageNumbers().map((page) => (
+                            <button
+                                key={`page-${page}`}
+                                className={page === currentPage ? 'active' : ''}
+                                onClick={() => setCurrentPage(page)}
+                            >
+                                {page}
+                            </button>
+                        ))}
+                        <button onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))} disabled={currentPage === totalPages}>Siguiente</button>
+                    </div>
+                )}
             </div>
             {showProductModal && (
                 <MvViewProduct product={selectedProduct} onClose={handleCloseProductModal} />

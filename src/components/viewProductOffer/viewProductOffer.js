@@ -1,7 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./viewProductOffer.css";
+import ImageViewer from '../viewProduct/ImageViewer';
 
 export default function ViewProductOffer({ offer, onClose }) {
+  const [showImageViewer, setShowImageViewer] = useState(false);
+  
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     
@@ -28,10 +31,14 @@ export default function ViewProductOffer({ offer, onClose }) {
     }
   };
 
+  const handleImageClick = () => {
+    setShowImageViewer(true);
+  };
+
   return (
     <div className="vpo-modal-bg" onClick={handleOverlayClick}>
       <div className="vpo-modal">
-        <div className="vpo-img-box">
+        <div className="vpo-img-box" onClick={handleImageClick} style={{cursor: 'pointer'}}>
           <img
             src={offer.url}
             alt={offer.nombre}
@@ -70,6 +77,13 @@ export default function ViewProductOffer({ offer, onClose }) {
           </div>
         </div>
       </div>
+      {showImageViewer && (
+        <ImageViewer 
+          imageUrl={offer.url} 
+          imageAlt={offer.nombre} 
+          onClose={() => setShowImageViewer(false)} 
+        />
+      )}
     </div>
   );
 }

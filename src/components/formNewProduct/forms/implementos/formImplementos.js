@@ -464,6 +464,11 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
                         <option value='Montura'>Montura</option>
                         <option value='Cuerda'>Cuerda</option>
                         <option value='Deslanador'>Deslanador</option>
+                        <option value='Rascaderos'>Rascadero</option>
+                        <option value='Voladeros'>Voladero</option>
+                        <option value='Jaulas'>Jaula</option>
+                        <option value='Biberones'>Biberon</option>
+                        <option value='Mamilas'>Mamila</option>
                     </select>
                     {showErrors && errors.whatIs && <p className="error-message">{errors.whatIs}</p>}
                   </div>
@@ -476,11 +481,13 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
                         onChange={(e) => handleInputChange(setTypeAnimal, 'animalType', e.target.value)}
                     >
                         <option value="">-- Selecciona --</option>
+                        <option value='Universal'>Universal</option>
                         <option value='Gallos y pollos'>Gallos y pollos</option>
                         <option value='Caballos'>Caballos</option>
                         <option value='Vacas'>Vacas</option>
                         <option value='Cerdos'>Cerdos</option>
                         <option value='Ovejas'>Ovejas</option>
+                        <option value='Conejos'>Conejos</option>
                     </select>
                     {showErrors && errors.animalType && <p className="error-message">{errors.animalType}</p>}
                   </div>

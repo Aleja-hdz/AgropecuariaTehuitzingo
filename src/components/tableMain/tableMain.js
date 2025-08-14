@@ -6,6 +6,9 @@ const TableMain = ({ data = [], onEdit, onDelete }) => {
   const tableData = data.length > 0 ? data : [
   ];
 
+  // Verificar si hay más de 8 registros para mostrar indicador de scroll
+  const hasMoreThan8Records = tableData.length > 8;
+
   return (
     <div className="table-container">
       <table className="product-table">

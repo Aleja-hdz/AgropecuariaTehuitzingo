@@ -27,7 +27,7 @@ export default function Products(){
     // Estado para "Todos los productos" aleatorios + paginación
     const [shuffledProducts, setShuffledProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 12;
+    const pageSize = 24;
 
     // Animación de entrada inicial
     useEffect(() => {
