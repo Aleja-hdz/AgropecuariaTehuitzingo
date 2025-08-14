@@ -122,6 +122,8 @@ export default function Products(){
                     tipo_animal: item.tipo_animal,
                     recomendaciones_uso: item.recomendaciones_uso,
                     informacion_adicional: item.informacion_adicional,
+                    marca_distribuidor: item.marca_distribuidor,
+                    presentaciones_disponibles: item.presentaciones_disponibles,
                     created_at: item.created_at,
                     // Identificador para el modal correcto
                     modalType: 'implementos'
@@ -347,8 +349,8 @@ export default function Products(){
                     <MenuCategories />
                 </div>
             ) : (
-                // Mostrar resultados: tarjetas en el mismo contenedor de categorías
-                <div className={`categories-container-menu ${isVisible.searchResults ? 'animate-fade-in-delay' : ''}`}>
+                // Mostrar resultados de búsqueda
+                <div className={`search-results-container ${isVisible.searchResults ? 'animate-fade-in-delay' : ''}`}>
                     <div className="search-results-header">
                         <p className='text'>Resultados de búsqueda para "{searchTerm}" ({filteredProducts.length} encontrado{filteredProducts.length !== 1 ? 's' : ''})</p>
                     </div>
