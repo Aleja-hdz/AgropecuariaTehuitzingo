@@ -83,6 +83,36 @@ const ImpViewProduct = ({ product, onClose }) => {
                   </div>
                 </div>
 
+                {/* Marca o distribuidor */}
+                {product.marca_distribuidor && (
+                  <div className="detail-section">
+                    <div className="detail-header">
+                      <span className="detail-icon">🏷️</span> {/* Label icon */}
+                      <h3>Marca o distribuidor</h3>
+                    </div>
+                    <div className="detail-content">
+                      <span className="detail-value">
+                        {product.marca_distribuidor}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Presentaciones disponibles */}
+                {product.presentaciones_disponibles && (
+                  <div className="detail-section">
+                    <div className="detail-header">
+                      <span className="detail-icon">📦</span> {/* Package icon */}
+                      <h3>Presentaciones disponibles</h3>
+                    </div>
+                    <div className="detail-content">
+                      <span className="detail-value">
+                        {product.presentaciones_disponibles}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
                 {/* Recomendaciones de uso */}
                 {product.recomendaciones_uso && (
                   <div className="detail-section">
