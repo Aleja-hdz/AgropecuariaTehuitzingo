@@ -119,25 +119,11 @@ Para más información sobre Agropecuaria Tehuitzingo:
 
 ## 🤝 Contribuciones
 
-Las contribuciones son bienvenidas. Para contribuir:
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+-- Solicitar al administrador por medio de formulario de la web --
 
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
-
-## 🙏 Agradecimientos
-
-- **React Team** por el framework
-- **Supabase** por la infraestructura backend
-- **Comunidad Open Source** por las librerías utilizadas
-
----
 
 <div align="center">
   <p><strong>Agropecuaria Tehuitzingo</strong> - Tu confianza, nuestro compromiso</p>
