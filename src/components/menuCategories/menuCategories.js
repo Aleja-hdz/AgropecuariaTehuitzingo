@@ -19,7 +19,7 @@ export default function MenuCategories() {
             <div className="order-categories animate-categories-row">
                 <Link className="btn-categorie-mascotas animate-category-btn" to="/mascotas">
                     <button className="btn-categorie-mascotas btn-mascotas animate-btn-hover">
-                        <span className="tittles-h1">Mascotas</span>
+                        <span className="tittles-h1">Productos para mascotas</span>
                     </button>
                 </Link>
                 <Link className="btn-categorie-implementos animate-category-btn" to="/implementos">
