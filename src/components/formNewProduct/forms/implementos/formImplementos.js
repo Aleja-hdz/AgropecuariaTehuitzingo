@@ -336,8 +336,7 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
                         onChange={(e) => handleInputChange(setTypeAnimal, 'animalType', e.target.value)}
                     >
                         <option value="">-- Selecciona --</option>
-                        <option value='Gallos'>Gallos</option>
-                        <option value='Pollos'>Pollos</option>
+                        <option value='Gallos y pollos'>Gallos y pollos</option>
                         <option value='Caballos'>Caballos</option>
                         <option value='Vacas'>Vacas</option>
                         <option value='Cerdos'>Cerdos</option>

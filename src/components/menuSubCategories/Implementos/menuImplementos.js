@@ -31,8 +31,7 @@ export default function MenuImplementos({
   };
 
   const animalTypes = [
-    'Gallos',
-    'Pollos',
+    'Gallos y pollos',
     'Caballos',
     'Vacas',
     'Cerdos',
