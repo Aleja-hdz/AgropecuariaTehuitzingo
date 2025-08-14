@@ -187,10 +187,34 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
     // Imagen
     const handleImageChange = (e) => {
         const file = e.target.files[0];
-        if (!file?.type.startsWith('image/')) {
-            setError('Solo se permiten imágenes');
+        
+        // Validar que se seleccionó un archivo
+        if (!file) {
+            setError("Por favor selecciona una imagen");
             return;
         }
+        
+        // Validar tipo de archivo
+        if (!file.type.startsWith('image/')) {
+            setError("Solo se permiten archivos de imagen (JPG, PNG, GIF, etc.)");
+            return;
+        }
+        
+        // Validar tamaño del archivo (máximo 5MB)
+        const maxSize = 5 * 1024 * 1024; // 5MB en bytes
+        if (file.size > maxSize) {
+            setError("La imagen es demasiado grande. El tamaño máximo permitido es 5MB");
+            return;
+        }
+        
+        // Validar extensiones específicas
+        const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(fileExtension)) {
+            setError("Formato de imagen no soportado. Usa JPG, PNG, GIF o WebP");
+            return;
+        }
+        
         setError('');
         const reader = new FileReader();
         reader.onloadend = () => setImagePreview(reader.result);
@@ -237,15 +261,65 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
     };
 
     const uploadImageToSupabase = async (bucket) => {
-        if (!imageFile) return null;
-        const fileName = `${Date.now()}_${imageFile.name}`;
-        const { data, error } = await supabase.storage.from(bucket).upload(fileName, imageFile);
-        if (error) {
-            setError('Error al subir la imagen');
+        if (!imageFile) {
+            console.error("No hay archivo de imagen para subir");
             return null;
         }
-        const { data: publicUrl } = supabase.storage.from(bucket).getPublicUrl(fileName);
-        return publicUrl.publicUrl;
+
+        try {
+            // Verificar que el usuario esté autenticado
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                setError("Debes estar autenticado para subir imágenes");
+                return null;
+            }
+
+            // Crear nombre único para el archivo
+            const fileExtension = imageFile.name.split('.').pop().toLowerCase();
+            const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExtension}`;
+            
+            console.log("Intentando subir imagen:", fileName);
+            
+            const { data, error } = await supabase
+                .storage
+                .from(bucket)
+                .upload(fileName, imageFile, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+
+            if (error) {
+                console.error("Error al subir imagen:", error);
+                
+                // Manejar errores específicos
+                if (error.message.includes('bucket')) {
+                    setError("Error: El bucket de almacenamiento no está configurado correctamente");
+                } else if (error.message.includes('size')) {
+                    setError("Error: El archivo es demasiado grande");
+                } else if (error.message.includes('type')) {
+                    setError("Error: Tipo de archivo no permitido");
+                } else if (error.message.includes('unauthorized')) {
+                    setError("Error: No tienes permisos para subir archivos");
+                } else {
+                    setError(`Error al subir imagen: ${error.message}`);
+                }
+                return null;
+            }
+
+            console.log("Imagen subida exitosamente:", data);
+
+            const { data: publicUrl } = supabase
+                .storage
+                .from(bucket)
+                .getPublicUrl(fileName);
+
+            return publicUrl.publicUrl;
+            
+        } catch (err) {
+            console.error("Error inesperado al subir imagen:", err);
+            setError("Error inesperado al subir la imagen. Intenta de nuevo.");
+            return null;
+        }
     };
 
     // Función para limpiar errores cuando el usuario empiece a escribir
@@ -286,12 +360,14 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
         }
         
         if (imageFile) {
+            console.log("Iniciando subida de imagen...");
             const uploadedUrl = await uploadImageToSupabase(bucket);
             if (!uploadedUrl) {
                 setLoading(false);
                 return;
             }
             url = uploadedUrl;
+            console.log("Imagen subida exitosamente:", url);
         }
         
         if (isEdit && mascotasData) {
@@ -304,7 +380,7 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
             
             if (updateError) {
                 console.error('Error al actualizar producto:', updateError);
-                setError('Error al actualizar producto');
+                setError(`Error al actualizar producto: ${updateError.message}`);
                 setLoading(false);
                 return;
             }
@@ -327,7 +403,7 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
 
                 if (alimentoError) {
                     console.error('Error al actualizar datos del alimento:', alimentoError);
-                    setError('Error al actualizar datos del alimento');
+                    setError(`Error al actualizar datos del alimento: ${alimentoError.message}`);
                     setLoading(false);
                     return;
                 }
@@ -343,7 +419,7 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
 
                 if (accesorioError) {
                     console.error('Error al actualizar datos del accesorio:', accesorioError);
-                    setError('Error al actualizar datos del accesorio');
+                    setError(`Error al actualizar datos del accesorio: ${accesorioError.message}`);
                     setLoading(false);
                     return;
                 }
@@ -368,7 +444,8 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
             }).select('id').single();
             
             if (mascotaError || !mascotaData) {
-                setError('Error al guardar el producto general');
+                console.error('Error al guardar producto general:', mascotaError);
+                setError(`Error al guardar el producto general: ${mascotaError?.message || 'Error desconocido'}`);
                 setLoading(false);
                 return;
             }
@@ -390,7 +467,7 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
                 });
                 if (alimentoError) {
                     console.error('Error al guardar los datos de alimento:', alimentoError);
-                    setError('Error al guardar los datos de alimento');
+                    setError(`Error al guardar los datos de alimento: ${alimentoError.message}`);
                     setLoading(false);
                     return;
                 }
@@ -403,7 +480,7 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
                 });
                 if (accesorioError) {
                     console.error('Error al guardar los datos de accesorio:', accesorioError);
-                    setError('Error al guardar los datos de accesorio');
+                    setError(`Error al guardar los datos de accesorio: ${accesorioError.message}`);
                     setLoading(false);
                     return;
                 }

@@ -121,10 +121,34 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (!file?.type.startsWith("image/")) {
-      alert("Solo se permiten imágenes");
+    
+    // Validar que se seleccionó un archivo
+    if (!file) {
+      alert("Por favor selecciona una imagen");
       return;
     }
+    
+    // Validar tipo de archivo
+    if (!file.type.startsWith("image/")) {
+      alert("Solo se permiten archivos de imagen (JPG, PNG, GIF, etc.)");
+      return;
+    }
+    
+    // Validar tamaño del archivo (máximo 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB en bytes
+    if (file.size > maxSize) {
+      alert("La imagen es demasiado grande. El tamaño máximo permitido es 5MB");
+      return;
+    }
+    
+    // Validar extensiones específicas
+    const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+    if (!allowedExtensions.includes(fileExtension)) {
+      alert("Formato de imagen no soportado. Usa JPG, PNG, GIF o WebP");
+      return;
+    }
+    
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => setImagePreview(reader.result);
@@ -171,26 +195,66 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
   };
 
   const uploadImageToSupabase = async () => {
-    if (!imageFile) return;
-
-    const fileName = `${Date.now()}_${imageFile.name}`;
-    const { error } = await supabase
-        .storage
-        .from('medicamentos-veterinarios-img')
-        .upload(fileName, imageFile);
-
-    if (error) {
-        console.error("Error al subir imagen:", error);
-        return null;
+    if (!imageFile) {
+      console.error("No hay archivo de imagen para subir");
+      return null;
     }
 
-    const { data: publicUrl } = supabase
-        .storage
-        .from('medicamentos-veterinarios-img')
-        .getPublicUrl(fileName);
+    try {
+      // Verificar que el usuario esté autenticado
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        alert("Debes estar autenticado para subir imágenes");
+        return null;
+      }
 
-    setImageUrl(publicUrl.publicUrl);
-    return publicUrl.publicUrl;
+      // Crear nombre único para el archivo
+      const fileExtension = imageFile.name.split('.').pop().toLowerCase();
+      const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExtension}`;
+      
+      console.log("Intentando subir imagen:", fileName);
+      
+      const { data, error } = await supabase
+          .storage
+          .from('medicamentos-veterinarios-img')
+          .upload(fileName, imageFile, {
+            cacheControl: '3600',
+            upsert: false
+          });
+
+      if (error) {
+          console.error("Error al subir imagen:", error);
+          
+          // Manejar errores específicos
+          if (error.message.includes('bucket')) {
+            alert("Error: El bucket de almacenamiento no está configurado correctamente");
+          } else if (error.message.includes('size')) {
+            alert("Error: El archivo es demasiado grande");
+          } else if (error.message.includes('type')) {
+            alert("Error: Tipo de archivo no permitido");
+          } else if (error.message.includes('unauthorized')) {
+            alert("Error: No tienes permisos para subir archivos");
+          } else {
+            alert(`Error al subir imagen: ${error.message}`);
+          }
+          return null;
+      }
+
+      console.log("Imagen subida exitosamente:", data);
+
+      const { data: publicUrl } = supabase
+          .storage
+          .from('medicamentos-veterinarios-img')
+          .getPublicUrl(fileName);
+
+      setImageUrl(publicUrl.publicUrl);
+      return publicUrl.publicUrl;
+      
+    } catch (err) {
+      console.error("Error inesperado al subir imagen:", err);
+      alert("Error inesperado al subir la imagen. Intenta de nuevo.");
+      return null;
+    }
   };
 
   // Función para limpiar errores cuando el usuario empiece a escribir
@@ -220,12 +284,14 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
           }
           
           if (imageFile) {
+              console.log("Iniciando subida de imagen...");
               const uploadedUrl = await uploadImageToSupabase();
               if (!uploadedUrl) {
-                  alert('No se pudo subir la imagen.');
+                  alert('No se pudo subir la imagen. Verifica que el archivo sea válido y que tengas permisos.');
                   return;
               }
               url = uploadedUrl;
+              console.log("Imagen subida exitosamente:", url);
           }
           
           if (isEdit && medicamentosData) {
@@ -243,8 +309,8 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
                   informacion_adicional: informacionAdicional,
               }).eq('id', medicamentosData.id);
               if (error) {
-                  console.error(error);
-                  alert('Error al actualizar producto en Supabase');
+                  console.error('Error al actualizar producto:', error);
+                  alert(`Error al actualizar producto: ${error.message}`);
                   return;
               }
               
@@ -273,8 +339,8 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
                   informacion_adicional: informacionAdicional,
               });
               if (error) {
-                  console.error(error);
-                  alert('Error al guardar el producto en Supabase');
+                  console.error('Error al guardar producto:', error);
+                  alert(`Error al guardar el producto: ${error.message}`);
                   return;
               }
               alert('¡Producto guardado con éxito!');
