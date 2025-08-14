@@ -17,6 +17,7 @@ export default function Implementos() {
     // Estados para filtros
     const [selectedAnimalType, setSelectedAnimalType] = useState('');
     const [selectedWhatIs, setSelectedWhatIs] = useState('');
+    const [selectedMarca, setSelectedMarca] = useState('');
 
     // Estados para animaciones
     const [isVisible, setIsVisible] = useState({
@@ -75,6 +76,8 @@ export default function Implementos() {
                     tipo_animal: item.tipo_animal,
                     recomendaciones_uso: item.recomendaciones_uso,
                     informacion_adicional: item.informacion_adicional,
+                    marca_distribuidor: item.marca_distribuidor,
+                    presentaciones_disponibles: item.presentaciones_disponibles,
                     created_at: item.created_at,
                 }));
                 setProducts(formattedProducts);
@@ -96,7 +99,8 @@ export default function Implementos() {
             filtered = filtered.filter(product => 
                 product.name && product.name.toLowerCase().includes(searchLower) ||
                 product.tipo_animal?.toLowerCase().includes(searchLower) ||
-                product.que_es?.toLowerCase().includes(searchLower)
+                product.que_es?.toLowerCase().includes(searchLower) ||
+                product.marca_distribuidor?.toLowerCase().includes(searchLower)
             );
         }
 
@@ -110,8 +114,13 @@ export default function Implementos() {
             filtered = filtered.filter(product => product.que_es === selectedWhatIs);
         }
 
+        // Filtro por marca
+        if (selectedMarca) {
+            filtered = filtered.filter(product => product.marca_distribuidor === selectedMarca);
+        }
+
         return filtered;
-    }, [products, searchTerm, selectedAnimalType, selectedWhatIs]);
+    }, [products, searchTerm, selectedAnimalType, selectedWhatIs, selectedMarca]);
 
     const handleSearch = (term) => {
         setSearchTerm(term);
@@ -136,6 +145,10 @@ export default function Implementos() {
         setSelectedWhatIs(selectedWhatIs === whatIs ? '' : whatIs);
     };
 
+    const handleMarcaFilter = (marca) => {
+        setSelectedMarca(selectedMarca === marca ? '' : marca);
+    };
+
     return(
         <div className="products-container">
             <div className={`categories-container-head ${isVisible.header ? 'animate-fade-in' : ''}`}>
@@ -146,8 +159,10 @@ export default function Implementos() {
                 <MenuImplementos 
                     selectedAnimalType={selectedAnimalType}
                     selectedWhatIs={selectedWhatIs}
+                    selectedMarca={selectedMarca}
                     onAnimalTypeFilter={handleAnimalTypeFilter}
                     onWhatIsFilter={handleWhatIsFilter}
+                    onMarcaFilter={handleMarcaFilter}
                 />
                 <div className={`container-card-products ${isVisible.products ? 'animate-fade-in-delay-2' : ''} ${filteredProducts.length === 0 ? 'no-products' : ''}`}>
                     {loading ? (

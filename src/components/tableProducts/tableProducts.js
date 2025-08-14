@@ -1,6 +1,7 @@
 import './tableProducts.css';
 import OptionsTable from '../optionsTable/optionsTable';
 import { useState } from 'react';
+import ReactDOM from 'react-dom';
 import FormImplementos from '../formNewProduct/forms/implementos/formImplementos';
 import FormAlimentosBalanceados from '../formNewProduct/forms/alimentosBalanceados/formAlimentosBalanceados';
 import FormMedicamentosVeterinarios from '../formNewProduct/forms/medicamentosVeterinarios/formMedicamentosVeterinarios';
@@ -122,80 +123,98 @@ const TableProducts = ({ productos = [], onRefresh }) => {
     }
   };
 
+  // Función para renderizar modales usando portal
+  const renderModal = () => {
+    if (!editProduct) return null;
+
+    const modalContent = (
+      <>
+        {editProduct.categoria === 'Implementos' && (
+          <FormImplementos
+            onClose={handleCloseEdit}
+            implementsData={editProduct}
+            isEdit={true}
+            onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
+          />
+        )}
+        {editProduct.categoria === 'Alimentos balanceados' && (
+          <FormAlimentosBalanceados
+            onClose={handleCloseEdit}
+            alimentosData={editProduct}
+            isEdit={true}
+            onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
+          />
+        )}
+        {editProduct.categoria === 'Medicamentos Veterinarios' && (
+          <FormMedicamentosVeterinarios
+            onClose={handleCloseEdit}
+            medicamentosData={editProduct}
+            isEdit={true}
+            onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
+          />
+        )}
+        {editProduct.categoria === 'Mascotas' && editProductType === 'mascotas-accesorios' && (
+          <FormEditMascotasAccesorios
+            onClose={handleCloseEdit}
+            mascotasData={editProduct}
+            onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
+          />
+        )}
+        {editProduct.categoria === 'Mascotas' && editProductType === 'mascotas-alimentos' && (
+          <FormEditMascotasAlimentos
+            onClose={handleCloseEdit}
+            mascotasData={editProduct}
+            onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
+          />
+        )}
+        {editProduct.categoria === 'Mascotas' && editProductType === 'mascotas-general' && (
+          <FormMascotas
+            onClose={handleCloseEdit}
+            mascotasData={editProduct}
+            isEdit={true}
+            onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
+          />
+        )}
+      </>
+    );
+
+    // Renderizar el modal en el body del documento usando portal
+    return ReactDOM.createPortal(modalContent, document.body);
+  };
+
   return (
-    <div className="table-container">
-      <table className="table-products">
-        <thead>
-          <tr>
-            <th>Nombre del producto</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {productosData.map((producto, i) => (
-            <tr key={producto.id || i}>
-              <td>{producto.nombre ? producto.nombre : producto}</td>
-              <td>
-                <div className="table-actions">
-                  {(producto.categoria === 'Implementos' || producto.categoria === 'Mascotas' || producto.categoria === 'Alimentos balanceados' || producto.categoria === 'Medicamentos Veterinarios') ? (
-                    <OptionsTable
-                      onDelete={() => handleDelete(producto.id, producto.nombre, producto.categoria, producto.url)}
-                      onEdit={() => handleEdit(producto)}
-                    />
-                  ) : null}
-                </div>
-              </td>
+    <>
+      <div className="table-container">
+        <table className="table-products">
+          <thead>
+            <tr>
+              <th>Nombre del producto</th>
+              <th>Acciones</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      {editProduct && editProduct.categoria === 'Implementos' && (
-        <FormImplementos
-          onClose={handleCloseEdit}
-          implementsData={editProduct}
-          isEdit={true}
-          onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
-        />
-      )}
-      {editProduct && editProduct.categoria === 'Alimentos balanceados' && (
-        <FormAlimentosBalanceados
-          onClose={handleCloseEdit}
-          alimentosData={editProduct}
-          isEdit={true}
-          onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
-        />
-      )}
-      {editProduct && editProduct.categoria === 'Medicamentos Veterinarios' && (
-        <FormMedicamentosVeterinarios
-          onClose={handleCloseEdit}
-          medicamentosData={editProduct}
-          isEdit={true}
-          onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
-        />
-      )}
-      {editProduct && editProduct.categoria === 'Mascotas' && editProductType === 'mascotas-accesorios' && (
-        <FormEditMascotasAccesorios
-          onClose={handleCloseEdit}
-          mascotasData={editProduct}
-          onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
-        />
-      )}
-      {editProduct && editProduct.categoria === 'Mascotas' && editProductType === 'mascotas-alimentos' && (
-        <FormEditMascotasAlimentos
-          onClose={handleCloseEdit}
-          mascotasData={editProduct}
-          onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
-        />
-      )}
-      {editProduct && editProduct.categoria === 'Mascotas' && editProductType === 'mascotas-general' && (
-        <FormMascotas
-          onClose={handleCloseEdit}
-          mascotasData={editProduct}
-          isEdit={true}
-          onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
-        />
-      )}
-    </div>
+          </thead>
+          <tbody>
+            {productosData.map((producto, i) => (
+              <tr key={producto.id || i}>
+                <td>{producto.nombre ? producto.nombre : producto}</td>
+                <td>
+                  <div className="table-actions">
+                    {(producto.categoria === 'Implementos' || producto.categoria === 'Mascotas' || producto.categoria === 'Alimentos balanceados' || producto.categoria === 'Medicamentos Veterinarios') ? (
+                      <OptionsTable
+                        onDelete={() => handleDelete(producto.id, producto.nombre, producto.categoria, producto.url)}
+                        onEdit={() => handleEdit(producto)}
+                      />
+                    ) : null}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      
+      {/* Renderizar modales usando portal */}
+      {renderModal()}
+    </>
   );
 };
 

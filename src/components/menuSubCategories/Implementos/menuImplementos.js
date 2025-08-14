@@ -6,27 +6,33 @@ import { Link } from 'react-router-dom';
 export default function MenuImplementos({
   selectedAnimalType,
   selectedWhatIs,
+  selectedMarca,
   onAnimalTypeFilter,
-  onWhatIsFilter
+  onWhatIsFilter,
+  onMarcaFilter
 }) {
   const [showAnimalType, setShowAnimalType] = useState(false);
   const [showWhatIs, setShowWhatIs] = useState(false);
+  const [showMarca, setShowMarca] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   // Estados temporales móvil
   const [tempAnimalType, setTempAnimalType] = useState(selectedAnimalType || '');
   const [tempWhatIs, setTempWhatIs] = useState(selectedWhatIs || '');
+  const [tempMarca, setTempMarca] = useState(selectedMarca || '');
 
   useEffect(() => {
     if (isFiltersOpen) {
       setTempAnimalType(selectedAnimalType || '');
       setTempWhatIs(selectedWhatIs || '');
+      setTempMarca(selectedMarca || '');
     }
-  }, [isFiltersOpen, selectedAnimalType, selectedWhatIs]);
+  }, [isFiltersOpen, selectedAnimalType, selectedWhatIs, selectedMarca]);
 
   const applyMobileFilters = () => {
     onAnimalTypeFilter(tempAnimalType || '');
     onWhatIsFilter(tempWhatIs || '');
+    onMarcaFilter(tempMarca || '');
     setIsFiltersOpen(false);
   };
 
@@ -44,6 +50,11 @@ export default function MenuImplementos({
     'Montura',
     'Cuerda',
     'Deslanador'
+  ];
+
+  const marcaOptions = [
+    'Implementos Lopez',
+    'Comprovet'
   ];
 
   return (
@@ -106,6 +117,25 @@ export default function MenuImplementos({
               </ul>
             )}
           </div>
+
+          <div className="filter" onClick={() => setShowMarca(!showMarca)}>
+            <span>Marca {selectedMarca && `(${selectedMarca})`}</span>
+            <ChevronDown size={16} />
+            {showMarca && (
+              <ul className="dropdown">
+                <li onClick={() => onMarcaFilter('')}>Todas</li>
+                {marcaOptions.map((option) => (
+                  <li 
+                    key={option}
+                    onClick={() => onMarcaFilter(option)}
+                    className={selectedMarca === option ? 'selected' : ''}
+                  >
+                    {option}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
 
         {isFiltersOpen && (
@@ -128,6 +158,15 @@ export default function MenuImplementos({
                 ))}
               </div>
             </div>
+            <div className="filters-section">
+              <h4>Marca</h4>
+              <div className="filters-options">
+                <button className={`option ${tempMarca === '' ? 'selected' : ''}`} onClick={() => setTempMarca('')}>Todas</button>
+                {marcaOptions.map((m) => (
+                  <button key={m} className={`option ${tempMarca === m ? 'selected' : ''}`} onClick={() => setTempMarca(m)}>{m}</button>
+                ))}
+              </div>
+            </div>
             <div className="filters-actions">
               <button className="apply-filters-btn" onClick={applyMobileFilters}>Aplicar filtros</button>
             </div>
@@ -147,6 +186,14 @@ export default function MenuImplementos({
             <span className="chip">
               {selectedWhatIs}
               <button onClick={() => onWhatIsFilter('')} aria-label="Quitar filtro generales">
+                <X size={14} />
+              </button>
+            </span>
+          )}
+          {selectedMarca && (
+            <span className="chip">
+              {selectedMarca}
+              <button onClick={() => onMarcaFilter('')} aria-label="Quitar filtro marca">
                 <X size={14} />
               </button>
             </span>
