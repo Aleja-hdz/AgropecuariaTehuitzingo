@@ -57,6 +57,15 @@ export default function Implementos() {
         fetchProducts();
     }, []);
 
+    const shuffleArray = (array) => {
+        const copy = [...array];
+        for (let i = copy.length - 1; i > 0; i -= 1) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+    };
+
     const fetchProducts = async () => {
         try {
             setLoading(true);
@@ -86,7 +95,8 @@ export default function Implementos() {
                     presentaciones_disponibles: item.presentaciones_disponibles,
                     created_at: item.created_at,
                 }));
-                setProducts(formattedProducts);
+                // Barajar los productos para mostrar en orden aleatorio
+                setProducts(shuffleArray(formattedProducts));
             }
         } catch (error) {
             console.error('Error inesperado:', error);
@@ -95,6 +105,31 @@ export default function Implementos() {
         }
     };
 
+    // Mapeo de plural a singular para búsqueda
+    const searchMapping = {
+        'comederos': 'comedero',
+        'bebederos': 'bebedero',
+        'monturas': 'montura',
+        'cuerdas': 'cuerda',
+        'deslanadores': 'deslanador',
+        'rascaderos': 'rascadero',
+        'voladeros': 'voladero',
+        'jaulas': 'jaula',
+        'biberones': 'biberon',
+        'mamilas': 'mamila'
+    };
+
+    // Mapeo de valores antiguos (plural) a nuevos (singular) para compatibilidad
+    const legacyMapping = {
+        'Rascaderos': 'Rascadero',
+        'Voladeros': 'Voladero',
+        'Jaulas': 'Jaula',
+        'Biberones': 'Biberon',
+        'Mamilas': 'Mamila'
+    };
+
+
+
     // Función para filtrar productos basada en el término de búsqueda y filtros
     const filteredProducts = useMemo(() => {
         let filtered = products;
@@ -102,12 +137,17 @@ export default function Implementos() {
         // Filtro por búsqueda
         if (searchTerm.trim()) {
             const searchLower = searchTerm.toLowerCase();
-            filtered = filtered.filter(product => 
-                product.name && product.name.toLowerCase().includes(searchLower) ||
-                product.tipo_animal?.toLowerCase().includes(searchLower) ||
-                product.que_es?.toLowerCase().includes(searchLower) ||
-                product.marca_distribuidor?.toLowerCase().includes(searchLower)
-            );
+            const mappedSearchTerm = searchMapping[searchLower] || searchLower;
+            
+            filtered = filtered.filter(product => {
+                // Normalizar el valor del producto para búsqueda
+                const normalizedProductValue = legacyMapping[product.que_es] || product.que_es;
+                
+                return product.name && product.name.toLowerCase().includes(searchLower) ||
+                       product.tipo_animal?.toLowerCase().includes(searchLower) ||
+                       normalizedProductValue?.toLowerCase().includes(mappedSearchTerm) ||
+                       product.marca_distribuidor?.toLowerCase().includes(searchLower);
+            });
         }
 
         // Filtro por tipo de animal
@@ -117,7 +157,11 @@ export default function Implementos() {
 
         // Filtro por tipo de implemento
         if (selectedWhatIs) {
-            filtered = filtered.filter(product => product.que_es === selectedWhatIs);
+            filtered = filtered.filter(product => {
+                // Normalizar el valor del producto para comparación
+                const normalizedProductValue = legacyMapping[product.que_es] || product.que_es;
+                return normalizedProductValue === selectedWhatIs;
+            });
         }
 
         // Filtro por marca
@@ -144,6 +188,20 @@ export default function Implementos() {
             setCurrentPage(1);
         }
     }, [totalPages, currentPage]);
+
+    // Scroll automático cuando cambia la página
+    useEffect(() => {
+        if (currentPage > 1) {
+            // Buscar el contenedor de productos y hacer scroll hacia arriba
+            const productsContainer = document.querySelector('.container-card-products');
+            if (productsContainer) {
+                productsContainer.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+            }
+        }
+    }, [currentPage]);
 
     const paginatedProducts = useMemo(() => {
         const start = (currentPage - 1) * pageSize;

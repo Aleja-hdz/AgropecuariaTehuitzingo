@@ -288,6 +288,20 @@ export default function Products(){
         }
     }, [totalPages, currentPage]);
 
+    // Scroll automático cuando cambia la página
+    useEffect(() => {
+        if (currentPage > 1) {
+            // Buscar el contenedor de productos y hacer scroll hacia arriba
+            const productsContainer = document.querySelector('.all-products');
+            if (productsContainer) {
+                productsContainer.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+            }
+        }
+    }, [currentPage]);
+
     const paginatedProducts = useMemo(() => {
         const start = (currentPage - 1) * pageSize;
         return shuffledProducts.slice(start, start + pageSize);
