@@ -90,6 +90,21 @@ const ImpViewProduct = ({ product, onClose }) => {
                   </div>
                 </div>
 
+                                 {/* Animales especiales */}
+                 {product.animales_especiales && (
+                   <div className="detail-section">
+                     <div className="detail-header">
+                       <span className="detail-icon">⭐</span> {/* Star icon */}
+                       <h3>Producto especial para</h3>
+                     </div>
+                     <div className="detail-content">
+                       <span className="detail-value">
+                         {product.animales_especiales}
+                       </span>
+                     </div>
+                   </div>
+                 )}
+
                 {/* Marca o distribuidor */}
                 {product.marca_distribuidor && (
                   <div className="detail-section">

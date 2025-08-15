@@ -18,6 +18,7 @@ export default function Implementos() {
     const [selectedAnimalType, setSelectedAnimalType] = useState('');
     const [selectedWhatIs, setSelectedWhatIs] = useState('');
     const [selectedMarca, setSelectedMarca] = useState('');
+    const [selectedAnimalesEspeciales, setSelectedAnimalesEspeciales] = useState('');
 
     // Estados para paginación
     const [currentPage, setCurrentPage] = useState(1);
@@ -78,6 +79,7 @@ export default function Implementos() {
                     nombre: item.nombre,
                     que_es: item.que_es,
                     tipo_animal: item.tipo_animal,
+                    animales_especiales: item.animales_especiales,
                     recomendaciones_uso: item.recomendaciones_uso,
                     informacion_adicional: item.informacion_adicional,
                     marca_distribuidor: item.marca_distribuidor,
@@ -123,8 +125,13 @@ export default function Implementos() {
             filtered = filtered.filter(product => product.marca_distribuidor === selectedMarca);
         }
 
+        // Filtro por animales especiales
+        if (selectedAnimalesEspeciales) {
+            filtered = filtered.filter(product => product.animales_especiales === selectedAnimalesEspeciales);
+        }
+
         return filtered;
-    }, [products, searchTerm, selectedAnimalType, selectedWhatIs, selectedMarca]);
+    }, [products, searchTerm, selectedAnimalType, selectedWhatIs, selectedMarca, selectedAnimalesEspeciales]);
 
     // Paginación
     const totalPages = useMemo(() => {
@@ -181,6 +188,10 @@ export default function Implementos() {
         setSelectedMarca(selectedMarca === marca ? '' : marca);
     };
 
+    const handleAnimalesEspecialesFilter = (animalesEspeciales) => {
+        setSelectedAnimalesEspeciales(selectedAnimalesEspeciales === animalesEspeciales ? '' : animalesEspeciales);
+    };
+
     return(
         <div className="products-container">
             <div className={`categories-container-head ${isVisible.header ? 'animate-fade-in' : ''}`}>
@@ -192,9 +203,11 @@ export default function Implementos() {
                     selectedAnimalType={selectedAnimalType}
                     selectedWhatIs={selectedWhatIs}
                     selectedMarca={selectedMarca}
+                    selectedAnimalesEspeciales={selectedAnimalesEspeciales}
                     onAnimalTypeFilter={handleAnimalTypeFilter}
                     onWhatIsFilter={handleWhatIsFilter}
                     onMarcaFilter={handleMarcaFilter}
+                    onAnimalesEspecialesFilter={handleAnimalesEspecialesFilter}
                 />
                 <div className={`container-card-products ${isVisible.products ? 'animate-fade-in-delay-2' : ''} ${paginatedProducts.length === 0 ? 'no-products' : ''}`}>
                     {loading ? (

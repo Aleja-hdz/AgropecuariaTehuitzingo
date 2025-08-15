@@ -118,8 +118,11 @@ export default function Products(){
                     image: item.url || 'https://via.placeholder.com/200x200?text=Sin+Imagen',
                     category: 'Implementos',
                     // Datos adicionales para la vista detallada
+                    url: item.url,
+                    nombre: item.nombre,
                     que_es: item.que_es,
                     tipo_animal: item.tipo_animal,
+                    animales_especiales: item.animales_especiales,
                     recomendaciones_uso: item.recomendaciones_uso,
                     informacion_adicional: item.informacion_adicional,
                     marca_distribuidor: item.marca_distribuidor,
