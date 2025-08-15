@@ -7,32 +7,38 @@ export default function MenuImplementos({
   selectedAnimalType,
   selectedWhatIs,
   selectedMarca,
+  selectedAnimalesEspeciales,
   onAnimalTypeFilter,
   onWhatIsFilter,
-  onMarcaFilter
+  onMarcaFilter,
+  onAnimalesEspecialesFilter
 }) {
   const [showAnimalType, setShowAnimalType] = useState(false);
   const [showWhatIs, setShowWhatIs] = useState(false);
   const [showMarca, setShowMarca] = useState(false);
+  const [showAnimalesEspeciales, setShowAnimalesEspeciales] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   // Estados temporales móvil
   const [tempAnimalType, setTempAnimalType] = useState(selectedAnimalType || '');
   const [tempWhatIs, setTempWhatIs] = useState(selectedWhatIs || '');
   const [tempMarca, setTempMarca] = useState(selectedMarca || '');
+  const [tempAnimalesEspeciales, setTempAnimalesEspeciales] = useState(selectedAnimalesEspeciales || '');
 
   useEffect(() => {
     if (isFiltersOpen) {
       setTempAnimalType(selectedAnimalType || '');
       setTempWhatIs(selectedWhatIs || '');
       setTempMarca(selectedMarca || '');
+      setTempAnimalesEspeciales(selectedAnimalesEspeciales || '');
     }
-  }, [isFiltersOpen, selectedAnimalType, selectedWhatIs, selectedMarca]);
+  }, [isFiltersOpen, selectedAnimalType, selectedWhatIs, selectedMarca, selectedAnimalesEspeciales]);
 
   const applyMobileFilters = () => {
     onAnimalTypeFilter(tempAnimalType || '');
     onWhatIsFilter(tempWhatIs || '');
     onMarcaFilter(tempMarca || '');
+    onAnimalesEspecialesFilter(tempAnimalesEspeciales || '');
     setIsFiltersOpen(false);
   };
 
@@ -62,6 +68,11 @@ export default function MenuImplementos({
   const marcaOptions = [
     'Implementos Lopez',
     'Comprovet'
+  ];
+
+  const animalesEspecialesOptions = [
+    'Aves de combate',
+    'Animales de engorda'
   ];
 
   return (
@@ -143,6 +154,25 @@ export default function MenuImplementos({
               </ul>
             )}
           </div>
+
+          <div className="filter" onClick={() => setShowAnimalesEspeciales(!showAnimalesEspeciales)}>
+            <span>Animales especiales {selectedAnimalesEspeciales && `(${selectedAnimalesEspeciales})`}</span>
+            <ChevronDown size={16} />
+            {showAnimalesEspeciales && (
+              <ul className="dropdown">
+                <li onClick={() => onAnimalesEspecialesFilter('')}>Todos</li>
+                {animalesEspecialesOptions.map((option) => (
+                  <li 
+                    key={option}
+                    onClick={() => onAnimalesEspecialesFilter(option)}
+                    className={selectedAnimalesEspeciales === option ? 'selected' : ''}
+                  >
+                    {option}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
 
         {isFiltersOpen && (
@@ -174,6 +204,15 @@ export default function MenuImplementos({
                 ))}
               </div>
             </div>
+            <div className="filters-section">
+              <h4>Animales especiales</h4>
+              <div className="filters-options">
+                <button className={`option ${tempAnimalesEspeciales === '' ? 'selected' : ''}`} onClick={() => setTempAnimalesEspeciales('')}>Todos</button>
+                {animalesEspecialesOptions.map((a) => (
+                  <button key={a} className={`option ${tempAnimalesEspeciales === a ? 'selected' : ''}`} onClick={() => setTempAnimalesEspeciales(a)}>{a}</button>
+                ))}
+              </div>
+            </div>
             <div className="filters-actions">
               <button className="apply-filters-btn" onClick={applyMobileFilters}>Aplicar filtros</button>
             </div>
@@ -201,6 +240,14 @@ export default function MenuImplementos({
             <span className="chip">
               {selectedMarca}
               <button onClick={() => onMarcaFilter('')} aria-label="Quitar filtro marca">
+                <X size={14} />
+              </button>
+            </span>
+          )}
+          {selectedAnimalesEspeciales && (
+            <span className="chip">
+              {selectedAnimalesEspeciales}
+              <button onClick={() => onAnimalesEspecialesFilter('')} aria-label="Quitar filtro animales especiales">
                 <X size={14} />
               </button>
             </span>

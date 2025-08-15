@@ -11,6 +11,7 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
   const [nameImplement, setNameImplement] = useState(implementsData?.nombre || '');
   const [typeAnimal, setTypeAnimal] = useState(implementsData?.tipo_animal || '');
   const [is, setIs] = useState(implementsData?.que_es || '');
+  const [animalesEspeciales, setAnimalesEspeciales] = useState(implementsData?.animales_especiales || '');
   const [recomendations, setRecomendations] = useState(implementsData?.recomendaciones_uso || '');
   const [additionalDetails, setAdditionalDetails] = useState(implementsData?.informacion_adicional || '');
   const [presentacionesDisponibles, setPresentacionesDisponibles] = useState(implementsData?.presentaciones_disponibles || '');
@@ -28,6 +29,7 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
     setNameImplement(implementsData?.nombre || '');
     setTypeAnimal(implementsData?.tipo_animal || '');
     setIs(implementsData?.que_es || '');
+    setAnimalesEspeciales(implementsData?.animales_especiales || '');
     setRecomendations(implementsData?.recomendaciones_uso || '');
     setAdditionalDetails(implementsData?.informacion_adicional || '');
     setPresentacionesDisponibles(implementsData?.presentaciones_disponibles || '');
@@ -346,6 +348,7 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
                   nombre: nameImplement,
                   tipo_animal: typeAnimal,
                   que_es: is,
+                  animales_especiales: animalesEspeciales,
                   recomendaciones_uso: recomendations,
                   informacion_adicional: additionalDetails,
                   presentaciones_disponibles: presentacionesDisponibles,
@@ -372,6 +375,7 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
                   nombre: nameImplement,
                   tipo_animal: typeAnimal,
                   que_es: is,
+                  animales_especiales: animalesEspeciales,
                   recomendaciones_uso: recomendations,
                   informacion_adicional: additionalDetails,
                   presentaciones_disponibles: presentacionesDisponibles,
@@ -400,6 +404,7 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
       setNameImplement('');
       setTypeAnimal('');
       setIs('');
+      setAnimalesEspeciales('');
       setRecomendations('');
       setAdditionalDetails('');
       setPresentacionesDisponibles('');
@@ -491,7 +496,21 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
                     </select>
                     {showErrors && errors.animalType && <p className="error-message">{errors.animalType}</p>}
                   </div>
-                                 </div>
+                </div>
+                
+                  <div className='new-product-box1' style={{marginTop: '20px'}}>
+                    <label>¿Es para animales especiales? Selecciona:</label>
+                    <select 
+                        className='new-product-opc-category' 
+                        name="Opciones" 
+                        value={animalesEspeciales} 
+                        onChange={(e) => setAnimalesEspeciales(e.target.value)}
+                    >
+                        <option value="">-- Selecciona --</option>
+                        <option value='Aves de combate'>Aves de combate</option>
+                        <option value='Animales de engorda'>Animales de engorda</option>
+                    </select>
+                  </div>
                  
                  <div className='new-product-box'>
                      <label className='new-product-text-box'>Marca o distribuidor: *</label>
