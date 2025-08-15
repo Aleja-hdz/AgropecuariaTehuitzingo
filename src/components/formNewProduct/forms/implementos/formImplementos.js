@@ -469,11 +469,11 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
                         <option value='Montura'>Montura</option>
                         <option value='Cuerda'>Cuerda</option>
                         <option value='Deslanador'>Deslanador</option>
-                        <option value='Rascaderos'>Rascadero</option>
-                        <option value='Voladeros'>Voladero</option>
-                        <option value='Jaulas'>Jaula</option>
-                        <option value='Biberones'>Biberon</option>
-                        <option value='Mamilas'>Mamila</option>
+                        <option value='Rascadero'>Rascadero</option>
+                        <option value='Voladero'>Voladero</option>
+                        <option value='Jaula'>Jaula</option>
+                        <option value='Biberon'>Biberon</option>
+                        <option value='Mamila'>Mamila</option>
                     </select>
                     {showErrors && errors.whatIs && <p className="error-message">{errors.whatIs}</p>}
                   </div>

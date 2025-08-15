@@ -30,6 +30,15 @@ export default function Mascotas() {
         fetchProducts();
     }, []);
 
+    const shuffleArray = (array) => {
+        const copy = [...array];
+        for (let i = copy.length - 1; i > 0; i -= 1) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+    };
+
     const fetchProducts = async () => {
         try {
             setLoading(true);
@@ -106,7 +115,8 @@ export default function Mascotas() {
                     })
                 );
                 
-                setProducts(productsWithDetails);
+                // Barajar los productos para mostrar en orden aleatorio
+                setProducts(shuffleArray(productsWithDetails));
             }
         } catch (error) {
             console.error('Error inesperado:', error);
@@ -169,6 +179,20 @@ export default function Mascotas() {
             setCurrentPage(1);
         }
     }, [totalPages, currentPage]);
+
+    // Scroll automático cuando cambia la página
+    useEffect(() => {
+        if (currentPage > 1) {
+            // Buscar el contenedor de productos y hacer scroll hacia arriba
+            const productsContainer = document.querySelector('.container-card-products');
+            if (productsContainer) {
+                productsContainer.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+            }
+        }
+    }, [currentPage]);
 
     const paginatedProducts = useMemo(() => {
         const start = (currentPage - 1) * pageSize;

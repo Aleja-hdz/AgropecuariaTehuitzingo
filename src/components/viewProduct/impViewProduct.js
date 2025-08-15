@@ -5,6 +5,27 @@ import ImageViewer from './ImageViewer';
 const ImpViewProduct = ({ product, onClose }) => {
   const [showImageViewer, setShowImageViewer] = useState(false);
   
+  // Función para asegurar que se muestre en singular
+  const getSingularWhatIs = (whatIs) => {
+    if (!whatIs) return '---';
+    
+    // Mapeo de plural a singular para casos inconsistentes
+    const pluralToSingular = {
+      'Comederos': 'Comedero',
+      'Bebederos': 'Bebedero',
+      'Monturas': 'Montura',
+      'Cuerdas': 'Cuerda',
+      'Deslanadores': 'Deslanador',
+      'Rascaderos': 'Rascadero',
+      'Voladeros': 'Voladero',
+      'Jaulas': 'Jaula',
+      'Biberones': 'Biberon',
+      'Mamilas': 'Mamila'
+    };
+    
+    return pluralToSingular[whatIs] || whatIs;
+  };
+  
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     
@@ -72,7 +93,7 @@ const ImpViewProduct = ({ product, onClose }) => {
                   </div>
                   <div className="detail-content">
                     <span className="detail-value">
-                      {product.que_es || '---'}
+                      {getSingularWhatIs(product.que_es)}
                     </span>
                   </div>
                 </div>
