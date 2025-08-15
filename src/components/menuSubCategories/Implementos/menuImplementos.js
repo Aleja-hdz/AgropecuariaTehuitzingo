@@ -42,28 +42,37 @@ export default function MenuImplementos({
     setIsFiltersOpen(false);
   };
 
+  // Función para obtener el texto en plural para mostrar en filtros activos
+  const getWhatIsDisplayText = (singularValue) => {
+    if (!singularValue) return '';
+    const pluralEntry = Object.entries(whatIsMapping).find(([plural, singular]) => singular === singularValue);
+    return pluralEntry ? pluralEntry[0] : singularValue;
+  };
+
   const animalTypes = [
     'Universal',
     'Gallos y pollos',
+    'Conejos',
     'Caballos',
     'Vacas',
     'Cerdos',
-    'Ovejas',
-    'Conejos'
+    'Ovejas'
   ];
 
-  const whatIsOptions = [
-    'Comederos',
-    'Bebederos',
-    'Monturas',
-    'Cuerdas',
-    'Deslanadores',
-    'Rascaderos',
-    'Voladeros',
-    'Jaulas',
-    'Biberones',
-    'Mamilas'
-  ];
+  const whatIsMapping = {
+    'Comederos': 'Comedero',
+    'Bebederos': 'Bebedero',
+    'Rascaderos': 'Rascadero',
+    'Voladeros': 'Voladero',
+    'Jaulas': 'Jaula',
+    'Biberones': 'Biberon',
+    'Mamilas': 'Mamila',
+    'Monturas': 'Montura',
+    'Cuerdas': 'Cuerda',
+    'Deslanadores': 'Deslanador'
+  };
+
+  const whatIsOptions = Object.keys(whatIsMapping);
 
   const marcaOptions = [
     'Implementos Lopez',
@@ -117,21 +126,21 @@ export default function MenuImplementos({
             )}
           </div>
 
-          <div className="filter" onClick={() => setShowWhatIs(!showWhatIs)}>
-            <span>Productos {selectedWhatIs && `(${selectedWhatIs})`}</span>
+                     <div className="filter" onClick={() => setShowWhatIs(!showWhatIs)}>
+             <span>Productos {selectedWhatIs && `(${getWhatIsDisplayText(selectedWhatIs)})`}</span>
             <ChevronDown size={16} />
             {showWhatIs && (
               <ul className="dropdown">
                 <li onClick={() => onWhatIsFilter('')}>Todos</li>
-                {whatIsOptions.map((option) => (
-                  <li 
-                    key={option}
-                    onClick={() => onWhatIsFilter(option)}
-                    className={selectedWhatIs === option ? 'selected' : ''}
-                  >
-                    {option}
-                  </li>
-                ))}
+                                 {whatIsOptions.map((option) => (
+                   <li 
+                     key={option}
+                     onClick={() => onWhatIsFilter(whatIsMapping[option])}
+                     className={selectedWhatIs === whatIsMapping[option] ? 'selected' : ''}
+                   >
+                     {option}
+                   </li>
+                 ))}
               </ul>
             )}
           </div>
@@ -190,9 +199,9 @@ export default function MenuImplementos({
               <h4>Productos</h4>
               <div className="filters-options">
                 <button className={`option ${tempWhatIs === '' ? 'selected' : ''}`} onClick={() => setTempWhatIs('')}>Todos</button>
-                {whatIsOptions.map((o) => (
-                  <button key={o} className={`option ${tempWhatIs === o ? 'selected' : ''}`} onClick={() => setTempWhatIs(o)}>{o}</button>
-                ))}
+                                 {whatIsOptions.map((o) => (
+                   <button key={o} className={`option ${tempWhatIs === whatIsMapping[o] ? 'selected' : ''}`} onClick={() => setTempWhatIs(whatIsMapping[o])}>{o}</button>
+                 ))}
               </div>
             </div>
             <div className="filters-section">
@@ -228,14 +237,14 @@ export default function MenuImplementos({
               </button>
             </span>
           )}
-          {selectedWhatIs && (
-            <span className="chip">
-              {selectedWhatIs}
-              <button onClick={() => onWhatIsFilter('')} aria-label="Quitar filtro productos">
-                <X size={14} />
-              </button>
-            </span>
-          )}
+                     {selectedWhatIs && (
+             <span className="chip">
+               {getWhatIsDisplayText(selectedWhatIs)}
+               <button onClick={() => onWhatIsFilter('')} aria-label="Quitar filtro productos">
+                 <X size={14} />
+               </button>
+             </span>
+           )}
           {selectedMarca && (
             <span className="chip">
               {selectedMarca}
