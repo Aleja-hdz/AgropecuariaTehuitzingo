@@ -19,6 +19,7 @@ export default function MedicamentosVeterinarios() {
     const [selectedEspecie, setSelectedEspecie] = useState('');
     const [selectedVia, setSelectedVia] = useState('');
     const [selectedPresentacion, setSelectedPresentacion] = useState('');
+    const [selectedMarca, setSelectedMarca] = useState('');
 
     // Estados para paginación
     const [currentPage, setCurrentPage] = useState(1);
@@ -137,8 +138,13 @@ export default function MedicamentosVeterinarios() {
             filtered = filtered.filter(product => product.presentacion === selectedPresentacion);
         }
 
+        // Filtro por marca
+        if (selectedMarca) {
+            filtered = filtered.filter(product => product.marca === selectedMarca);
+        }
+
         return filtered;
-    }, [products, searchTerm, selectedTipo, selectedEspecie, selectedVia, selectedPresentacion]);
+    }, [products, searchTerm, selectedTipo, selectedEspecie, selectedVia, selectedPresentacion, selectedMarca]);
 
     // Paginación
     const totalPages = useMemo(() => {
@@ -213,6 +219,10 @@ export default function MedicamentosVeterinarios() {
         setSelectedPresentacion(selectedPresentacion === presentacion ? '' : presentacion);
     };
 
+    const handleMarcaFilter = (marca) => {
+        setSelectedMarca(selectedMarca === marca ? '' : marca);
+    };
+
     return(
         <div className="products-container">
             <div className="categories-container-head">
@@ -225,10 +235,12 @@ export default function MedicamentosVeterinarios() {
                     selectedEspecie={selectedEspecie}
                     selectedVia={selectedVia}
                     selectedPresentacion={selectedPresentacion}
+                    selectedMarca={selectedMarca}
                     onTipoFilter={handleTipoFilter}
                     onEspecieFilter={handleEspecieFilter}
                     onViaFilter={handleViaFilter}
                     onPresentacionFilter={handlePresentacionFilter}
+                    onMarcaFilter={handleMarcaFilter}
                 />
                 <div className={`container-card-products ${paginatedProducts.length === 0 ? 'no-products' : ''}`}>
                     {loading ? (

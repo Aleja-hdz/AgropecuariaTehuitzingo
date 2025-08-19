@@ -39,14 +39,35 @@ const TableProducts = ({ productos = [], onRefresh }) => {
         setEditProduct(producto);
       }
     } else if (producto.categoria === 'Alimentos balanceados') {
+      // Obtener todos los datos del alimento balanceado
+      const { data: alimentoData } = await supabase
+        .from('alimentos_balanceados')
+        .select('*')
+        .eq('id', producto.id)
+        .single();
+      
       setEditProductType('alimentos-balanceados');
-      setEditProduct(producto);
+      setEditProduct(alimentoData || producto);
     } else if (producto.categoria === 'Medicamentos Veterinarios') {
+      // Obtener todos los datos del medicamento veterinario
+      const { data: medicamentoData } = await supabase
+        .from('medicamentos_veterinarios')
+        .select('*')
+        .eq('id', producto.id)
+        .single();
+      
       setEditProductType('medicamentos-veterinarios');
-      setEditProduct(producto);
+      setEditProduct(medicamentoData || producto);
     } else {
+      // Obtener todos los datos del implemento
+      const { data: implementoData } = await supabase
+        .from('implementos')
+        .select('*')
+        .eq('id', producto.id)
+        .single();
+      
       setEditProductType('implementos');
-      setEditProduct(producto);
+      setEditProduct(implementoData || producto);
     }
   };
 

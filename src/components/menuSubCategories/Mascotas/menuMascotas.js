@@ -37,10 +37,10 @@ export default function MenuMascotas({
   };
 
   const foodTypes = [
-    'Perro',
     'Gato',
     'Hamsters',
-    'Peces'
+    'Peces',
+    'Perro'
   ];
 
   const accessoryTypes = [
@@ -50,10 +50,10 @@ export default function MenuMascotas({
   ];
 
   const animalTypes = [
-    'Perro',
     'Gato',
     'Hamsters',
-    'Peces'
+    'Peces',
+    'Perro'
   ];
 
   return (

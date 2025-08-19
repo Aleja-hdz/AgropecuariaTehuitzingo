@@ -50,38 +50,38 @@ export default function MenuImplementos({
   };
 
   const animalTypes = [
-    'Universal',
-    'Gallos y pollos',
-    'Conejos',
     'Caballos',
-    'Vacas',
     'Cerdos',
-    'Ovejas'
+    'Conejos',
+    'Gallos y pollos',
+    'Ovejas',
+    'Universal',
+    'Vacas'
   ];
 
   const whatIsMapping = {
-    'Comederos': 'Comedero',
     'Bebederos': 'Bebedero',
-    'Rascaderos': 'Rascadero',
-    'Voladeros': 'Voladero',
-    'Jaulas': 'Jaula',
     'Biberones': 'Biberon',
+    'Comederos': 'Comedero',
+    'Cuerdas': 'Cuerda',
+    'Deslanadores': 'Deslanador',
+    'Jaulas': 'Jaula',
     'Mamilas': 'Mamila',
     'Monturas': 'Montura',
-    'Cuerdas': 'Cuerda',
-    'Deslanadores': 'Deslanador'
+    'Rascaderos': 'Rascadero',
+    'Voladeros': 'Voladero'
   };
 
   const whatIsOptions = Object.keys(whatIsMapping);
 
   const marcaOptions = [
-    'Implementos Lopez',
-    'Comprovet'
+    'Comprovet',
+    'Implementos Lopez'
   ];
 
   const animalesEspecialesOptions = [
-    'Aves de combate',
-    'Animales de engorda'
+    'Animales de engorda',
+    'Aves de combate'
   ];
 
   return (

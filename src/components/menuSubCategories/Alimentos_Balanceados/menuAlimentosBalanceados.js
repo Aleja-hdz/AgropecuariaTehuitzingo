@@ -42,15 +42,22 @@ export default function MenuAlimentosBalanceados({
     'Porcinos',
     'Caprinos',
     'Ovinos',
-    'Aves',
-    'Aquacultura'
+    'Aviar',
+    'Canino',
+    'Felino',
+    'Aquacultura',
+    'Apícola',
+    'Roedores',
+    'Reptilia',
+    'Cúnicos',
+    'Aves ornamentales'
   ];
 
   const brands = [
-    'Unión',
     'Apiaba',
     'Fasa',
-    'Nutre bien'
+    'Nutre bien',
+    'Unión'
   ];
 
   const productionOptions = [
