@@ -191,6 +191,8 @@ export default function AdminPanel() {
                 via_administracion: item.via_administracion || '',
                 presentacion: item.presentacion || '',
                 marca: item.marca || '',
+                contenido_decimal: item.contenido_decimal || '',
+                contenido_medida: item.contenido_medida || '',
                 informacion_adicional: item.informacion_adicional || '',
                 created_at: item.created_at,
             })));

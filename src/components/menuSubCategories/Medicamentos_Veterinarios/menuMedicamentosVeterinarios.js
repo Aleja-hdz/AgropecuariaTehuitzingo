@@ -8,15 +8,18 @@ export default function MenuMedicamentosVeterinarios({
   selectedEspecie,
   selectedVia,
   selectedPresentacion,
+  selectedMarca,
   onTipoFilter,
   onEspecieFilter,
   onViaFilter,
-  onPresentacionFilter
+  onPresentacionFilter,
+  onMarcaFilter
 }) {
   const [showTipo, setShowTipo] = useState(false);
   const [showEspecie, setShowEspecie] = useState(false);
   const [showVia, setShowVia] = useState(false);
   const [showPresentacion, setShowPresentacion] = useState(false);
+  const [showMarca, setShowMarca] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   // Estados temporales para el panel móvil
@@ -24,6 +27,7 @@ export default function MenuMedicamentosVeterinarios({
   const [tempEspecie, setTempEspecie] = useState(selectedEspecie || '');
   const [tempVia, setTempVia] = useState(selectedVia || '');
   const [tempPresentacion, setTempPresentacion] = useState(selectedPresentacion || '');
+  const [tempMarca, setTempMarca] = useState(selectedMarca || '');
 
   useEffect(() => {
     if (isFiltersOpen) {
@@ -31,63 +35,104 @@ export default function MenuMedicamentosVeterinarios({
       setTempEspecie(selectedEspecie || '');
       setTempVia(selectedVia || '');
       setTempPresentacion(selectedPresentacion || '');
+      setTempMarca(selectedMarca || '');
     }
-  }, [isFiltersOpen, selectedTipo, selectedEspecie, selectedVia, selectedPresentacion]);
+  }, [isFiltersOpen, selectedTipo, selectedEspecie, selectedVia, selectedPresentacion, selectedMarca]);
 
   const applyMobileFilters = () => {
     onTipoFilter(tempTipo || '');
     onEspecieFilter(tempEspecie || '');
     onViaFilter(tempVia || '');
     onPresentacionFilter(tempPresentacion || '');
+    onMarcaFilter(tempMarca || '');
     setIsFiltersOpen(false);
   };
 
   const tipos = [
-    'Desparasitante',
-    'Vitamina',
-    'Suplemento',
-    'Vacuna',
-    'Antibiótico',
-    'Antiinflamatorio',
     'Analgésico',
-    'Hormonal'
+    'Antihelmínticos',
+    'Antibiótico',
+    'Antimicóticos',
+    'Antimicrobianos',
+    'Antiparásito',
+    'Antiséptico',
+    'Antiinflamatorio',
+    'Biológicos',
+    'Cardiología',
+    'Dermatología',
+    'Desinfectante',
+    'Desparasitante',
+    'Electrolitos',
+    'Endocrinología',
+    'Farmacéutico',
+    'Gastroenterología',
+    'Gastrointestinal',
+    'Hormonal',
+    'Locomoción',
+    'Manejo de heridas',
+    'Multivitamínico',
+    'Nutrición',
+    'Pomada',
+    'Renal',
+    'Respiratorio',
+    'Solución',
+    'Suplementos',
+    'Vacunas',
+    'Vitaminas'
   ];
 
   const especies = [
-    'Perro',
-    'Gato',
-    'Gallo',
-    'Caballo',
-    'Cerdo',
-    'Conejo',
-    'Vaca',
-    'Oveja',
-    'Cabra',
-    'Ave'
+    'Bovinos',
+    'Equinos',
+    'Porcinos',
+    'Caprinos',
+    'Ovinos',
+    'Aviar',
+    'Canino',
+    'Felino',
+    'Aquacultura',
+    'Apícola',
+    'Roedores',
+    'Reptilia',
+    'Cúnicos',
+    'Aves ornamentales'
   ];
 
   const vias = [
-    'Oral',
-    'Inyectable',
-    'Tópica',
-    'Intranasal',
-    'Ocular',
-    'Subcutánea',
     'Intramuscular',
-    'Intravenosa'
+    'Intranasal',
+    'Intravenosa',
+    'Inyectable',
+    'Ocular',
+    'Oral',
+    'Subcutánea',
+    'Tópica'
   ];
 
   const presentaciones = [
-    'Frasco',
     'Ampolleta',
     'Blister',
-    'Sobres',
+    'Cápsulas',
+    'Frasco',
+    'Gotas',
     'Jeringa',
     'Pomada',
-    'Gotas',
-    'Tabletas',
-    'Cápsulas',
-    'Suspensión'
+    'Sobres',
+    'Suspensión',
+    'Tabletas'
+  ];
+
+  const marcas = [
+    'AGROVET',
+    'ARANDA',
+    'Aranda Pets',
+    'Dechra',
+    'Laboratorios Pier',
+    'PANAVET',
+    'PROVETMEX',
+    'Riverfarma',
+    'Sanfer',
+    'Zoetis'
   ];
 
   return (
@@ -193,6 +238,26 @@ export default function MenuMedicamentosVeterinarios({
               </ul>
             )}
           </div>
+
+          {/* Filtro por Marca */}
+          <div className="filter" onClick={() => setShowMarca(!showMarca)}>
+            <span>Marca {selectedMarca && `(${selectedMarca})`}</span>
+            <ChevronDown size={16} />
+            {showMarca && (
+              <ul className="dropdown">
+                <li onClick={() => onMarcaFilter('')}>Todas las marcas</li>
+                {marcas.map((marca) => (
+                  <li 
+                    key={marca}
+                    onClick={() => onMarcaFilter(marca)}
+                    className={selectedMarca === marca ? 'selected' : ''}
+                  >
+                    {marca}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
 
         {/* Panel móvil de filtros en lista */}
@@ -234,6 +299,15 @@ export default function MenuMedicamentosVeterinarios({
                 ))}
               </div>
             </div>
+            <div className="filters-section">
+              <h4>Marca</h4>
+              <div className="filters-options">
+                <button className={`option ${tempMarca === '' ? 'selected' : ''}`} onClick={() => setTempMarca('')}>Todas</button>
+                {marcas.map((m) => (
+                  <button key={m} className={`option ${tempMarca === m ? 'selected' : ''}`} onClick={() => setTempMarca(m)}>{m}</button>
+                ))}
+              </div>
+            </div>
             <div className="filters-actions">
               <button className="apply-filters-btn" onClick={applyMobileFilters}>Aplicar filtros</button>
             </div>
@@ -270,6 +344,14 @@ export default function MenuMedicamentosVeterinarios({
             <span className="chip">
               {selectedPresentacion}
               <button onClick={() => onPresentacionFilter('')} aria-label="Quitar filtro presentación">
+                <X size={14} />
+              </button>
+            </span>
+          )}
+          {selectedMarca && (
+            <span className="chip">
+              {selectedMarca}
+              <button onClick={() => onMarcaFilter('')} aria-label="Quitar filtro marca">
                 <X size={14} />
               </button>
             </span>
