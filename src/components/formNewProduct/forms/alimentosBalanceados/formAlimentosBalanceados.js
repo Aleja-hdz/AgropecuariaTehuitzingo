@@ -450,8 +450,15 @@ export default function FormAlimentosBalanceados({ onClose, alimentosData, isEdi
                               <option value='Porcinos'>Porcinos</option>
                               <option value='Caprinos'>Caprinos</option>
                               <option value='Ovinos'>Ovinos</option>
-                              <option value='Aves'>Aves</option>
+                              <option value='Aviar'>Aviar</option>
+                              <option value='Canino'>Canino</option>
+                              <option value='Felino'>Felino</option>
                               <option value='Aquacultura'>Aquacultura</option>
+                              <option value='Apícola'>Apícola</option>
+                              <option value='Roedores'>Roedores</option>
+                              <option value='Reptilia'>Reptilia</option>
+                              <option value='Cúnicos'>Cúnicos</option>
+                              <option value='Aves ornamentales'>Aves ornamentales</option>
                           </select>
                           {showErrors && errors.especie && <p className="error-message">{errors.especie}</p>}
                       </div>

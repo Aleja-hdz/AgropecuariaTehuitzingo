@@ -413,24 +413,46 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
                 />
                 {showErrors && errors.nombre && <p className="error-message">{errors.nombre}</p>}
                 
-            <div className='new-product-box2'>
+            <div style={{gap:'15px'}} className='new-product-box2'>
                 <div className='new-product-box1'>
-                    <label>¿Qué tipo de medicamento es? *</label>
-                    <select 
-                        className={`new-product-opc-category ${showErrors && errors.tipo ? 'error-input' : ''}`} 
-                        value={tipo} 
-                        onChange={(e) => handleInputChange(setTipo, 'tipo', e.target.value)}
-                    >
-                        <option value="">-- Selecciona --</option>
-                        <option value='Desparasitante'>Desparasitante</option>
-                        <option value='Vitaminas'>Vitaminas</option>
-                        <option value='Suplementos'>Suplementos</option>
-                        <option value='Vacunas'>Vacunas</option>
-                        <option value='Antibiótico'>Antibiótico</option>
-                        <option value='Antiinflamatorio'>Antiinflamatorio</option>
-                        <option value='Analgésico'>Analgésico</option>
-                        <option value='Hormonal'>Hormonal</option>
-                    </select>
+                    <label>Tipo de medicamento: *</label>
+                                         <select 
+                         className={`new-product-opc-category ${showErrors && errors.tipo ? 'error-input' : ''}`} 
+                         value={tipo} 
+                         onChange={(e) => handleInputChange(setTipo, 'tipo', e.target.value)}
+                     >
+                         <option value="">-- Selecciona --</option>
+                         <option value='Analgésico'>Analgésico</option>
+                         <option value='Antihelmínticos'>Antihelmínticos</option>
+                         <option value='Antibiótico'>Antibiótico</option>
+                         <option value='Antimicóticos'>Antimicóticos</option>
+                         <option value='Antimicrobianos'>Antimicrobianos</option>
+                         <option value='Antiparásito'>Antiparásito</option>
+                         <option value='Antiséptico'>Antiséptico</option>
+                         <option value='Antiinflamatorio'>Antiinflamatorio</option>
+                         <option value='Biológicos'>Biológicos</option>
+                         <option value='Cardiología'>Cardiología</option>
+                         <option value='Dermatología'>Dermatología</option>
+                         <option value='Desinfectante'>Desinfectante</option>
+                         <option value='Desparasitante'>Desparasitante</option>
+                         <option value='Electrolitos'>Electrolitos</option>
+                         <option value='Endocrinología'>Endocrinología</option>
+                         <option value='Farmacéutico'>Farmacéutico</option>
+                         <option value='Gastroenterología'>Gastroenterología</option>
+                         <option value='Gastrointestinal'>Gastrointestinal</option>
+                         <option value='Hormonal'>Hormonal</option>
+                         <option value='Locomoción'>Locomoción</option>
+                         <option value='Manejo de heridas'>Manejo de heridas</option>
+                         <option value='Multivitamínico'>Multivitamínico</option>
+                         <option value='Nutrición'>Nutrición</option>
+                         <option value='Pomada'>Pomada</option>
+                         <option value='Renal'>Renal</option>
+                         <option value='Respiratorio'>Respiratorio</option>
+                         <option value='Solución'>Solución</option>
+                         <option value='Suplementos'>Suplementos</option>
+                         <option value='Vacunas'>Vacunas</option>
+                         <option value='Vitaminas'>Vitaminas</option>
+                     </select>
                     {showErrors && errors.tipo && <p className="error-message">{errors.tipo}</p>}
                 </div>
                 <div className='new-product-box1'>
@@ -441,16 +463,20 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
                         onChange={(e) => handleInputChange(setEspecie, 'especie', e.target.value)}
                     >
                         <option value="">-- Selecciona --</option>
-                        <option value='Perro'>Perro</option>
-                        <option value='Gato'>Gato</option>
-                        <option value='Gallos'>Gallos</option>
-                        <option value='Caballo'>Caballo</option>
-                        <option value='Cerdo'>Cerdo</option>
-                        <option value='Conejo'>Conejo</option>
-                        <option value='Vacas'>Vacas</option>
-                        <option value='Oveja'>Oveja</option>
-                        <option value='Cabra'>Cabra</option>
-                        <option value='Ave'>Ave</option>
+                        <option value='Bovinos'>Bovinos</option>
+                        <option value='Equinos'>Equinos</option>
+                        <option value='Porcinos'>Porcinos</option>
+                        <option value='Caprinos'>Caprinos</option>
+                        <option value='Ovinos'>Ovinos</option>
+                        <option value='Aviar'>Aviar</option>
+                        <option value='Canino'>Canino</option>
+                        <option value='Felino'>Felino</option>
+                        <option value='Aquacultura'>Aquacultura</option>
+                        <option value='Apícola'>Apícola</option>
+                        <option value='Roedores'>Roedores</option>
+                        <option value='Reptilia'>Reptilia</option>
+                        <option value='Cúnicos'>Cúnicos</option>
+                        <option value='Aves ornamentales'>Aves ornamentales</option>
                     </select>
                     {showErrors && errors.especie && <p className="error-message">{errors.especie}</p>}
                 </div>
@@ -520,7 +546,7 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
                         <option value='Gotas'>Gotas</option>
                         <option value='Tabletas'>Tabletas</option>
                         <option value='Cápsulas'>Cápsulas</option>
-                        <option value='Suspención'>Suspención</option>
+                                                 <option value='Suspensión'>Suspensión</option>
                     </select>
                     {showErrors && errors.presentacion && <p className="error-message">{errors.presentacion}</p>}
                   </div>
@@ -535,15 +561,25 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
                 />
                 {showErrors && errors.edad && <p className="error-message">{errors.edad}</p>}
                 
-                <p className='new-product-text'>Marca: *</p>
-                <input 
-                    className={`new-product-input1 ${showErrors && errors.marca ? 'error-input' : ''}`} 
-                    type='text' 
-                    placeholder='Bayer Animal Health...' 
-                    value={marca} 
-                    onChange={(e) => handleInputChange(setMarca, 'marca', e.target.value)}
-                />
-                {showErrors && errors.marca && <p className="error-message">{errors.marca}</p>}
+                                 <p className='new-product-text'>Marca: *</p>
+                 <select 
+                     className={`new-product-input1 ${showErrors && errors.marca ? 'error-input' : ''}`} 
+                     value={marca} 
+                     onChange={(e) => handleInputChange(setMarca, 'marca', e.target.value)}
+                 >
+                     <option value="">-- Selecciona --</option>
+                     <option value='AGROVET'>AGROVET</option>
+                     <option value='ARANDA'>ARANDA</option>
+                     <option value='Aranda Pets'>Aranda Pets</option>
+                     <option value='Dechra'>Dechra</option>
+                     <option value='Laboratorios Pier'>Laboratorios Pier</option>
+                     <option value='PANAVET'>PANAVET</option>
+                     <option value='PROVETMEX'>PROVETMEX</option>
+                     <option value='Riverfarma'>Riverfarma</option>
+                     <option value='Sanfer'>Sanfer</option>
+                     <option value='Zoetis'>Zoetis</option>
+                 </select>
+                 {showErrors && errors.marca && <p className="error-message">{errors.marca}</p>}
                 
                 <p className='new-product-text'>Información adicional (opcional):</p>
                 <textarea 

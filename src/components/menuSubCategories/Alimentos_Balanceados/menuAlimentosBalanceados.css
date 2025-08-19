@@ -83,6 +83,9 @@
   width: max-content;
   border-radius: 4px;
   z-index: 10;
+  max-height: 300px;
+  overflow-y: auto;
+  min-width: 180px;
 }
 
 .dropdown li {
