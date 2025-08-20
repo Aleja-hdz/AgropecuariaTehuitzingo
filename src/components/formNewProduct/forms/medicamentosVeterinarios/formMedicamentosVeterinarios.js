@@ -435,6 +435,7 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
                 />
                 {showErrors && errors.nombre && <p className="error-message">{errors.nombre}</p>}
                 
+                <p style={{fontSize:'13px', fontWeight:'400'}} className='new-product-text'>NOTA: Si desea agregar más de una especie, precione la tecla "ctrl" y seleccione las especies.</p>
             <div style={{gap:'15px'}} className='new-product-box2'>
                 <div className='new-product-box1'>
                     <label>Tipo de medicamento: *</label>
@@ -525,6 +526,7 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
                     <option value='Mililitros'>Mililitros</option>
                     <option value='Litros'>Litros</option>
                     <option value='Unidades'>Unidades</option>
+                    <option value='Tabletas'>Tabletas</option>
                     <option value='Dosis'>Dosis</option>
                 </select>
             </div>
@@ -545,6 +547,7 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
                         <option value='Tópica'>Tópica</option>
                         <option value='Intranasal'>Intranasal</option>
                         <option value='Ocular'>Ocular</option>
+                        <option value='Cutánea'>Cutánea</option>
                         <option value='Subcutánea'>Subcutánea</option>
                         <option value='Intramuscular'>Intramuscular</option>
                         <option value='Intravenosa'>Intravenosa</option>
@@ -568,8 +571,12 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
                         <option value='Gotas'>Gotas</option>
                         <option value='Tabletas'>Tabletas</option>
                         <option value='Cápsulas'>Cápsulas</option>
-                                                 <option value='Suspensión'>Suspensión</option>
+                        <option value='Solución'>Solución</option>
+                        <option value='Suspensión'>Suspensión</option>
                         <option value='Polvo soluble'>Polvo soluble</option>
+                        <option value='Shampoo'>Shampoo</option>
+                        <option value='Spray'>Spray</option>
+                        <option value='Pasta'>Pasta</option>
                     </select>
                     {showErrors && errors.presentacion && <p className="error-message">{errors.presentacion}</p>}
                   </div>

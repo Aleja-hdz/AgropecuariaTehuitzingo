@@ -104,6 +104,7 @@ export default function MenuMedicamentosVeterinarios({
     'Tópica',
     'Intranasal',
     'Ocular',
+    'Cutánea',
     'Subcutánea',
     'Intramuscular',
     'Intravenosa'
@@ -119,8 +120,12 @@ export default function MenuMedicamentosVeterinarios({
     'Gotas',
     'Tabletas',
     'Cápsulas',
+    'Solución',
     'Suspensión',
-    'Polvo soluble'
+    'Polvo soluble',
+    'Shampoo',
+    'Spray',
+    'Pasta'
   ];
 
   const marcas = [
