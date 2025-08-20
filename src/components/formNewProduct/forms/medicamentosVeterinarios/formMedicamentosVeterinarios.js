@@ -435,6 +435,7 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
                 />
                 {showErrors && errors.nombre && <p className="error-message">{errors.nombre}</p>}
                 
+                <p style={{fontSize:'13px', fontWeight:'400'}} className='new-product-text'>NOTA: Si desea agregar más de una especie, precione la tecla "ctrl" y seleccione las especies.</p>
             <div style={{gap:'15px'}} className='new-product-box2'>
                 <div className='new-product-box1'>
                     <label>Tipo de medicamento: *</label>
