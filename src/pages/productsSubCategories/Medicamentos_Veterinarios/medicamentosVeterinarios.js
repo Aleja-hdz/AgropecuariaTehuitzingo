@@ -125,7 +125,16 @@ export default function MedicamentosVeterinarios() {
 
         // Filtro por especie
         if (selectedEspecie) {
-            filtered = filtered.filter(product => product.especie === selectedEspecie);
+            filtered = filtered.filter(product => {
+                if (!product.especie) return false;
+                // Si el producto tiene especies separadas por comas, verificar si contiene la especie seleccionada
+                if (typeof product.especie === 'string' && product.especie.includes(',')) {
+                    const especiesProducto = product.especie.split(',').map(s => s.trim());
+                    return especiesProducto.includes(selectedEspecie);
+                }
+                // Si es una sola especie, comparar directamente
+                return product.especie === selectedEspecie;
+            });
         }
 
         // Filtro por vía de administración
