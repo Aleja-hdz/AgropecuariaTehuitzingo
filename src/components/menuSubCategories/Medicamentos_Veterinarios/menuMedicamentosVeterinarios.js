@@ -99,27 +99,28 @@ export default function MenuMedicamentosVeterinarios({
   ];
 
   const vias = [
-    'Intramuscular',
-    'Intranasal',
-    'Intravenosa',
-    'Inyectable',
-    'Ocular',
     'Oral',
+    'Inyectable',
+    'Tópica',
+    'Intranasal',
+    'Ocular',
     'Subcutánea',
-    'Tópica'
+    'Intramuscular',
+    'Intravenosa'
   ];
 
   const presentaciones = [
+    'Frasco',
     'Ampolleta',
     'Blister',
-    'Cápsulas',
-    'Frasco',
-    'Gotas',
+    'Sobres',
     'Jeringa',
     'Pomada',
-    'Sobres',
+    'Gotas',
+    'Tabletas',
+    'Cápsulas',
     'Suspensión',
-    'Tabletas'
+    'Polvo soluble'
   ];
 
   const marcas = [
