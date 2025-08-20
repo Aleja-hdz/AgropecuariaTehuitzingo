@@ -9,7 +9,14 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
   const [imageUrl, setImageUrl] = useState(medicamentosData?.url || '');
   const [nombre, setNombre] = useState(medicamentosData?.nombre || '');
   const [tipo, setTipo] = useState(medicamentosData?.tipo || '');
-  const [especie, setEspecie] = useState(medicamentosData?.especie || '');
+  const [especies, setEspecies] = useState(() => {
+    const value = medicamentosData?.especie;
+    if (Array.isArray(value)) return value;
+    if (typeof value === 'string' && value.trim().length > 0) {
+      return value.split(',').map((s) => s.trim()).filter(Boolean);
+    }
+    return [];
+  });
   const [edad, setEdad] = useState(medicamentosData?.edad || '');
   const [viaAdministracion, setViaAdministracion] = useState(medicamentosData?.via_administracion || '');
   const [presentacion, setPresentacion] = useState(medicamentosData?.presentacion || '');
@@ -27,7 +34,14 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
     setImageUrl(medicamentosData?.url || '');
     setNombre(medicamentosData?.nombre || '');
     setTipo(medicamentosData?.tipo || '');
-    setEspecie(medicamentosData?.especie || '');
+    const especieValue = medicamentosData?.especie;
+    if (Array.isArray(especieValue)) {
+      setEspecies(especieValue);
+    } else if (typeof especieValue === 'string' && especieValue.trim().length > 0) {
+      setEspecies(especieValue.split(',').map((s) => s.trim()).filter(Boolean));
+    } else {
+      setEspecies([]);
+    }
     setEdad(medicamentosData?.edad || '');
     setViaAdministracion(medicamentosData?.via_administracion || '');
     setPresentacion(medicamentosData?.presentacion || '');
@@ -79,8 +93,8 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
     }
     
     // Validar especie
-    if (!especie) {
-      newErrors.especie = 'Debe seleccionar la especie';
+    if (!especies || especies.length === 0) {
+      newErrors.especie = 'Debe seleccionar al menos una especie';
     }
     
     // Validar edad
@@ -265,6 +279,14 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
     }
   };
 
+  const handleEspeciesChange = (e) => {
+    const selectedValues = Array.from(e.target.selectedOptions).map((opt) => opt.value);
+    setEspecies(selectedValues);
+    if (errors.especie) {
+      setErrors(prev => ({ ...prev, especie: null }));
+    }
+  };
+
   const handleSubmit = async (e) => {
       e.preventDefault();
       
@@ -299,7 +321,7 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
                   url: url,
                   nombre: nombre,
                   tipo: tipo,
-                  especie: especie,
+                  especie: especies.join(','),
                   edad: edad,
                   via_administracion: viaAdministracion,
                   presentacion: presentacion,
@@ -329,7 +351,7 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
                   url: url,
                   nombre: nombre,
                   tipo: tipo,
-                  especie: especie,
+                  especie: especies.join(','),
                   edad: edad,
                   via_administracion: viaAdministracion,
                   presentacion: presentacion,
@@ -360,7 +382,7 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
       setImageUrl('');
       setNombre('');
       setTipo('');
-      setEspecie('');
+      setEspecies([]);
       setEdad('');
       setViaAdministracion('');
       setPresentacion('');
@@ -456,13 +478,13 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
                     {showErrors && errors.tipo && <p className="error-message">{errors.tipo}</p>}
                 </div>
                 <div className='new-product-box1'>
-                    <label>Especie: *</label>
+                    <label>Especies: *</label>
                     <select 
+                        multiple
                         className={`new-product-opc-category ${showErrors && errors.especie ? 'error-input' : ''}`} 
-                        value={especie} 
-                        onChange={(e) => handleInputChange(setEspecie, 'especie', e.target.value)}
+                        value={especies} 
+                        onChange={handleEspeciesChange}
                     >
-                        <option value="">-- Selecciona --</option>
                         <option value='Bovinos'>Bovinos</option>
                         <option value='Equinos'>Equinos</option>
                         <option value='Porcinos'>Porcinos</option>
@@ -547,6 +569,7 @@ export default function FormMedicamentosVeterinarios({ onClose, medicamentosData
                         <option value='Tabletas'>Tabletas</option>
                         <option value='Cápsulas'>Cápsulas</option>
                                                  <option value='Suspensión'>Suspensión</option>
+                        <option value='Polvo soluble'>Polvo soluble</option>
                     </select>
                     {showErrors && errors.presentacion && <p className="error-message">{errors.presentacion}</p>}
                   </div>
