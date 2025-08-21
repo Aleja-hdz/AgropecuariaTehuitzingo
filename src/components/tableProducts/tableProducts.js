@@ -1,6 +1,6 @@
 import './tableProducts.css';
 import OptionsTable from '../optionsTable/optionsTable';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import FormImplementos from '../formNewProduct/forms/implementos/formImplementos';
 import FormAlimentosBalanceados from '../formNewProduct/forms/alimentosBalanceados/formAlimentosBalanceados';
@@ -17,57 +17,115 @@ const TableProducts = ({ productos = [], onRefresh }) => {
   const [editProduct, setEditProduct] = useState(null);
   const [editProductType, setEditProductType] = useState(null);
 
+
+
+
+
   const handleEdit = async (producto) => {
-    if (producto.categoria === 'Mascotas') {
-      // Obtener todos los datos del producto para determinar qué formulario usar
-      const { data: mascotaData } = await supabase
-        .from('mascotas')
-        .select('*')
-        .eq('id', producto.id)
-        .single();
+    try {
+      // Usar originalId si existe, sino usar id (para compatibilidad)
+      const productId = producto.originalId || producto.id;
       
-      if (mascotaData?.sub_categoria === 'Accesorio') {
-        setEditProductType('mascotas-accesorios');
-        // Usar los datos completos de mascotas
-        setEditProduct(mascotaData);
-      } else if (mascotaData?.sub_categoria === 'Alimento') {
-        setEditProductType('mascotas-alimentos');
-        // Usar los datos completos de mascotas
-        setEditProduct(mascotaData);
-      } else {
-        setEditProductType('mascotas-general');
-        setEditProduct(producto);
+      if (producto.categoria === 'Mascotas') {
+        // Obtener todos los datos del producto para determinar qué formulario usar
+        const { data: mascotaData, error: mascotaError } = await supabase
+          .from('mascotas')
+          .select('*')
+          .eq('id', productId)
+          .single();
+        
+        if (mascotaError) {
+          console.error('Error al obtener datos de mascota:', mascotaError);
+          alert('Error al cargar los datos del producto. Por favor, inténtalo de nuevo.');
+          return;
+        }
+        
+        if (!mascotaData) {
+          alert('No se encontró el producto. Por favor, verifica que exista.');
+          return;
+        }
+
+        
+        if (mascotaData?.sub_categoria === 'Accesorio') {
+          setEditProductType('mascotas-accesorios');
+          setEditProduct(mascotaData);
+        } else if (mascotaData?.sub_categoria === 'Alimento') {
+          setEditProductType('mascotas-alimentos');
+          setEditProduct(mascotaData);
+        } else {
+          setEditProductType('mascotas-general');
+          setEditProduct(mascotaData);
+        }
+      } else if (producto.categoria === 'Alimentos balanceados') {
+        // Obtener todos los datos del alimento balanceado
+        const { data: alimentoData, error: alimentoError } = await supabase
+          .from('alimentos_balanceados')
+          .select('*')
+          .eq('id', productId)
+          .single();
+        
+        if (alimentoError) {
+          console.error('Error al obtener datos del alimento:', alimentoError);
+          alert('Error al cargar los datos del producto. Por favor, inténtalo de nuevo.');
+          return;
+        }
+        
+        if (!alimentoData) {
+          alert('No se encontró el producto. Por favor, verifica que exista.');
+          return;
+        }
+
+        
+        setEditProductType('alimentos-balanceados');
+        setEditProduct(alimentoData);
+      } else if (producto.categoria === 'Medicamentos Veterinarios') {
+        // Obtener todos los datos del medicamento veterinario
+        const { data: medicamentoData, error: medicamentoError } = await supabase
+          .from('medicamentos_veterinarios')
+          .select('*')
+          .eq('id', productId)
+          .single();
+        
+        if (medicamentoError) {
+          console.error('Error al obtener datos del medicamento:', medicamentoError);
+          alert('Error al cargar los datos del producto. Por favor, inténtalo de nuevo.');
+          return;
+        }
+        
+        if (!medicamentoData) {
+          alert('No se encontró el producto. Por favor, verifica que exista.');
+          return;
+        }
+
+        
+        setEditProductType('medicamentos-veterinarios');
+        setEditProduct(medicamentoData);
+      } else if (producto.categoria === 'Implementos') {
+        // Obtener todos los datos del implemento
+        const { data: implementoData, error: implementoError } = await supabase
+          .from('implementos')
+          .select('*')
+          .eq('id', productId)
+          .single();
+        
+        if (implementoError) {
+          console.error('Error al obtener datos del implemento:', implementoError);
+          alert('Error al cargar los datos del producto. Por favor, inténtalo de nuevo.');
+          return;
+        }
+        
+        if (!implementoData) {
+          alert('No se encontró el producto. Por favor, verifica que exista.');
+          return;
+        }
+
+        setEditProductType('implementos');
+        setEditProduct(implementoData);
+
       }
-    } else if (producto.categoria === 'Alimentos balanceados') {
-      // Obtener todos los datos del alimento balanceado
-      const { data: alimentoData } = await supabase
-        .from('alimentos_balanceados')
-        .select('*')
-        .eq('id', producto.id)
-        .single();
-      
-      setEditProductType('alimentos-balanceados');
-      setEditProduct(alimentoData || producto);
-    } else if (producto.categoria === 'Medicamentos Veterinarios') {
-      // Obtener todos los datos del medicamento veterinario
-      const { data: medicamentoData } = await supabase
-        .from('medicamentos_veterinarios')
-        .select('*')
-        .eq('id', producto.id)
-        .single();
-      
-      setEditProductType('medicamentos-veterinarios');
-      setEditProduct(medicamentoData || producto);
-    } else {
-      // Obtener todos los datos del implemento
-      const { data: implementoData } = await supabase
-        .from('implementos')
-        .select('*')
-        .eq('id', producto.id)
-        .single();
-      
-      setEditProductType('implementos');
-      setEditProduct(implementoData || producto);
+    } catch (err) {
+      console.error('Error inesperado al editar producto:', err);
+      alert('Error inesperado al cargar los datos del producto. Por favor, inténtalo de nuevo.');
     }
   };
 
@@ -76,32 +134,34 @@ const TableProducts = ({ productos = [], onRefresh }) => {
     setEditProductType(null);
   };
 
-  const handleDelete = async (id, nombre, categoria, url) => {
-    if (categoria !== 'Implementos' && categoria !== 'Mascotas' && categoria !== 'Alimentos balanceados' && categoria !== 'Medicamentos Veterinarios') {
+  const handleDelete = async (producto) => {
+    if (producto.categoria !== 'Implementos' && producto.categoria !== 'Mascotas' && producto.categoria !== 'Alimentos balanceados' && producto.categoria !== 'Medicamentos Veterinarios') {
       alert('Solo puedes eliminar productos de las categorías Implementos, Mascotas, Alimentos balanceados y Medicamentos Veterinarios desde aquí.');
       return;
     }
-    const confirm = window.confirm(`Eliminarás el producto: ${nombre}`);
+    const confirm = window.confirm(`Eliminarás el producto: ${producto.nombre}`);
     if (!confirm) return;
     
     // Determinar el bucket según la categoría
     let bucket = '';
     let tableName = '';
-    if (categoria === 'Implementos') {
+    if (producto.categoria === 'Implementos') {
       bucket = 'implementos-img';
       tableName = 'implementos';
-    } else if (categoria === 'Alimentos balanceados') {
+    } else if (producto.categoria === 'Alimentos balanceados') {
       bucket = 'alimentos-balanceados-img';
       tableName = 'alimentos_balanceados';
-    } else if (categoria === 'Medicamentos Veterinarios') {
+    } else if (producto.categoria === 'Medicamentos Veterinarios') {
       bucket = 'medicamentos-veterinarios-img';
       tableName = 'medicamentos_veterinarios';
-    } else if (categoria === 'Mascotas') {
+    } else if (producto.categoria === 'Mascotas') {
       // Para mascotas, necesitamos obtener la subcategoría del producto
+      // Usar originalId si existe, sino usar id (para compatibilidad)
+      const productId = producto.originalId || producto.id;
       const { data: mascotaData } = await supabase
         .from('mascotas')
         .select('sub_categoria')
-        .eq('id', id)
+        .eq('id', productId)
         .single();
       
       if (mascotaData?.sub_categoria === 'Alimento') {
@@ -115,10 +175,10 @@ const TableProducts = ({ productos = [], onRefresh }) => {
     }
     
     // Eliminar imagen del bucket si existe
-    if (url) {
+    if (producto.url) {
       try {
         // Extraer el nombre del archivo de la URL
-        const parts = url.split('/');
+        const parts = producto.url.split('/');
         const fileName = parts[parts.length - 1].split('?')[0];
         const { error: storageError } = await supabase
           .storage
@@ -133,10 +193,12 @@ const TableProducts = ({ productos = [], onRefresh }) => {
     }
     
     // Eliminar registro de la base de datos
+    // Usar originalId si existe, sino usar id (para compatibilidad)
+    const productId = producto.originalId || producto.id;
     const { error } = await supabase
       .from(tableName)
       .delete()
-      .eq('id', id);
+      .eq('id', productId);
     if (error) {
       console.error('Error al eliminar el producto:', error.message);
     } else {
@@ -146,11 +208,13 @@ const TableProducts = ({ productos = [], onRefresh }) => {
 
   // Función para renderizar modales usando portal
   const renderModal = () => {
-    if (!editProduct) return null;
+    if (!editProduct) {
+      return null;
+    }
 
     const modalContent = (
       <>
-        {editProduct.categoria === 'Implementos' && (
+        {(editProduct.categoria === 'Implementos' || editProduct.categoria === '"Implementos"') && (
           <FormImplementos
             onClose={handleCloseEdit}
             implementsData={editProduct}
@@ -158,7 +222,7 @@ const TableProducts = ({ productos = [], onRefresh }) => {
             onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
           />
         )}
-        {editProduct.categoria === 'Alimentos balanceados' && (
+        {(editProduct.categoria === 'Alimentos balanceados' || editProduct.categoria === '"Alimentos balanceados"') && (
           <FormAlimentosBalanceados
             onClose={handleCloseEdit}
             alimentosData={editProduct}
@@ -166,7 +230,7 @@ const TableProducts = ({ productos = [], onRefresh }) => {
             onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
           />
         )}
-        {editProduct.categoria === 'Medicamentos Veterinarios' && (
+        {(editProduct.categoria === 'Medicamentos Veterinarios' || editProduct.categoria === '"Medicamentos Veterinarios"') && (
           <FormMedicamentosVeterinarios
             onClose={handleCloseEdit}
             medicamentosData={editProduct}
@@ -174,21 +238,21 @@ const TableProducts = ({ productos = [], onRefresh }) => {
             onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
           />
         )}
-        {editProduct.categoria === 'Mascotas' && editProductType === 'mascotas-accesorios' && (
+        {(editProduct.categoria === 'Mascotas' || editProduct.categoria === '"Mascotas"') && editProductType === 'mascotas-accesorios' && (
           <FormEditMascotasAccesorios
             onClose={handleCloseEdit}
             mascotasData={editProduct}
             onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
           />
         )}
-        {editProduct.categoria === 'Mascotas' && editProductType === 'mascotas-alimentos' && (
+        {(editProduct.categoria === 'Mascotas' || editProduct.categoria === '"Mascotas"') && editProductType === 'mascotas-alimentos' && (
           <FormEditMascotasAlimentos
             onClose={handleCloseEdit}
             mascotasData={editProduct}
             onSave={() => { handleCloseEdit(); if (onRefresh) onRefresh(); }}
           />
         )}
-        {editProduct.categoria === 'Mascotas' && editProductType === 'mascotas-general' && (
+        {(editProduct.categoria === 'Mascotas' || editProduct.categoria === '"Mascotas"') && editProductType === 'mascotas-general' && (
           <FormMascotas
             onClose={handleCloseEdit}
             mascotasData={editProduct}
@@ -205,6 +269,7 @@ const TableProducts = ({ productos = [], onRefresh }) => {
 
   return (
     <>
+
       <div className="table-container">
         <table className="table-products">
           <thead>
@@ -221,7 +286,7 @@ const TableProducts = ({ productos = [], onRefresh }) => {
                   <div className="table-actions">
                     {(producto.categoria === 'Implementos' || producto.categoria === 'Mascotas' || producto.categoria === 'Alimentos balanceados' || producto.categoria === 'Medicamentos Veterinarios') ? (
                       <OptionsTable
-                        onDelete={() => handleDelete(producto.id, producto.nombre, producto.categoria, producto.url)}
+                        onDelete={() => handleDelete(producto)}
                         onEdit={() => handleEdit(producto)}
                       />
                     ) : null}
