@@ -278,7 +278,7 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
             const fileExtension = imageFile.name.split('.').pop().toLowerCase();
             const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExtension}`;
             
-            console.log("Intentando subir imagen:", fileName);
+    
             
             const { data, error } = await supabase
                 .storage
@@ -306,7 +306,7 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
                 return null;
             }
 
-            console.log("Imagen subida exitosamente:", data);
+    
 
             const { data: publicUrl } = supabase
                 .storage
@@ -360,14 +360,14 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
         }
         
         if (imageFile) {
-            console.log("Iniciando subida de imagen...");
+    
             const uploadedUrl = await uploadImageToSupabase(bucket);
             if (!uploadedUrl) {
                 setLoading(false);
                 return;
             }
             url = uploadedUrl;
-            console.log("Imagen subida exitosamente:", url);
+    
         }
         
         if (isEdit && mascotasData) {

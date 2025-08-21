@@ -134,7 +134,8 @@ export default function AdminPanel() {
             console.error('Error al obtener implementos:', error.message);
         } else {
             setImplementos(data.map(item => ({
-                id: item.id,
+                id: `impl_${item.id}`, // ID único con prefijo
+                originalId: item.id, // ID original de la base de datos
                 nombre: item.nombre,
                 categoria: 'Implementos',
                 url: item.url || '',
@@ -157,7 +158,8 @@ export default function AdminPanel() {
             console.error('Error al obtener alimentos:', error.message);
         } else {
             setAlimentos(data.map(item => ({
-                id: item.id,
+                id: `ali_${item.id}`, // ID único con prefijo
+                originalId: item.id, // ID original de la base de datos
                 nombre: item.nombre || item.name || '',
                 categoria: 'Alimentos balanceados',
                 url: item.url || item.image || '',
@@ -181,7 +183,8 @@ export default function AdminPanel() {
             console.error('Error al obtener medicamentos:', error.message);
         } else {
             setMedicamentos(data.map(item => ({
-                id: item.id,
+                id: `med_${item.id}`, // ID único con prefijo
+                originalId: item.id, // ID original de la base de datos
                 nombre: item.nombre || item.name || '',
                 categoria: 'Medicamentos Veterinarios',
                 url: item.url || item.image || '',
@@ -207,7 +210,8 @@ export default function AdminPanel() {
             console.error('Error al obtener mascotas:', error.message);
         } else {
             setMascotas(data.map(item => ({
-                id: item.id,
+                id: `mas_${item.id}`, // ID único con prefijo
+                originalId: item.id, // ID original de la base de datos
                 nombre: item.nombre || item.name || '',
                 categoria: 'Mascotas',
                 url: item.url || item.image || '',
@@ -297,24 +301,82 @@ export default function AdminPanel() {
             const producto = allProducts.find(p => p.id === item.id);
             if (producto) {
                 if (producto.categoria === 'Implementos') {
+                    // Obtener datos completos del implemento
+                    const { data: implementoData, error } = await supabase
+                        .from('implementos')
+                        .select('*')
+                        .eq('id', producto.originalId)
+                        .single();
+                    
+                    if (error) {
+                        console.error('Error al obtener datos del implemento:', error);
+                        alert('Error al cargar los datos del producto. Por favor, inténtalo de nuevo.');
+                        return;
+                    }
+                    
+                    if (!implementoData) {
+                        console.error('No se encontraron datos para el implemento ID:', producto.originalId);
+                        alert('No se encontró el producto. Por favor, verifica que exista.');
+                        return;
+                    }
+                    
                     setEditProductType('implementos');
-                    setEditProduct(producto);
+                    setEditProduct(implementoData);
                 } else if (producto.categoria === 'Alimentos balanceados') {
+                    // Obtener datos completos del alimento balanceado
+                    const { data: alimentoData, error } = await supabase
+                        .from('alimentos_balanceados')
+                        .select('*')
+                        .eq('id', producto.originalId)
+                        .single();
+                    
+                    if (error) {
+                        console.error('Error al obtener datos del alimento:', error);
+                        alert('Error al cargar los datos del producto. Por favor, inténtalo de nuevo.');
+                        return;
+                    }
+                    
+                    if (!alimentoData) {
+                        console.error('No se encontraron datos para el alimento ID:', producto.originalId);
+                        alert('No se encontró el producto. Por favor, verifica que exista.');
+                        return;
+                    }
+                    
                     setEditProductType('alimentos-balanceados');
-                    setEditProduct(producto);
+                    setEditProduct(alimentoData);
                 } else if (producto.categoria === 'Medicamentos Veterinarios') {
+                    // Obtener datos completos del medicamento veterinario
+                    const { data: medicamentoData, error } = await supabase
+                        .from('medicamentos_veterinarios')
+                        .select('*')
+                        .eq('id', producto.originalId)
+                        .single();
+                    
+                    if (error) {
+                        console.error('Error al obtener datos del medicamento:', error);
+                        alert('Error al cargar los datos del producto. Por favor, inténtalo de nuevo.');
+                        return;
+                    }
+                    
+                    if (!medicamentoData) {
+                        console.error('No se encontraron datos para el medicamento ID:', producto.originalId);
+                        alert('No se encontró el producto. Por favor, verifica que exista.');
+                        return;
+                    }
+                    
                     setEditProductType('medicamentos-veterinarios');
-                    setEditProduct(producto);
+                    setEditProduct(medicamentoData);
                 } else if (producto.categoria === 'Mascotas') {
                     // Obtener datos completos de mascotas para determinar subcategoría
                     const { data: mascotaData, error } = await supabase
                         .from('mascotas')
                         .select('*')
-                        .eq('id', producto.id)
+                        .eq('id', producto.originalId)
                         .single();
                     
                     if (error) {
                         console.error('Error al obtener datos de mascota:', error);
+                        alert('Error al cargar los datos del producto. Por favor, inténtalo de nuevo.');
                         return;
                     }
                     
@@ -373,7 +435,7 @@ export default function AdminPanel() {
                     const { error } = await supabase
                         .from('implementos')
                         .delete()
-                        .eq('id', producto.id);
+                        .eq('id', producto.originalId);
                     if (error) {
                         console.error('Error al eliminar implemento:', error);
                         alert('Error al eliminar el producto');
@@ -403,7 +465,7 @@ export default function AdminPanel() {
                     const { error } = await supabase
                         .from('alimentos_balanceados')
                         .delete()
-                        .eq('id', producto.id);
+                        .eq('id', producto.originalId);
                     if (error) {
                         console.error('Error al eliminar alimento balanceado:', error);
                         alert('Error al eliminar el producto');
@@ -433,7 +495,7 @@ export default function AdminPanel() {
                     const { error } = await supabase
                         .from('medicamentos_veterinarios')
                         .delete()
-                        .eq('id', producto.id);
+                        .eq('id', producto.originalId);
                     if (error) {
                         console.error('Error al eliminar medicamento veterinario:', error);
                         alert('Error al eliminar el producto');
@@ -446,7 +508,7 @@ export default function AdminPanel() {
                     const { data: mascotaData } = await supabase
                         .from('mascotas')
                         .select('sub_categoria')
-                        .eq('id', producto.id)
+                        .eq('id', producto.originalId)
                         .single();
                     
                     // Determinar el bucket según la subcategoría
@@ -485,7 +547,7 @@ export default function AdminPanel() {
                     const { error } = await supabase
                         .from('mascotas')
                         .delete()
-                        .eq('id', producto.id);
+                        .eq('id', producto.originalId);
                     if (error) {
                         console.error('Error al eliminar mascota:', error);
                         alert('Error al eliminar el producto');
@@ -594,24 +656,82 @@ export default function AdminPanel() {
             const producto = allProducts.find(p => p.id === item.id);
             if (producto) {
                 if (producto.categoria === 'Implementos') {
+                    // Obtener datos completos del implemento
+                    const { data: implementoData, error } = await supabase
+                        .from('implementos')
+                        .select('*')
+                        .eq('id', producto.originalId)
+                        .single();
+                    
+                    if (error) {
+                        console.error('Error al obtener datos del implemento:', error);
+                        alert('Error al cargar los datos del producto. Por favor, inténtalo de nuevo.');
+                        return;
+                    }
+                    
+                    if (!implementoData) {
+                        console.error('No se encontraron datos para el implemento ID:', producto.originalId);
+                        alert('No se encontró el producto. Por favor, verifica que exista.');
+                        return;
+                    }
+                    
                     setEditProductType('implementos');
-                    setEditProduct(producto);
+                    setEditProduct(implementoData);
                 } else if (producto.categoria === 'Alimentos balanceados') {
+                    // Obtener datos completos del alimento balanceado
+                    const { data: alimentoData, error } = await supabase
+                        .from('alimentos_balanceados')
+                        .select('*')
+                        .eq('id', producto.originalId)
+                        .single();
+                    
+                    if (error) {
+                        console.error('Error al obtener datos del alimento:', error);
+                        alert('Error al cargar los datos del producto. Por favor, inténtalo de nuevo.');
+                        return;
+                    }
+                    
+                    if (!alimentoData) {
+                        console.error('No se encontraron datos para el alimento ID:', producto.originalId);
+                        alert('No se encontró el producto. Por favor, verifica que exista.');
+                        return;
+                    }
+                    
                     setEditProductType('alimentos-balanceados');
-                    setEditProduct(producto);
+                    setEditProduct(alimentoData);
                 } else if (producto.categoria === 'Medicamentos Veterinarios') {
+                    // Obtener datos completos del medicamento veterinario
+                    const { data: medicamentoData, error } = await supabase
+                        .from('medicamentos_veterinarios')
+                        .select('*')
+                        .eq('id', producto.originalId)
+                        .single();
+                    
+                    if (error) {
+                        console.error('Error al obtener datos del medicamento:', error);
+                        alert('Error al cargar los datos del producto. Por favor, inténtalo de nuevo.');
+                        return;
+                    }
+                    
+                    if (!medicamentoData) {
+                        console.error('No se encontraron datos para el medicamento ID:', producto.originalId);
+                        alert('No se encontró el producto. Por favor, verifica que exista.');
+                        return;
+                    }
+                    
                     setEditProductType('medicamentos-veterinarios');
-                    setEditProduct(producto);
+                    setEditProduct(medicamentoData);
                 } else if (producto.categoria === 'Mascotas') {
                     // Obtener datos completos de mascotas para determinar subcategoría
                     const { data: mascotaData, error } = await supabase
                         .from('mascotas')
                         .select('*')
-                        .eq('id', producto.id)
+                        .eq('id', producto.originalId)
                         .single();
                     
                     if (error) {
                         console.error('Error al obtener datos de mascota:', error);
+                        alert('Error al cargar los datos del producto. Por favor, inténtalo de nuevo.');
                         return;
                     }
                     
@@ -675,7 +795,7 @@ export default function AdminPanel() {
                     const { error } = await supabase
                         .from('implementos')
                         .delete()
-                        .eq('id', producto.id);
+                        .eq('id', producto.originalId);
                     if (error) {
                         console.error('Error al eliminar implemento:', error);
                         alert('Error al eliminar el producto');
@@ -705,7 +825,7 @@ export default function AdminPanel() {
                     const { error } = await supabase
                         .from('alimentos_balanceados')
                         .delete()
-                        .eq('id', producto.id);
+                        .eq('id', producto.originalId);
                     if (error) {
                         console.error('Error al eliminar alimento balanceado:', error);
                         alert('Error al eliminar el producto');
@@ -735,7 +855,7 @@ export default function AdminPanel() {
                     const { error } = await supabase
                         .from('medicamentos_veterinarios')
                         .delete()
-                        .eq('id', producto.id);
+                        .eq('id', producto.originalId);
                     if (error) {
                         console.error('Error al eliminar medicamento veterinario:', error);
                         alert('Error al eliminar el producto');
@@ -748,7 +868,7 @@ export default function AdminPanel() {
                     const { data: mascotaData } = await supabase
                         .from('mascotas')
                         .select('sub_categoria')
-                        .eq('id', producto.id)
+                        .eq('id', producto.originalId)
                         .single();
                     
                     // Determinar el bucket según la subcategoría
@@ -787,7 +907,7 @@ export default function AdminPanel() {
                     const { error } = await supabase
                         .from('mascotas')
                         .delete()
-                        .eq('id', producto.id);
+                        .eq('id', producto.originalId);
                     if (error) {
                         console.error('Error al eliminar mascota:', error);
                         alert('Error al eliminar el producto');
@@ -899,7 +1019,7 @@ export default function AdminPanel() {
                         </div>
                     )}
                     <div className={`admin-first-table ${isVisible.tables ? 'animate-fade-in-delay-2' : ''}`} style={{display: 'flex', alignItems: 'flex-start', marginTop: '0px'}}>
-                        <p className="animate-text">Todos los productos</p>
+                        <p className="animate-text">Últimas creaciones</p>
                         <TableMain 
                             data={todosLosProductosData} 
                             onEdit={handleEditFromMain}
