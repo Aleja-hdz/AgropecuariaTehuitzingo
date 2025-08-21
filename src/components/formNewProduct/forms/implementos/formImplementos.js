@@ -181,7 +181,7 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
 
   // Función para ejecutar diagnóstico completo
   const runDiagnostics = async () => {
-    console.log("🔧 Iniciando diagnóstico de Supabase...");
+    
     setDiagnosticResult("Ejecutando diagnóstico...");
     
     try {
@@ -192,16 +192,16 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
         console.error("❌ Errores encontrados:", diagnostics.errors);
         alert(`Se encontraron ${diagnostics.errors.length} errores. Revisa la consola para más detalles.`);
       } else {
-        console.log("✅ Diagnóstico completado sin errores");
+
         alert("Diagnóstico completado. No se encontraron errores.");
       }
       
       // Probar subida de imagen si todo está bien
       if (diagnostics.auth?.success && diagnostics.storage?.['implementos-img']?.success) {
-        console.log("🧪 Probando subida de imagen...");
+
         const uploadTest = await testImageUpload();
         if (uploadTest.success) {
-          console.log("✅ Prueba de subida exitosa");
+          
         } else {
           console.error("❌ Prueba de subida falló:", uploadTest.error);
         }
@@ -258,7 +258,7 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
       const fileExtension = imageFile.name.split('.').pop().toLowerCase();
       const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExtension}`;
       
-      console.log("Intentando subir imagen:", fileName);
+      
       
       const { data, error } = await supabase
           .storage
@@ -286,7 +286,7 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
           return null;
       }
 
-      console.log("Imagen subida exitosamente:", data);
+      
 
       const { data: publicUrl } = supabase
           .storage
@@ -332,14 +332,14 @@ export default function FormImplementos({ onClose, implementsData, isEdit, onSav
           }
           
           if (imageFile) {
-              console.log("Iniciando subida de imagen...");
+      
               const uploadedUrl = await uploadImageToSupabase();
               if (!uploadedUrl) {
                   alert('No se pudo subir la imagen. Verifica que el archivo sea válido y que tengas permisos.');
                   return;
               }
               url = uploadedUrl;
-              console.log("Imagen subida exitosamente:", url);
+      
           }
           
           if (isEdit && implementsData) {

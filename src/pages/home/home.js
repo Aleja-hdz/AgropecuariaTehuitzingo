@@ -171,7 +171,7 @@ export default function Home() {
             </div>
           </div>
           <p className={`tittles ${isVisible.about ? 'animate-fade-in-up-delay-4' : ''}`}>
-            Nuestros distribuidores
+            Nuestros proveedores
           </p>
           <div className={`distributors ${isVisible.about ? 'animate-fade-in-up-delay-5' : ''}`}>
             <div className="box-distributors animate-pulse">
