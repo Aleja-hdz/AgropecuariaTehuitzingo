@@ -16,9 +16,9 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
     const [informacionAdicional, setInformacionAdicional] = useState(mascotasData?.informacion_adicional || '');
 
     // Estado para Alimento
-    const [especieMascota, setEspecieMascota] = useState('');
+    const [especieMascota, setEspecieMascota] = useState([]);
     const [etapaVida, setEtapaVida] = useState('');
-    const [tamanoRaza, setTamanoRaza] = useState('');
+    const [tamanoRaza, setTamanoRaza] = useState([]);
     const [presentacion, setPresentacion] = useState('');
     const [marca, setMarca] = useState('');
     const [ingredientesComposicion, setIngredientesComposicion] = useState('');
@@ -27,7 +27,7 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
 
     // Estado para Accesorio
     const [queEs, setQueEs] = useState('');
-    const [tipoAnimal, setTipoAnimal] = useState('');
+    const [tipoAnimal, setTipoAnimal] = useState([]);
     const [recomendacionesUso, setRecomendacionesUso] = useState('');
     
     // Estados para validaciones
@@ -69,9 +69,29 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
         if (data) {
           setContenidoDecimal(data.contenido_decimal?.toString() || '');
           setContenidoMedida(data.contenido_medida || '');
-          setEspecieMascota(data.especie_mascota || '');
+          
+          // Manejar especie_mascota como array
+          const especieValue = data.especie_mascota;
+          if (Array.isArray(especieValue)) {
+            setEspecieMascota(especieValue);
+          } else if (typeof especieValue === 'string' && especieValue.trim().length > 0) {
+            setEspecieMascota(especieValue.split(',').map((s) => s.trim()).filter(Boolean));
+          } else {
+            setEspecieMascota([]);
+          }
+          
           setEtapaVida(data.etapa_vida || '');
-          setTamanoRaza(data.tamano_raza || '');
+          
+          // Manejar tamano_raza como array
+          const tamanoRazaValue = data.tamano_raza;
+          if (Array.isArray(tamanoRazaValue)) {
+            setTamanoRaza(tamanoRazaValue);
+          } else if (typeof tamanoRazaValue === 'string' && tamanoRazaValue.trim().length > 0) {
+            setTamanoRaza(tamanoRazaValue.split(',').map((s) => s.trim()).filter(Boolean));
+          } else {
+            setTamanoRaza([]);
+          }
+          
           setPresentacion(data.presentacion || '');
           setMarca(data.marca || '');
           setIngredientesComposicion(data.ingredientes_composicion_nutrimental || '');
@@ -97,7 +117,17 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
 
         if (data) {
           setQueEs(data.que_es || '');
-          setTipoAnimal(data.tipo_animal || '');
+          
+          // Manejar tipo_animal como array
+          const tipoAnimalValue = data.tipo_animal;
+          if (Array.isArray(tipoAnimalValue)) {
+            setTipoAnimal(tipoAnimalValue);
+          } else if (typeof tipoAnimalValue === 'string' && tipoAnimalValue.trim().length > 0) {
+            setTipoAnimal(tipoAnimalValue.split(',').map((s) => s.trim()).filter(Boolean));
+          } else {
+            setTipoAnimal([]);
+          }
+          
           setRecomendacionesUso(data.recomendaciones_uso || '');
         }
       } catch (err) {
@@ -147,13 +177,13 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
       
       // Validaciones específicas para alimentos
       if (opcProduct === 'Alimento') {
-        if (!especieMascota) {
+        if (!especieMascota || especieMascota.length === 0) {
           newErrors.especie = 'La especie es obligatoria';
         }
         if (!etapaVida.trim()) {
           newErrors.etapaVida = 'La edad/etapa de vida es obligatoria';
         }
-        if (!tamanoRaza) {
+        if (!tamanoRaza || tamanoRaza.length === 0) {
           newErrors.tamanoRaza = 'El tamaño o raza es obligatorio';
         }
         if (!presentacion) {
@@ -175,7 +205,7 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
         if (!queEs.trim()) {
           newErrors.queEs = 'El campo "¿Qué es?" es obligatorio';
         }
-        if (!tipoAnimal.trim()) {
+        if (!tipoAnimal || tipoAnimal.length === 0) {
           newErrors.tipoAnimal = 'El tipo de animal es obligatorio';
         }
       }
@@ -280,7 +310,7 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
             
     
             
-            const { data, error } = await supabase
+            const { error } = await supabase
                 .storage
                 .from(bucket)
                 .upload(fileName, imageFile, {
@@ -327,6 +357,31 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
       setter(value);
       if (errors[fieldName]) {
         setErrors(prev => ({ ...prev, [fieldName]: null }));
+      }
+    };
+
+    // Funciones para manejar selección múltiple
+    const handleEspecieMascotaChange = (e) => {
+      const selectedValues = Array.from(e.target.selectedOptions).map((opt) => opt.value);
+      setEspecieMascota(selectedValues);
+      if (errors.especie) {
+        setErrors(prev => ({ ...prev, especie: null }));
+      }
+    };
+
+    const handleTamanoRazaChange = (e) => {
+      const selectedValues = Array.from(e.target.selectedOptions).map((opt) => opt.value);
+      setTamanoRaza(selectedValues);
+      if (errors.tamanoRaza) {
+        setErrors(prev => ({ ...prev, tamanoRaza: null }));
+      }
+    };
+
+    const handleTipoAnimalChange = (e) => {
+      const selectedValues = Array.from(e.target.selectedOptions).map((opt) => opt.value);
+      setTipoAnimal(selectedValues);
+      if (errors.tipoAnimal) {
+        setErrors(prev => ({ ...prev, tipoAnimal: null }));
       }
     };
 
@@ -392,9 +447,9 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
                     .update({
                         contenido_decimal: parseFloat(contenidoDecimal),
                         contenido_medida: contenidoMedida,
-                        especie_mascota: especieMascota,
+                        especie_mascota: especieMascota.join(','),
                         etapa_vida: etapaVida,
-                        tamano_raza: tamanoRaza,
+                        tamano_raza: tamanoRaza.join(','),
                         presentacion,
                         marca,
                         ingredientes_composicion_nutrimental: ingredientesComposicion
@@ -412,7 +467,7 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
                     .from('accesorios_mascotas')
                     .update({
                         que_es: queEs,
-                        tipo_animal: tipoAnimal,
+                        tipo_animal: tipoAnimal.join(','),
                         recomendaciones_uso: recomendacionesUso
                     })
                     .eq('id', mascotasData.id);
@@ -458,9 +513,9 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
                     id,
                     contenido_decimal: parseFloat(contenidoDecimal),
                     contenido_medida: contenidoMedida,
-                    especie_mascota: especieMascota,
+                    especie_mascota: especieMascota.join(','),
                     etapa_vida: etapaVida,
-                    tamano_raza: tamanoRaza,
+                    tamano_raza: tamanoRaza.join(','),
                     presentacion,
                     marca,
                     ingredientes_composicion_nutrimental: ingredientesComposicion
@@ -475,7 +530,7 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
                 const { error: accesorioError } = await supabase.from('accesorios_mascotas').insert({
                     id,
                     que_es: queEs,
-                    tipo_animal: tipoAnimal,
+                    tipo_animal: tipoAnimal.join(','),
                     recomendaciones_uso: recomendacionesUso
                 });
                 if (accesorioError) {
@@ -500,16 +555,16 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
         setImageUrl('');
         setNombre('');
         setInformacionAdicional('');
-        setEspecieMascota('');
+        setEspecieMascota([]);
         setEtapaVida('');
-        setTamanoRaza('');
+        setTamanoRaza([]);
         setPresentacion('');
         setMarca('');
         setIngredientesComposicion('');
         setContenidoDecimal('');
         setContenidoMedida('');
         setQueEs('');
-        setTipoAnimal('');
+        setTipoAnimal([]);
         setRecomendacionesUso('');
         setErrors({});
         setShowErrors(false);
@@ -630,19 +685,22 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
                                     {(showErrors && errors.contenidoMedida) && <p className="error-message">{errors.contenidoMedida}</p>}
                                 </div>
                             </div>
+                            <p style={{fontSize:'13px', fontWeight:'400'}} className='new-product-text'>NOTA: Si desea agregar más de una especie o tamaño de animal, precione la tecla "ctrl" y seleccione las especies.</p>
                             <div className='new-product-box2'>
                                 <div className='new-product-box1'>
                                     <label>Especie *</label>
                                     <select 
+                                        multiple
                                         className={`new-product-opc-category ${showErrors && errors.especie ? 'error-input' : ''}`} 
                                         value={especieMascota} 
-                                        onChange={(e) => handleInputChange(setEspecieMascota, 'especie', e.target.value)}
+                                        onChange={handleEspecieMascotaChange}
                                     >
-                                        <option value="">-- Selecciona --</option>
-                                        <option value='Perro'>Perro</option>
-                                        <option value='Gato'>Gato</option>
-                                        <option value='Hamsters'>Hamsters</option>
+                                        <option value='Perros'>Perros</option>
+                                        <option value='Gatos'>Gatos</option>
                                         <option value='Peces'>Peces</option>
+                                        <option value='Tortugas'>Tortugas</option>
+                                        <option value='Hamsters'>Hamsters</option>
+                                        <option value='Pájaros'>Pájaros</option>
                                     </select>
                                     {showErrors && errors.especie && <p className="error-message">{errors.especie}</p>}
                                 </div>
@@ -662,15 +720,15 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
                                 <div className='new-product-box1'>
                                     <label>Tamaño o raza *</label>
                                     <select 
+                                        multiple
                                         className={`new-product-opc-category ${showErrors && errors.tamanoRaza ? 'error-input' : ''}`} 
                                         value={tamanoRaza} 
-                                        onChange={(e) => handleInputChange(setTamanoRaza, 'tamanoRaza', e.target.value)}
+                                        onChange={handleTamanoRazaChange}
                                     >
-                                        <option value="">-- Selecciona --</option>
+                                        <option value='Todas'>Todas</option>
                                         <option value='Razas pequeñas'>Razas pequeñas</option>
                                         <option value='Medianas'>Medianas</option>
                                         <option value='Grandes'>Grandes</option>
-                                        <option value='Ninguno'>Ninguno</option>
                                     </select>
                                     {showErrors && errors.tamanoRaza && <p className="error-message">{errors.tamanoRaza}</p>}
                                 </div>
@@ -686,6 +744,7 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
                                         <option value='Latas'>Latas</option>
                                         <option value='Sobres'>Sobres</option>
                                         <option value='Snack'>Snack</option>
+                                        <option value='Leche en polvo'>Leche en polvo</option>
                                     </select>
                                     {showErrors && errors.presentacion && <p className="error-message">{errors.presentacion}</p>}
                                 </div>
@@ -693,13 +752,21 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
 
                             <div className='new-product-box1'>
                                 <label>Marca o fabricante *</label>
-                                <input 
-                                    className={`new-product-input1 ${showErrors && errors.marca ? 'error-input' : ''}`} 
-                                    type='text' 
-                                    placeholder='Minino Plus... ' 
+                                <select 
+                                    className={`new-product-opc-category ${showErrors && errors.marca ? 'error-input' : ''}`} 
                                     value={marca} 
-                                    onChange={(e) => handleInputChange(setMarca, 'marca', e.target.value)} 
-                                />
+                                    onChange={(e) => handleInputChange(setMarca, 'marca', e.target.value)}
+                                >
+                                    <option value="">-- Selecciona --</option>
+                                    <option value='Genérico'>Genérico</option>
+                                    <option value='Pedigree'>Pedigree</option>
+                                    <option value='Whiskas'>Whiskas</option>
+                                    <option value='Perron'>Perron</option>
+                                    <option value='Ganador'>Ganador</option>
+                                    <option value='Minino'>Minino</option>
+                                    <option value='Poder Canino'>Poder Canino</option>
+                                    <option value='Super-cría'>Super-cría</option>
+                                </select>
                                 {showErrors && errors.marca && <p className="error-message">{errors.marca}</p>}
                             </div>
                             <div className='new-product-box1'>
@@ -716,6 +783,7 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
                     )}
                     {opcProduct === 'Accesorio' && (
                         <>
+                        <p style={{fontSize:'13px', fontWeight:'400'}} className='new-product-text'>NOTA: Si desea agregar más de una especie de animal, precione la tecla "ctrl" y seleccione las especies.</p>
                             <div className='new-product-box2'>
                                 <div className='new-product-box1'>
                                     <label>¿Qué es? *</label>
@@ -726,25 +794,35 @@ export default function FormMascotas({ onClose, mascotasData, isEdit, onSave }) 
                                         onChange={(e) => handleInputChange(setQueEs, 'queEs', e.target.value)} 
                                     >
                                         <option value="">-- Selecciona --</option>
-                                        <option value='Comedero'>Collares</option>
-                                        <option value='Bebedero'>Correas</option>
-                                        <option value='Montura'>Juguetes</option>
+                                        <option value='Collares'>Collares</option>
+                                        <option value='Correas'>Correas</option>
+                                        <option value='Juguetes'>Juguetes</option>
+                                        <option value='Pecheras'>Pecheras</option>
+                                        <option value='Bozales'>Bozales</option>
+                                        <option value='Cepillo/Peine'>Cepillo/Peine</option>
+                                        <option value='Transportadoras'>Transportadoras</option>
+                                        <option value='Comederos'>Comederos</option>
+                                        <option value='Bebederos'>Bebederos</option>
+                                        <option value='Arena higiénica'>Arena higiénica</option>
+                                        <option value='Camas/Cojines'>Camas/Cojines</option>
                                     </select>
                                     {showErrors && errors.queEs && <p className="error-message">{errors.queEs}</p>}
                                 </div>
                                 <div className='new-product-box1'>
                                     <label>¿Para qué animal? *</label>
                                     <select 
+                                        multiple
                                         className={`new-product-input1 ${showErrors && errors.tipoAnimal ? 'error-input' : ''}`} 
                                         name="Opciones" 
                                         value={tipoAnimal} 
-                                        onChange={(e) => handleInputChange(setTipoAnimal, 'tipoAnimal', e.target.value)} 
+                                        onChange={handleTipoAnimalChange} 
                                     >
-                                        <option value="">-- Selecciona --</option>
-                                        <option value='Perro'>Perro</option>
-                                        <option value='Gato'>Gato</option>
-                                        <option value='Hamsters'>Hamsters</option>
+                                        <option value='Perros'>Perros</option>
+                                        <option value='Gatos'>Gatos</option>
                                         <option value='Peces'>Peces</option>
+                                        <option value='Tortugas'>Tortugas</option>
+                                        <option value='Hamsters'>Hamsters</option>
+                                        <option value='Pájaros'>Pájaros</option>
                                     </select>
                                     {showErrors && errors.tipoAnimal && <p className="error-message">{errors.tipoAnimal}</p>}
                                 </div>

@@ -15,7 +15,7 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
 
     // Estado para campos de la tabla accesorios_mascotas
     const [queEs, setQueEs] = useState('');
-    const [tipoAnimal, setTipoAnimal] = useState('');
+    const [tipoAnimal, setTipoAnimal] = useState([]);
     const [recomendacionesUso, setRecomendacionesUso] = useState('');
     
     // Estados para validaciones
@@ -72,7 +72,17 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
 
             if (data) {
                 setQueEs(data.que_es || '');
-                setTipoAnimal(data.tipo_animal || '');
+                
+                // Manejar tipo_animal como array
+                const tipoAnimalValue = data.tipo_animal;
+                if (Array.isArray(tipoAnimalValue)) {
+                    setTipoAnimal(tipoAnimalValue);
+                } else if (typeof tipoAnimalValue === 'string' && tipoAnimalValue.trim().length > 0) {
+                    setTipoAnimal(tipoAnimalValue.split(',').map((s) => s.trim()).filter(Boolean));
+                } else {
+                    setTipoAnimal([]);
+                }
+                
                 setRecomendacionesUso(data.recomendaciones_uso || '');
             }
         } catch (err) {
@@ -98,7 +108,7 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
         if (!queEs.trim()) {
             newErrors.queEs = 'El campo "¿Qué es?" es obligatorio';
         }
-        if (!tipoAnimal.trim()) {
+        if (!tipoAnimal || tipoAnimal.length === 0) {
             newErrors.tipoAnimal = 'El tipo de animal es obligatorio';
         }
         
@@ -136,7 +146,7 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
     const uploadImageToSupabase = async () => {
         if (!imageFile) return null;
         const fileName = `${Date.now()}_${imageFile.name}`;
-        const { data, error } = await supabase.storage.from('mascotas-accesorios-img').upload(fileName, imageFile);
+        const { error } = await supabase.storage.from('mascotas-accesorios-img').upload(fileName, imageFile);
         if (error) {
             setError('Error al subir la imagen');
             return null;
@@ -177,6 +187,15 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
         setter(value);
         if (errors[fieldName]) {
             setErrors(prev => ({ ...prev, [fieldName]: null }));
+        }
+    };
+
+    // Función para manejar selección múltiple de tipo animal
+    const handleTipoAnimalChange = (e) => {
+        const selectedValues = Array.from(e.target.selectedOptions).map((opt) => opt.value);
+        setTipoAnimal(selectedValues);
+        if (errors.tipoAnimal) {
+            setErrors(prev => ({ ...prev, tipoAnimal: null }));
         }
     };
 
@@ -233,7 +252,7 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
                 .from('accesorios_mascotas')
                 .update({
                     que_es: queEs,
-                    tipo_animal: tipoAnimal,
+                    tipo_animal: tipoAnimal.join(','),
                     recomendaciones_uso: recomendacionesUso
                 })
                 .eq('id', mascotasData.id);
@@ -325,29 +344,41 @@ export default function FormEditMascotasAccesorios({ onClose, mascotasData, onSa
                         <div className='new-product-box1'>
                             <label>¿Qué es? *</label>
                             <select 
-                                className={`new-product-opc-category ${showErrors && errors.queEs ? 'error-input' : ''}`} 
+                                className={`new-product-input1 ${showErrors && errors.queEs ? 'error-input' : ''}`} 
+                                name="Opciones" 
                                 value={queEs} 
-                                onChange={(e) => handleInputChange(setQueEs, 'queEs', e.target.value)}
-                            >
-                                <option value="">-- Selecciona --</option>
-                                <option value='Collares'>Collares</option>
-                                <option value='Correas'>Correas</option>
-                                <option value='Juguetes'>Juguetes</option>
+                                onChange={(e) => handleInputChange(setQueEs, 'queEs', e.target.value)} 
+                                                          >
+                                  <option value="">-- Selecciona --</option>
+                                  <option value='Collares'>Collares</option>
+                                  <option value='Correas'>Correas</option>
+                                  <option value='Juguetes'>Juguetes</option>
+                                  <option value='Pecheras'>Pecheras</option>
+                                  <option value='Bozales'>Bozales</option>
+                                  <option value='Cepillo/Peine'>Cepillo/Peine</option>
+                                  <option value='Transportadoras'>Transportadoras</option>
+                                  <option value='Comederos'>Comederos</option>
+                                  <option value='Bebederos'>Bebederos</option>
+                                  <option value='Arena higiénica'>Arena higiénica</option>
+                                  <option value='Camas/Cojines'>Camas/Cojines</option>
                             </select>
                             {showErrors && errors.queEs && <p className="error-message">{errors.queEs}</p>}
                         </div>
                         <div className='new-product-box1'>
                             <label>¿Para qué animal? *</label>
                             <select 
-                                className={`new-product-opc-category ${showErrors && errors.tipoAnimal ? 'error-input' : ''}`} 
+                                multiple
+                                className={`new-product-input1 ${showErrors && errors.tipoAnimal ? 'error-input' : ''}`} 
+                                name="Opciones" 
                                 value={tipoAnimal} 
-                                onChange={(e) => handleInputChange(setTipoAnimal, 'tipoAnimal', e.target.value)}
+                                onChange={handleTipoAnimalChange} 
                             >
-                                <option value="">-- Selecciona --</option>
-                                <option value='Perro'>Perro</option>
-                                <option value='Gato'>Gato</option>
-                                <option value='Hamsters'>Hamsters</option>
+                                <option value='Perros'>Perros</option>
+                                <option value='Gatos'>Gatos</option>
                                 <option value='Peces'>Peces</option>
+                                <option value='Tortugas'>Tortugas</option>
+                                <option value='Hamsters'>Hamsters</option>
+                                <option value='Pájaros'>Pájaros</option>
                             </select>
                             {showErrors && errors.tipoAnimal && <p className="error-message">{errors.tipoAnimal}</p>}
                         </div>

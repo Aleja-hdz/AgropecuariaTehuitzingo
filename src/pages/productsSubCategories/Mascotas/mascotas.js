@@ -20,6 +20,9 @@ export default function Mascotas() {
     const [selectedFoodType, setSelectedFoodType] = useState('');
     const [selectedAccessoryType, setSelectedAccessoryType] = useState('');
     const [selectedAnimalType, setSelectedAnimalType] = useState('');
+    const [selectedMarca, setSelectedMarca] = useState('');
+    const [selectedPresentacion, setSelectedPresentacion] = useState('');
+    const [selectedTamanoRaza, setSelectedTamanoRaza] = useState('');
 
     // Estados para paginación
     const [currentPage, setCurrentPage] = useState(1);
@@ -137,7 +140,10 @@ export default function Mascotas() {
                 (product.weight && product.weight.toLowerCase().includes(searchLower)) ||
                 (product.especie_mascota && product.especie_mascota.toLowerCase().includes(searchLower)) ||
                 (product.tipo_animal && product.tipo_animal.toLowerCase().includes(searchLower)) ||
-                (product.que_es && product.que_es.toLowerCase().includes(searchLower))
+                (product.que_es && product.que_es.toLowerCase().includes(searchLower)) ||
+                (product.marca && product.marca.toLowerCase().includes(searchLower)) ||
+                (product.presentacion && product.presentacion.toLowerCase().includes(searchLower)) ||
+                (product.tamano_raza && product.tamano_raza.toLowerCase().includes(searchLower))
             );
         }
 
@@ -145,7 +151,8 @@ export default function Mascotas() {
         if (selectedFoodType) {
             filtered = filtered.filter(product => 
                 product.sub_categoria === 'Alimento' && 
-                product.especie_mascota === selectedFoodType
+                product.especie_mascota && 
+                product.especie_mascota.split(',').map(s => s.trim()).includes(selectedFoodType)
             );
         }
 
@@ -160,13 +167,37 @@ export default function Mascotas() {
         // Filtro por tipo de animal
         if (selectedAnimalType) {
             filtered = filtered.filter(product => 
-                (product.sub_categoria === 'Alimento' && product.especie_mascota === selectedAnimalType) ||
-                (product.sub_categoria === 'Accesorio' && product.tipo_animal === selectedAnimalType)
+                (product.sub_categoria === 'Alimento' && product.especie_mascota && 
+                 product.especie_mascota.split(',').map(s => s.trim()).includes(selectedAnimalType)) ||
+                (product.sub_categoria === 'Accesorio' && product.tipo_animal && 
+                 product.tipo_animal.split(',').map(s => s.trim()).includes(selectedAnimalType))
+            );
+        }
+
+        // Filtro por marca
+        if (selectedMarca) {
+            filtered = filtered.filter(product => 
+                product.sub_categoria === 'Alimento' && product.marca === selectedMarca
+            );
+        }
+
+        // Filtro por presentación
+        if (selectedPresentacion) {
+            filtered = filtered.filter(product => 
+                product.sub_categoria === 'Alimento' && product.presentacion === selectedPresentacion
+            );
+        }
+
+        // Filtro por tamaño o raza
+        if (selectedTamanoRaza) {
+            filtered = filtered.filter(product => 
+                product.sub_categoria === 'Alimento' && product.tamano_raza && 
+                product.tamano_raza.split(',').map(s => s.trim()).includes(selectedTamanoRaza)
             );
         }
 
         return filtered;
-    }, [products, searchTerm, selectedFoodType, selectedAccessoryType, selectedAnimalType]);
+    }, [products, searchTerm, selectedFoodType, selectedAccessoryType, selectedAnimalType, selectedMarca, selectedPresentacion, selectedTamanoRaza]);
 
     // Paginación
     const totalPages = useMemo(() => {
@@ -237,6 +268,18 @@ export default function Mascotas() {
         setSelectedAnimalType(selectedAnimalType === animalType ? '' : animalType);
     };
 
+    const handleMarcaFilter = (marca) => {
+        setSelectedMarca(selectedMarca === marca ? '' : marca);
+    };
+
+    const handlePresentacionFilter = (presentacion) => {
+        setSelectedPresentacion(selectedPresentacion === presentacion ? '' : presentacion);
+    };
+
+    const handleTamanoRazaFilter = (tamanoRaza) => {
+        setSelectedTamanoRaza(selectedTamanoRaza === tamanoRaza ? '' : tamanoRaza);
+    };
+
     return(
         <div className="products-container">
             <div className="categories-container-head">
@@ -248,9 +291,15 @@ export default function Mascotas() {
                     selectedFoodType={selectedFoodType}
                     selectedAccessoryType={selectedAccessoryType}
                     selectedAnimalType={selectedAnimalType}
+                    selectedMarca={selectedMarca}
+                    selectedPresentacion={selectedPresentacion}
+                    selectedTamanoRaza={selectedTamanoRaza}
                     onFoodTypeFilter={handleFoodTypeFilter}
                     onAccessoryTypeFilter={handleAccessoryTypeFilter}
                     onAnimalTypeFilter={handleAnimalTypeFilter}
+                    onMarcaFilter={handleMarcaFilter}
+                    onPresentacionFilter={handlePresentacionFilter}
+                    onTamanoRazaFilter={handleTamanoRazaFilter}
                 />
                 <div className={`container-card-products ${paginatedProducts.length === 0 ? 'no-products' : ''}`}>
                     {loading ? (
